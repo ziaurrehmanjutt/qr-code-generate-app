@@ -1,17 +1,328 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>QR Code Generator</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="resetToDefaults()" title="Reset to defaults">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="download()" title="Download QR Code">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="togglePanel()" [color]="panelOpen ? 'primary' : ''">
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="qr-layout">
+    <!-- QR Code Preview Area -->
+    <div class="qr-preview-area">
+      <div class="qr-card">
+        <div class="qr-container" #canvas></div>
+        <div class="qr-actions">
+          <ion-button expand="block" color="primary" (click)="download()">
+            <ion-icon slot="start" name="download-outline"></ion-icon>
+            Download {{ config.extension | uppercase }}
+          </ion-button>
+        </div>
+      </div>
+    </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <!-- Settings Panel (slide-in sidebar) -->
+    <div class="settings-panel" [class.open]="panelOpen">
+      <div class="settings-header">
+        <ion-title>Settings</ion-title>
+        <ion-button fill="clear" (click)="togglePanel()">
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="settings-body">
+        <!-- Section Tabs -->
+        <div class="section-tabs">
+          <button *ngFor="let sec of [
+            {id:'data', icon:'text-outline', label:'Data'},
+            {id:'dots', icon:'grid-outline', label:'Dots'},
+            {id:'corners', icon:'square-outline', label:'Corners'},
+            {id:'bg', icon:'color-palette-outline', label:'BG'},
+            {id:'image', icon:'image-outline', label:'Image'},
+            {id:'size', icon:'resize-outline', label:'Size'},
+            {id:'download', icon:'cloud-download-outline', label:'Export'}
+          ]"
+            class="section-tab"
+            [class.active]="activeSection === sec.id"
+            (click)="setActiveSection(sec.id)">
+            <ion-icon [name]="sec.icon"></ion-icon>
+            <span>{{ sec.label }}</span>
+          </button>
+        </div>
+
+        <!-- Data Section -->
+        <div class="settings-section" *ngIf="activeSection === 'data'">
+          <ion-item>
+            <ion-label position="stacked">QR Code Data (URL / Text)</ion-label>
+            <ion-textarea [value]="config.data" (ionInput)="onDataInput($event)" rows="3"
+              placeholder="Enter URL or text..."></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Error Correction Level</ion-label>
+            <ion-select [value]="config.errorCorrectionLevel" (ionChange)="onSelectChange($event, 'errorCorrectionLevel')">
+              <ion-select-option *ngFor="let l of errorLevels" [value]="l">{{ l }} - {{ l === 'L' ? 'Low (7%)' : l === 'M' ? 'Medium (15%)' : l === 'Q' ? 'Quartile (25%)' : 'High (30%)' }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Shape</ion-label>
+            <ion-select [value]="config.shape" (ionChange)="onSelectChange($event, 'shape')">
+              <ion-select-option *ngFor="let s of shapes" [value]="s">{{ s | titlecase }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <!-- Dots Section -->
+        <div class="settings-section" *ngIf="activeSection === 'dots'">
+          <ion-item>
+            <ion-label position="stacked">Dots Style</ion-label>
+            <ion-select [value]="config.dotsType" (ionChange)="onSelectChange($event, 'dotsType')">
+              <ion-select-option *ngFor="let t of dotTypes" [value]="t">{{ t | titlecase }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Dots Color</ion-label>
+            <div class="color-picker-row">
+              <input type="color" [value]="config.dotsColor" (input)="onColorChange($event, 'dotsColor')" class="color-input">
+              <span class="color-hex">{{ config.dotsColor }}</span>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Dots Gradient</ion-label>
+            <ion-select [value]="config.dotsGradientType" (ionChange)="onGradientTypeChange($event, 'dots')">
+              <ion-select-option value="none">None</ion-select-option>
+              <ion-select-option value="linear">Linear</ion-select-option>
+              <ion-select-option value="radial">Radial</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ng-container *ngIf="config.dotsGradientType !== 'none'">
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 1</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.dotsGradientColor1" (input)="onColorChange($event, 'dotsGradientColor1')" class="color-input">
+                <span class="color-hex">{{ config.dotsGradientColor1 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 2</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.dotsGradientColor2" (input)="onColorChange($event, 'dotsGradientColor2')" class="color-input">
+                <span class="color-hex">{{ config.dotsGradientColor2 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Gradient Rotation: {{ config.dotsGradientRotation }}°</ion-label>
+              <ion-range [value]="config.dotsGradientRotation" min="0" max="360" (ionChange)="onRangeChange($event, 'dotsGradientRotation')"></ion-range>
+            </ion-item>
+          </ng-container>
+        </div>
+
+        <!-- Corners Section -->
+        <div class="settings-section" *ngIf="activeSection === 'corners'">
+          <ion-item-divider>
+            <ion-label>Corner Squares (Position Markers)</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label position="stacked">Style</ion-label>
+            <ion-select [value]="config.cornersSquareType" (ionChange)="onSelectChange($event, 'cornersSquareType')">
+              <ion-select-option *ngFor="let t of cornerSquareTypes" [value]="t">{{ t | titlecase }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Color</ion-label>
+            <div class="color-picker-row">
+              <input type="color" [value]="config.cornersSquareColor" (input)="onColorChange($event, 'cornersSquareColor')" class="color-input">
+              <span class="color-hex">{{ config.cornersSquareColor }}</span>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Gradient</ion-label>
+            <ion-select [value]="config.cornersSquareGradientType" (ionChange)="onGradientTypeChange($event, 'cornersSquare')">
+              <ion-select-option value="none">None</ion-select-option>
+              <ion-select-option value="linear">Linear</ion-select-option>
+              <ion-select-option value="radial">Radial</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ng-container *ngIf="config.cornersSquareGradientType !== 'none'">
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 1</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersSquareGradientColor1" (input)="onColorChange($event, 'cornersSquareGradientColor1')" class="color-input">
+                <span class="color-hex">{{ config.cornersSquareGradientColor1 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 2</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersSquareGradientColor2" (input)="onColorChange($event, 'cornersSquareGradientColor2')" class="color-input">
+                <span class="color-hex">{{ config.cornersSquareGradientColor2 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Rotation: {{ config.cornersSquareGradientRotation }}°</ion-label>
+              <ion-range [value]="config.cornersSquareGradientRotation" min="0" max="360" (ionChange)="onRangeChange($event, 'cornersSquareGradientRotation')"></ion-range>
+            </ion-item>
+          </ng-container>
+
+          <ion-item-divider>
+            <ion-label>Corner Dots (Center Dots)</ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label position="stacked">Style</ion-label>
+            <ion-select [value]="config.cornersDotType" (ionChange)="onSelectChange($event, 'cornersDotType')">
+              <ion-select-option *ngFor="let t of cornerDotTypes" [value]="t">{{ t | titlecase }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Color</ion-label>
+            <div class="color-picker-row">
+              <input type="color" [value]="config.cornersDotColor" (input)="onColorChange($event, 'cornersDotColor')" class="color-input">
+              <span class="color-hex">{{ config.cornersDotColor }}</span>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Gradient</ion-label>
+            <ion-select [value]="config.cornersDotGradientType" (ionChange)="onGradientTypeChange($event, 'cornersDot')">
+              <ion-select-option value="none">None</ion-select-option>
+              <ion-select-option value="linear">Linear</ion-select-option>
+              <ion-select-option value="radial">Radial</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ng-container *ngIf="config.cornersDotGradientType !== 'none'">
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 1</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersDotGradientColor1" (input)="onColorChange($event, 'cornersDotGradientColor1')" class="color-input">
+                <span class="color-hex">{{ config.cornersDotGradientColor1 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 2</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersDotGradientColor2" (input)="onColorChange($event, 'cornersDotGradientColor2')" class="color-input">
+                <span class="color-hex">{{ config.cornersDotGradientColor2 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Rotation: {{ config.cornersDotGradientRotation }}°</ion-label>
+              <ion-range [value]="config.cornersDotGradientRotation" min="0" max="360" (ionChange)="onRangeChange($event, 'cornersDotGradientRotation')"></ion-range>
+            </ion-item>
+          </ng-container>
+        </div>
+
+        <!-- Background Section -->
+        <div class="settings-section" *ngIf="activeSection === 'bg'">
+          <ion-item>
+            <ion-label position="stacked">Background Color</ion-label>
+            <div class="color-picker-row">
+              <input type="color" [value]="config.bgColor" (input)="onColorChange($event, 'bgColor')" class="color-input">
+              <span class="color-hex">{{ config.bgColor }}</span>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label>Border Radius: {{ config.bgRound }}px</ion-label>
+            <ion-range [value]="config.bgRound" min="0" max="50" (ionChange)="onRangeChange($event, 'bgRound')"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Background Gradient</ion-label>
+            <ion-select [value]="config.bgGradientType" (ionChange)="onGradientTypeChange($event, 'bg')">
+              <ion-select-option value="none">None</ion-select-option>
+              <ion-select-option value="linear">Linear</ion-select-option>
+              <ion-select-option value="radial">Radial</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ng-container *ngIf="config.bgGradientType !== 'none'">
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 1</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.bgGradientColor1" (input)="onColorChange($event, 'bgGradientColor1')" class="color-input">
+                <span class="color-hex">{{ config.bgGradientColor1 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Gradient Color 2</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.bgGradientColor2" (input)="onColorChange($event, 'bgGradientColor2')" class="color-input">
+                <span class="color-hex">{{ config.bgGradientColor2 }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Rotation: {{ config.bgGradientRotation }}°</ion-label>
+              <ion-range [value]="config.bgGradientRotation" min="0" max="360" (ionChange)="onRangeChange($event, 'bgGradientRotation')"></ion-range>
+            </ion-item>
+          </ng-container>
+        </div>
+
+        <!-- Image Section -->
+        <div class="settings-section" *ngIf="activeSection === 'image'">
+          <ion-item>
+            <ion-label position="stacked">Image URL (optional)</ion-label>
+            <ion-input [value]="config.imageUrl" (ionInput)="onImageUrlInput($event)" placeholder="https://example.com/logo.png" type="url"></ion-input>
+          </ion-item>
+          <ion-note class="ion-padding-start" color="medium">
+            Supports URLs, data URIs (base64), or leave empty for no image.
+          </ion-note>
+          <ion-item>
+            <ion-label>Image Size: {{ config.imageSize | number:'1.1-1' }}</ion-label>
+            <ion-range [value]="config.imageSize" min="0.1" max="0.5" step="0.05" (ionChange)="onRangeChange($event, 'imageSize')"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label>Image Margin: {{ config.imageMargin }}px</ion-label>
+            <ion-range [value]="config.imageMargin" min="0" max="50" (ionChange)="onRangeChange($event, 'imageMargin')"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label>Hide Dots Behind Image</ion-label>
+            <ion-toggle [checked]="config.imageHideDots" (ionChange)="config.imageHideDots = $event.detail.checked; updateQRCode()"></ion-toggle>
+          </ion-item>
+        </div>
+
+        <!-- Size Section -->
+        <div class="settings-section" *ngIf="activeSection === 'size'">
+          <ion-item>
+            <ion-label>Width: {{ config.width }}px</ion-label>
+            <ion-range [value]="config.width" min="100" max="600" step="10" (ionChange)="onRangeChange($event, 'width')"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label>Height: {{ config.height }}px</ion-label>
+            <ion-range [value]="config.height" min="100" max="600" step="10" (ionChange)="onRangeChange($event, 'height')"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label>Margin: {{ config.margin }}px</ion-label>
+            <ion-range [value]="config.margin" min="0" max="50" (ionChange)="onRangeChange($event, 'margin')"></ion-range>
+          </ion-item>
+        </div>
+
+        <!-- Export Section -->
+        <div class="settings-section" *ngIf="activeSection === 'download'">
+          <ion-item>
+            <ion-label position="stacked">File Name</ion-label>
+            <ion-input [value]="config.fileName" (ionInput)="config.fileName = $event.detail.value || ''" placeholder="my-qr-code"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Format</ion-label>
+            <ion-select [value]="config.extension" (ionChange)="onSelectChange($event, 'extension')">
+              <ion-select-option *ngFor="let e of extensions" [value]="e">{{ e | uppercase }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="ion-padding">
+            <ion-button expand="block" color="primary" (click)="download()">
+              <ion-icon slot="start" name="download-outline"></ion-icon>
+              Download QR Code
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
