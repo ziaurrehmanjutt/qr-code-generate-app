@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, NgZone, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import QRCodeStyling from "qr-code-styling";
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 
 interface QrConfig {

@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.zia.qrtest;
 
 import com.getcapacitor.BridgeActivity;
 
