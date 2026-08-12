@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } from '@capacitor/barcode-scanner';
 
 @Component({
   selector: 'app-tab3',
@@ -9,5 +10,18 @@ import { Component } from '@angular/core';
 export class Tab3Page {
 
   constructor() {}
+
+  scanBarcode() {
+    CapacitorBarcodeScanner.scanBarcode({hint: CapacitorBarcodeScannerTypeHint.QR_CODE}).then(result => {
+      console.log(result);
+    }).catch(error => {
+      console.error(error);
+    });
+  }
+
+  ionViewWillEnter(){
+
+    this.scanBarcode();
+  }
 
 }
