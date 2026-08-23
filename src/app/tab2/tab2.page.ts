@@ -4,6 +4,7 @@ import { Device } from '@capacitor/device';
 import QRCodeStyling from "qr-code-styling";
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { FileOpener, FileOpenerOptions } from '@capacitor-community/file-opener';
 
 @Component({
   selector: 'app-tab2',
@@ -113,6 +114,77 @@ export class Tab2Page {
     });
   }
 
+
+  async open() {
+     const fileName = 'qr-code';
+    const ext = this.downloadFormat;
+
+    if (await this.isBrowser()) {
+      // Browser: use native download
+      this.qrCode?.download({
+        name: fileName,
+        extension: ext,
+      });
+    } else {
+      // Mobile (Capacitor native): use Filesystem + Share
+      try {
+        // Get raw data as base64 blob
+        const blob: Blob = await this.qrCode.getRawData(ext);
+
+        // Convert blob to base64
+        const base64 = await this.blobToBase64(blob);
+
+        // Determine MIME type
+        const mimeMap: Record<string, string> = {
+          png: 'image/png',
+          jpeg: 'image/jpeg',
+          webp: 'image/webp',
+          svg: 'image/svg+xml',
+        };
+        const mimeType = mimeMap[ext] || 'image/png';
+
+        // Strip data-URL prefix if present
+        const base64Data = base64.includes('base64,')
+          ? base64.split('base64,')[1]
+          : base64;
+
+        const savedFile = await Filesystem.writeFile({
+          path: `${fileName}.${ext}`,
+          data: base64Data,
+          directory: Directory.Cache,
+          recursive: true,
+        });
+
+
+        const fileOpenerOptions: FileOpenerOptions = {
+          filePath:  savedFile.uri,
+          contentType: mimeType,
+          openWithDefault: true,
+        };
+        await FileOpener.open(fileOpenerOptions);
+  
+        // Share/save the file using Share plugin
+        // await Share.share({
+        //   title: fileName,
+        //   text: `QR Code: ${this.qrData}`,
+        //   url: savedFile.uri,
+        //   dialogTitle: 'Save or Share QR Code',
+        // });
+      } catch (error: any) {
+        console.error('Download failed:', error);
+        alert('Failed to open the file. Please check if the file type is supported on your device.');
+        // Fallback: try browser download
+        try {
+          this.qrCode?.download({
+            name: fileName,
+            extension: ext,
+          });
+        } catch (fallbackError) {
+          console.error('Fallback download also failed:', fallbackError);
+        }
+      }
+    }
+  }
 
   ///////
   isDownlaodSheetOpen = false;
