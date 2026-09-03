@@ -1,240 +1,325 @@
-.qr-layout {
-  display: flex;
-  height: 100%;
-  position: relative;
+:host {
+  --home-ink: #17252b;
+  --home-muted: #68777a;
+  --home-line: #dfe7e3;
+  --home-paper: #fbfcf8;
+  --home-teal: #147d72;
+  --home-mint: #d8efe4;
+  --home-coral: #e9785c;
+  display: block;
 }
-
-.qr-preview-area {
-  flex: 1;
+ion-content {
+  --background: var(--home-paper);
+}
+.home-header ion-toolbar {
+  --background: rgba(251, 252, 248, 0.94);
+  --color: var(--home-ink);
+  border-bottom: 1px solid var(--home-line);
+}
+.home-header ion-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+.home-shell {
+  width: min(1080px, 100%);
+  margin: auto;
+  padding: 40px 20px 63px;
+}
+.welcome-block {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
-  min-height: calc(100vh - 56px);
-
-  .qr-card {
-    background: white;
-    border-radius: 20px;
-    padding: 32px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-    max-width: 400px;
-    width: 100%;
-  }
-
-  .qr-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    canvas, svg {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
-  }
-
-  .qr-actions {
-    width: 100%;
-  }
+  justify-content: space-between;
+  max-width: 850px;
+  margin: 8px 0 34px;
 }
-
-/* Settings Panel - Slide in from right */
-.settings-panel {
-  position: fixed;
-  top: 56px;
-  right: -380px;
-  width: 380px;
-  max-width: 90vw;
-  height: calc(100% - 56px);
-  background: var(--ion-background-color, #fff);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
-  z-index: 100;
-  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.eyebrow,
+.section-kicker {
+  margin: 0 0 9px;
+  color: var(--home-coral);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+.welcome-block h1 {
+  margin: 0 0 14px;
+  color: var(--home-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+.welcome-block h1 em {
+  color: var(--home-teal);
+  font-style: normal;
+}
+.welcome-copy {
+  max-width: 450px;
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.signal-mark {
+  display: grid;
+  grid-template-columns: repeat(2, 44px);
+  grid-template-rows: repeat(2, 44px);
+  gap: 9px;
+  transform: rotate(8deg);
+}
+.signal-mark span {
+  display: block;
+  border-radius: 8px;
+  background: var(--home-teal);
+}
+.signal-mark span:nth-child(2) {
+  background: var(--home-coral);
+}
+.signal-mark span:nth-child(3) {
+  background: #f2c94c;
+}
+.signal-mark span:nth-child(4) {
+  background: var(--home-mint);
+}
+.primary-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.action-card {
   display: flex;
-  flex-direction: column;
-  border-left: 1px solid var(--ion-border-color, #e0e0e0);
-
-  &.open {
-    right: 0;
-  }
-
-  .settings-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--ion-border-color, #e0e0e0);
-    min-height: 52px;
-  }
-
-  .settings-body {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 20px;
-  }
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 20px;
+  border-radius: 8px;
+  color: var(--home-ink);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
-
-/* Section Tabs */
-.section-tabs {
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(23, 37, 43, 0.12);
+}
+.create-card {
+  background: var(--home-mint);
+}
+.scan-card {
+  background: var(--home-ink);
+  color: #fff;
+}
+.action-icon {
+  display: grid;
+  flex: 0 0 45px;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--home-teal);
+}
+.scan-card .action-icon {
+  background: rgba(216, 239, 228, 0.14);
+  color: var(--home-mint);
+}
+.action-icon ion-icon {
+  font-size: 25px;
+}
+.action-text {
+  min-width: 0;
+}
+.action-text strong,
+.action-text small {
+  display: block;
+}
+.action-text strong {
+  font-size: 16px;
+}
+.action-text small {
+  margin-top: 4px;
+  color: var(--home-muted);
+  font-size: 12px;
+}
+.scan-card .action-text small {
+  color: #bbcbca;
+}
+.action-arrow {
+  margin-left: auto;
+  font-size: 20px;
+}
+.saved-section,
+.coming-section {
+  margin-top: 48px;
+}
+.section-heading {
   display: flex;
-  overflow-x: auto;
-  gap: 4px;
-  padding: 8px;
-  background: var(--ion-color-light, #f4f5f8);
-  border-bottom: 1px solid var(--ion-border-color, #e0e0e0);
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  .section-tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 14px;
-    border: none;
-    background: transparent;
-    border-radius: 12px;
-    cursor: pointer;
-    min-width: 64px;
-    font-size: 11px;
-    color: var(--ion-color-medium, #666);
-    transition: all 0.2s;
-    white-space: nowrap;
-
-    ion-icon {
-      font-size: 20px;
-    }
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.04);
-    }
-
-    &.active {
-      background: var(--ion-color-primary, #3880ff);
-      color: white;
-      font-weight: 600;
-    }
-  }
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
-
-/* Settings Sections */
-.settings-section {
-  padding: 4px 0;
+.section-heading h2 {
+  margin: 0;
+  color: var(--home-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
 }
-
-/* Color Picker Row */
-.color-picker-row {
+.count-badge {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--home-teal);
+  background: var(--home-mint);
+  font-size: 12px;
+  font-weight: 800;
+}
+.empty-state {
+  display: grid;
+  justify-items: center;
+  padding: 40px 20px;
+  border: 1px dashed #b8d6ca;
+  border-radius: 8px;
+  background: #f4faf5;
+  text-align: center;
+}
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  color: var(--home-teal);
+  background: var(--home-mint);
+}
+.empty-icon ion-icon {
+  font-size: 28px;
+}
+.empty-state h3 {
+  margin: 0 0 7px;
+  color: var(--home-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+}
+.empty-state p {
+  max-width: 390px;
+  margin: 0 0 16px;
+  color: var(--home-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--home-teal);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.saved-list {
+  display: grid;
+  gap: 8px;
+}
+.saved-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 4px 0;
-  width: 100%;
-
-  .color-input {
-    width: 40px;
-    height: 40px;
-    border: 2px solid var(--ion-border-color, #e0e0e0);
-    border-radius: 8px;
-    cursor: pointer;
-    padding: 0;
-    background: none;
-
-    &::-webkit-color-swatch-wrapper {
-      padding: 2px;
-    }
-
-    &::-webkit-color-swatch {
-      border: none;
-      border-radius: 5px;
-    }
-  }
-
-  .color-hex {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    color: var(--ion-color-dark, #222);
-  }
+  padding: 14px;
+  border: 1px solid var(--home-line);
+  border-radius: 6px;
+  background: #fff;
 }
-
-/* Override Ionic item styles inside settings */
-.settings-panel {
-  ion-item {
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --inner-padding-end: 0;
-    font-size: 14px;
-  }
-
-  ion-item-divider {
-    --padding-start: 16px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    min-height: 40px;
-  }
-
-  ion-range {
-    --padding-start: 0;
-    --padding-end: 0;
-  }
-
-  ion-note {
-    font-size: 12px;
-    display: block;
-  }
+.saved-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: var(--home-teal);
+  background: var(--home-mint);
 }
-
-/* Responsive: On mobile, panel takes full width */
-@media (max-width: 768px) {
-  .qr-preview-area {
+.saved-icon ion-icon {
+  font-size: 21px;
+}
+.saved-info {
+  min-width: 0;
+}
+.saved-info strong,
+.saved-info small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.saved-info strong {
+  color: var(--home-ink);
+  font-size: 14px;
+}
+.saved-info small {
+  margin-top: 4px;
+  color: var(--home-muted);
+  font-size: 11px;
+}
+.saved-arrow {
+  margin-left: auto;
+  color: var(--home-muted);
+}
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 130px;
+  color: var(--home-muted);
+  font-size: 13px;
+}
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.feature-row div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px;
+  border: 1px solid var(--home-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--home-muted);
+  font-size: 12px;
+}
+.feature-row ion-icon {
+  color: var(--home-teal);
+  font-size: 20px;
+}
+@media (max-width: 600px) {
+  .home-shell {
+    padding: 28px 14px 63px;
+  }
+  .welcome-block {
+    align-items: flex-start;
+  }
+  .signal-mark {
+    grid-template-columns: repeat(2, 27px);
+    grid-template-rows: repeat(2, 27px);
+    gap: 5px;
+  }
+  .signal-mark span {
+    border-radius: 5px;
+  }
+  .primary-actions,
+  .feature-row {
+    grid-template-columns: 1fr;
+  }
+  .action-card {
+    padding: 16px;
+  }
+  .feature-row div {
     padding: 12px;
-
-    .qr-card {
-      padding: 20px;
-      box-shadow: none;
-      background: transparent;
-    }
-  }
-
-  .settings-panel {
-    width: 100vw;
-    max-width: 100vw;
-    right: -100vw;
-    top: 56px;
-    height: calc(100% - 56px);
-    border-left: none;
-
-    &.open {
-      right: 0;
-    }
-  }
-}
-
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-  .qr-preview-area {
-    .qr-card {
-      background: var(--ion-card-background, #1e1e1e);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  .section-tabs {
-    background: var(--ion-color-step-50, #1a1a1a);
-
-    .section-tab {
-      &:hover {
-        background: rgba(255, 255, 255, 0.06);
-      }
-    }
   }
 }

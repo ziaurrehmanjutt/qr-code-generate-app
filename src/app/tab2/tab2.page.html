@@ -1,84 +1,248 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="app-header">
   <ion-toolbar>
-    <ion-title>
-      QR Generator
-    </ion-title>
+    <ion-title>QR Studio</ion-title>
 
     <ion-buttons slot="end">
-      <!-- <ion-button (click)="resetToDefaults()" title="Reset to defaults">
+      <ion-button (click)="resetToDefaults()" title="Reset to defaults">
         <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
-      </ion-button> -->
-      <ion-button (click)="isDownlaodSheetOpen = true" title="Download QR Code">
+      </ion-button>
+      <ion-button (click)="setDownloadModalOpen(true)" title="Export QR Code">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
-      <!-- <ion-button (click)="togglePanel()" [color]="panelOpen ? 'primary' : ''">
-        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
-      </ion-button> -->
     </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">QR Generator</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <main class="studio-shell">
+    <section class="intro-block">
+      <p class="eyebrow">CREATE A CODE</p>
+      <h1>Turn a thought into a scan.</h1>
+      <p class="intro-copy">Choose a format, add your content, and shape a QR code that feels like yours.</p>
+    </section>
 
-  <ion-segment>
-    <ion-segment-button value="text">
-      <ion-label>Text</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="url">
-      <ion-label>URL</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="email">
-      <ion-label>Email</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="mobile">
-      <ion-label>Mobile</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  <div class="ion-padding ">
-    <ion-textarea class="qr-text" placeholder="Enter text to generate QR code" [(ngModel)]="qrData"></ion-textarea>
-  </div>
+    <section class="content-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="section-kicker">CONTENT</p>
+          <h2>What should it open?</h2>
+        </div>
+        <span class="live-badge"><span></span> Live preview</span>
+      </div>
 
-  <div>
-    <div class="qr-container" #canvas></div>
-  </div>
+      <div class="segment-wrap">
+    <ion-segment [value]="contentType" (ionChange)="setContentType($event.detail.value)">
+      <ion-segment-button *ngFor="let ct of supported.contentTypes" [value]="ct.id">
+        <ion-icon [name]="ct.icon"></ion-icon>
+        <ion-label>{{ ct.label }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+      </div>
 
+      <div class="input-wrap">
+        <ion-input class="data-input" label="Your content" label-placement="stacked" [placeholder]="placeholder"
+          [value]="rawValue" (ionInput)="onDataInput($event)" clearInput></ion-input>
+    <div class="preview-row" *ngIf="formattedPreview">
+          <span class="preview-label">SCANNED RESULT</span>
+      <span class="preview-value">{{ formattedPreview }}</span>
+    </div>
+      </div>
+    </section>
 
+    <section class="qr-card">
+      <div class="preview-heading">
+        <div>
+          <p class="section-kicker">YOUR QR CODE</p>
+          <h2>Ready to share</h2>
+        </div>
+        <ion-icon name="scan-outline"></ion-icon>
+      </div>
+      <div class="qr-container" #canvas></div>
+      <div class="qr-actions">
+        <ion-button expand="block" color="primary" (click)="setDownloadModalOpen(true)">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+          Export code
+      </ion-button>
+    </div>
+    </section>
 
-   <ion-modal 
-    (onWillDismiss)="isDownlaodSheetOpen = false"
-    [isOpen]="isDownlaodSheetOpen" 
-    [initialBreakpoint]="0.25" 
-    [breakpoints]="[0, 0.25, 0.5, 0.75]">
+    <section class="options-wrap">
+      <div class="options-heading">
+        <div>
+          <p class="section-kicker">CUSTOMIZE</p>
+          <h2>Make it yours</h2>
+        </div>
+        <ion-button fill="clear" size="small" (click)="resetToDefaults()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>Reset
+        </ion-button>
+      </div>
+    <div class="option-section" *ngFor="let section of optionSections">
+      <button class="option-header" (click)="toggleSection(section)">
+        <ion-icon [name]="section.icon"></ion-icon>
+        <span>{{ section.label }}</span>
+        <ion-icon class="chevron" [class.rotated]="section.open" name="chevron-down-outline"></ion-icon>
+      </button>
+
+      <div class="option-body" [class.open]="section.open">
+
+        <!-- Style Selection -->
+        <ng-container *ngIf="section.id === 'style'">
+          <div class="style-group">
+            <div class="style-label"><span>Dots style</span><small>Swipe to explore</small></div>
+            <div class="style-scroller">
+              <button class="style-card" *ngFor="let style of supported.dotStyles" [class.selected]="config.dotsType === style.value"
+                (click)="updateStyle('dotsType', style.value)">
+                <img [src]="style.image" [alt]="style.label + ' QR style'">
+                <span>{{ style.label }}</span>
+                <ion-icon *ngIf="config.dotsType === style.value" name="checkmark-circle"></ion-icon>
+              </button>
+            </div>
+          </div>
+          <div class="style-group">
+            <div class="style-label"><span>Corner shape</span><small>Finder pattern</small></div>
+            <div class="style-scroller compact">
+              <button class="shape-card" *ngFor="let style of supported.cornerStyles" [class.selected]="config.cornersSquareType === style.value"
+                (click)="updateStyle('cornersSquareType', style.value)">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="5" width="38" height="38" [attr.rx]="style.value === 'extra-rounded' ? 12 : style.value === 'rounded' ? 6 : 0" /><rect class="cutout" x="14" y="14" width="20" height="20" [attr.rx]="style.value === 'dot' ? 10 : 2" /></svg>
+                <span>{{ style.label }}</span>
+              </button>
+            </div>
+          </div>
+          <div class="shape-toggle">
+            <span><strong>QR canvas</strong><small>Choose the outer shape</small></span>
+            <ion-segment [value]="config.shape" (ionChange)="onSelectChange($event, 'shape')">
+              <ion-segment-button value="square">Square</ion-segment-button>
+              <ion-segment-button value="circle">Circle</ion-segment-button>
+            </ion-segment>
+          </div>
+        </ng-container>
+
+        <!-- Colors -->
+        <ng-container *ngIf="section.id === 'colors'">
+          <ion-list lines="full">
+            <ion-item>
+              <ion-label>Dots Color</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.dotsColor" (input)="onColorChange($event, 'dotsColor')" class="color-input">
+                <span class="color-hex">{{ config.dotsColor }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Background Color</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.bgColor" (input)="onColorChange($event, 'bgColor')" class="color-input">
+                <span class="color-hex">{{ config.bgColor }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Corner Square Color</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersSquareColor" (input)="onColorChange($event, 'cornersSquareColor')" class="color-input">
+                <span class="color-hex">{{ config.cornersSquareColor }}</span>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Corner Dot Color</ion-label>
+              <div class="color-picker-row">
+                <input type="color" [value]="config.cornersDotColor" (input)="onColorChange($event, 'cornersDotColor')" class="color-input">
+                <span class="color-hex">{{ config.cornersDotColor }}</span>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+
+        <!-- Image / Logo -->
+        <ng-container *ngIf="section.id === 'image'">
+          <ion-list lines="full">
+            <ion-item>
+              <ion-label position="stacked">Image / Logo URL</ion-label>
+              <ion-input [value]="config.imageUrl" (ionInput)="onImageUrlInput($event)"
+                placeholder="https://example.com/logo.png"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Logo Size</ion-label>
+              <ion-range [value]="config.imageSize" min="0.1" max="0.6" step="0.05"
+                (ionChange)="onRangeChange($event, 'imageSize')"></ion-range>
+            </ion-item>
+            <ion-item>
+              <ion-label>Logo Margin</ion-label>
+              <ion-range [value]="config.imageMargin" min="0" max="40" step="1"
+                (ionChange)="onRangeChange($event, 'imageMargin')"></ion-range>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [checked]="config.imageHideDots" (ionChange)="onToggleChange($event, 'imageHideDots')">
+                Hide dots behind logo
+              </ion-toggle>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+
+        <!-- Extra Options -->
+        <ng-container *ngIf="section.id === 'extra'">
+          <ion-list lines="full">
+            <ion-item>
+              <ion-label>Error Correction Level</ion-label>
+              <ion-select [value]="config.errorCorrectionLevel" (ionChange)="onSelectChange($event, 'errorCorrectionLevel')">
+                <ion-select-option *ngFor="let l of supported.errorLevels" [value]="l">{{ l }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Margin</ion-label>
+              <ion-range [value]="config.margin" min="0" max="40" step="1"
+                (ionChange)="onRangeChange($event, 'margin')"></ion-range>
+            </ion-item>
+            <ion-item>
+              <ion-label>Size</ion-label>
+              <ion-range [value]="config.width" min="150" max="600" step="10"
+                (ionChange)="onRangeChange($event, 'width')"></ion-range>
+            </ion-item>
+            <ion-item>
+              <ion-label>Background Round</ion-label>
+              <ion-range [value]="config.bgRound" min="0" max="40" step="1"
+                (ionChange)="onRangeChange($event, 'bgRound')"></ion-range>
+            </ion-item>
+            <ion-item>
+              <ion-label>File Name</ion-label>
+              <ion-input [value]="config.fileName" (ionInput)="onFileNameInput($event)"></ion-input>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+
+      </div>
+    </div>
+    </section>
+  </main>
+
+  <!-- Download / Open sheet -->
+  <ion-modal
+    (willDismiss)="setDownloadModalOpen(false)"
+    [isOpen]="isDownloadSheetOpen"
+    [initialBreakpoint]="0.35"
+    [breakpoints]="[0.35, 0.5, 0.75]">
     <ng-template>
       <ion-content>
         <ion-radio-group [(ngModel)]="downloadFormat">
           <ion-list-header>
-            <ion-label>Download Format</ion-label>
+            <ion-label><p class="section-kicker">EXPORT</p><h2>Choose a format</h2></ion-label>
           </ion-list-header>
 
-          <ion-item>
-            <ion-label>PNG</ion-label>
-            <ion-radio slot="start" value="png"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>JPEG</ion-label>
-            <ion-radio slot="start" value="jpeg"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>SVG</ion-label>
-            <ion-radio slot="start" value="svg"></ion-radio>
-          </ion-item>
+          <div class="format-row">
+            <button *ngFor="let format of supported.extensions" class="format-chip" [class.selected]="downloadFormat === format" (click)="selectFormat(format)">
+              <ion-icon [name]="format === 'svg' ? 'code-slash-outline' : 'image-outline'"></ion-icon>{{ format | uppercase }}
+            </button>
+          </div>
         </ion-radio-group>
-        <ion-button expand="block" (click)="download()">Download</ion-button>
-        <ion-button expand="block" (click)="open()">Open</ion-button>
+        <div class="export-actions">
+          <button class="export-action" [class.selected]="exportAction === 'share'" (click)="selectExportAction('share')"><ion-icon name="share-social-outline"></ion-icon><span>Share<small>WhatsApp, mail...</small></span></button>
+          <button class="export-action" [class.selected]="exportAction === 'open'" (click)="selectExportAction('open')"><ion-icon name="open-outline"></ion-icon><span>Open with<small>Another app</small></span></button>
+          <button class="export-action" [class.selected]="exportAction === 'gallery'" (click)="selectExportAction('gallery')"><ion-icon name="images-outline"></ion-icon><span>Gallery<small>Device photos</small></span></button>
+          <button class="export-action" [class.selected]="exportAction === 'app'" (click)="selectExportAction('app')"><ion-icon name="bookmark-outline"></ion-icon><span>Save in app<small>My library</small></span></button>
+        </div>
+        <p class="export-message" *ngIf="exportMessage">{{ exportMessage }}</p>
+        <div class="sheet-actions">
+          <ion-button expand="block" (click)="runExportAction()"><ion-icon slot="start" name="arrow-forward-outline"></ion-icon>Continue</ion-button>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>
