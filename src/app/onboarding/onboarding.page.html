@@ -1,14 +1,14 @@
 <ion-content [fullscreen]="true" [scrollY]="false">
   <main class="intro">
-    <button type="button" class="skip" (click)="finish()" *ngIf="!last">Skip</button>
+    <button type="button" class="skip" (click)="finish()" *ngIf="!last">{{ 'Skip' | t }}</button>
     <section class="slide" *ngFor="let s of slides; let i = index" [hidden]="i !== index">
       <span class="art"><ion-icon [name]="s.icon"></ion-icon></span>
-      <h1>{{ s.title }}</h1>
-      <p>{{ s.text }}</p>
+      <h1>{{ s.title | t }}</h1>
+      <p>{{ s.text | t }}</p>
     </section>
     <footer>
       <div class="dots"><i *ngFor="let s of slides; let i = index" [class.on]="i === index"></i></div>
-      <button type="button" class="btn block" (click)="next()">{{ last ? 'Get started' : 'Next' }}</button>
+      <button type="button" class="btn block" (click)="next()">{{ (last ? 'Get started' : 'Next') | t }}</button>
     </footer>
   </main>
 </ion-content>

@@ -11,6 +11,7 @@ import { DecodedQrResult, QrDecodeService, QuickAction } from '../services/qr-de
 import { QrStorageService, ScanRecord } from '../services/qr-storage.service';
 import { QrService } from '../services/qr.service';
 import { SettingsService } from '../services/settings.service';
+import { TranslateService } from '../i18n/translate.service';
 
 @Component({
   selector: 'app-tab3',
@@ -31,6 +32,7 @@ export class Tab3Page {
     private qrService: QrService,
     private router: Router,
     private settings: SettingsService,
+    private i18n: TranslateService,
   ) {}
 
   async scanBarcode(): Promise<void> {
@@ -42,7 +44,7 @@ export class Tab3Page {
       if (raw) await this.showResult(raw);
     } catch (error) {
       console.error(error);
-      this.scanError = 'The scan was cancelled or the camera could not be opened.';
+      this.scanError = this.i18n.t('The scan was cancelled or the camera could not be opened.');
     } finally {
       this.isScanning = false;
     }
@@ -81,10 +83,10 @@ export class Tab3Page {
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
       const code = jsQR(pixels.data, pixels.width, pixels.height, { inversionAttempts: 'attemptBoth' });
       if (code?.data) await this.showResult(code.data);
-      else this.scanError = 'No QR code was found in that image.';
+      else this.scanError = this.i18n.t('No QR code was found in that image.');
     } catch (error) {
       console.error(error);
-      this.scanError = 'That image could not be read.';
+      this.scanError = this.i18n.t('That image could not be read.');
     }
   }
 
@@ -171,7 +173,7 @@ export class Tab3Page {
   }
 
   private flash(message: string): void {
-    this.notice = message;
+    this.notice = this.i18n.t(message);
     setTimeout(() => (this.notice = ''), 1800);
   }
 }

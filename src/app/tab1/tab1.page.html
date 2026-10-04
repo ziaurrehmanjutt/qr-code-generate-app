@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>QR House</ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
+      <ion-button routerLink="/settings" [title]="'Settings' | t"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -12,39 +12,39 @@
     <!-- Quick actions -->
     <section class="hero">
       <button type="button" class="hero-btn create" (click)="go('/tabs/tab2')">
-        <ion-icon name="color-wand-outline"></ion-icon><strong>Create</strong><small>Design a QR code</small>
+        <ion-icon name="color-wand-outline"></ion-icon><strong>{{ 'Create' | t }}</strong><small>{{ 'Design a QR code' | t }}</small>
       </button>
       <button type="button" class="hero-btn scan" (click)="go('/tabs/tab3')">
-        <ion-icon name="scan-outline"></ion-icon><strong>Scan</strong><small>Camera or gallery</small>
+        <ion-icon name="scan-outline"></ion-icon><strong>{{ 'Scan' | t }}</strong><small>{{ 'Camera or gallery' | t }}</small>
       </button>
     </section>
 
     <!-- Stats -->
     <section class="stats">
-      <div class="stat"><strong>{{ savedCodes.length }}</strong><span>Created</span></div>
-      <div class="stat"><strong>{{ scans.length }}</strong><span>Scanned</span></div>
-      <div class="stat"><strong>{{ favoriteCount }}</strong><span>Favorites</span></div>
-      <div class="stat chart" [attr.aria-label]="weekCount + ' actions in the last 7 days'">
+      <div class="stat"><strong>{{ savedCodes.length }}</strong><span>{{ 'Created' | t }}</span></div>
+      <div class="stat"><strong>{{ scans.length }}</strong><span>{{ 'Scanned' | t }}</span></div>
+      <div class="stat"><strong>{{ favoriteCount }}</strong><span>{{ 'Favorites' | t }}</span></div>
+      <div class="stat chart">
         <div class="bars"><i *ngFor="let b of weekBars" [style.height.%]="b.height" [class.on]="b.count" [title]="b.label + ': ' + b.count"></i></div>
-        <span>{{ weekCount }} this week</span>
+        <span>{{ '{n} this week' | t: { n: weekCount } }}</span>
       </div>
     </section>
 
     <!-- Library -->
     <section class="library">
       <ion-segment [value]="tab" (ionChange)="setTab($event.detail.value)">
-        <ion-segment-button value="saved"><ion-label>Saved</ion-label></ion-segment-button>
-        <ion-segment-button value="scanned"><ion-label>Scanned</ion-label></ion-segment-button>
-        <ion-segment-button value="favorites"><ion-label>Favorites</ion-label></ion-segment-button>
+        <ion-segment-button value="saved"><ion-label>{{ 'Saved' | t }}</ion-label></ion-segment-button>
+        <ion-segment-button value="scanned"><ion-label>{{ 'Scanned' | t }}</ion-label></ion-segment-button>
+        <ion-segment-button value="favorites"><ion-label>{{ 'Favorites' | t }}</ion-label></ion-segment-button>
       </ion-segment>
-      <ion-searchbar class="search" placeholder="Search" [debounce]="150" (ionInput)="setQuery($event.detail.value)"></ion-searchbar>
+      <ion-searchbar class="search" [placeholder]="'Search' | t" [debounce]="150" (ionInput)="setQuery($event.detail.value)"></ion-searchbar>
 
       <div class="empty" *ngIf="isLoading"><ion-spinner name="crescent"></ion-spinner></div>
 
       <div class="empty" *ngIf="!isLoading && !visibleCodes.length && !visibleScans.length">
         <ion-icon [name]="tab === 'scanned' ? 'scan-outline' : tab === 'favorites' ? 'star-outline' : 'qr-code-outline'"></ion-icon>
-        <h3>{{ query ? 'Nothing matches' : tab === 'scanned' ? 'No scans yet' : tab === 'favorites' ? 'No favorites yet' : 'No saved codes yet' }}</h3>
-        <p>{{ query ? 'Try a different search.' : tab === 'scanned' ? 'Scanned codes show up here.' : tab === 'favorites' ? 'Star a code or a scan to keep it here.' : 'Create a code and tap Save.' }}</p>
+        <h3>{{ (query ? 'Nothing matches' : tab === 'scanned' ? 'No scans yet' : tab === 'favorites' ? 'No favorites yet' : 'No saved codes yet') | t }}</h3>
+        <p>{{ (query ? 'Try a different search.' : tab === 'scanned' ? 'Scanned codes show up here.' : tab === 'favorites' ? 'Star a code or a scan to keep it here.' : 'Create a code and tap Save.') | t }}</p>
       </div>
 
       <div class="list" *ngIf="!isLoading">
@@ -53,9 +53,9 @@
             <img class="thumb" [src]="thumb(code)" [alt]="code.name" (click)="edit(code)">
             <div class="info" (click)="edit(code)"><strong>{{ code.name }}</strong><small>{{ code.format | uppercase }} · {{ formatDate(code.createdAt) }}</small></div>
             <div class="acts">
-              <button type="button" class="icon-btn" (click)="toggleFavorite(code)" aria-label="Favorite"><ion-icon [name]="code.favorite ? 'star' : 'star-outline'"></ion-icon></button>
-              <button type="button" class="icon-btn" (click)="share(code)" aria-label="Share"><ion-icon name="share-social-outline"></ion-icon></button>
-              <button type="button" class="icon-btn" (click)="remove(code)" aria-label="Delete"><ion-icon name="trash-outline"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="toggleFavorite(code)" [attr.aria-label]="'Favorite' | t"><ion-icon [name]="code.favorite ? 'star' : 'star-outline'"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="share(code)" [attr.aria-label]="'Share' | t"><ion-icon name="share-social-outline"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="remove(code)" [attr.aria-label]="'Delete' | t"><ion-icon name="trash-outline"></ion-icon></button>
             </div>
           </article>
         </ng-container>
@@ -63,11 +63,11 @@
         <ng-container *ngIf="tab !== 'saved'">
           <article class="item" *ngFor="let scan of visibleScans">
             <span class="thumb icon"><ion-icon [name]="scan.icon"></ion-icon></span>
-            <div class="info" (click)="copyScan(scan)"><strong>{{ scan.title }}</strong><small>{{ scan.type | titlecase }} · {{ formatDate(scan.scannedAt) }}</small></div>
+            <div class="info" (click)="copyScan(scan)"><strong>{{ scan.title | t }}</strong><small>{{ (scan.type | titlecase) | t }} · {{ formatDate(scan.scannedAt) }}</small></div>
             <div class="acts">
-              <button type="button" class="icon-btn" (click)="toggleScanFavorite(scan)" aria-label="Favorite"><ion-icon [name]="scan.favorite ? 'star' : 'star-outline'"></ion-icon></button>
-              <button type="button" class="icon-btn" (click)="createFromScan(scan)" aria-label="Make QR"><ion-icon name="color-wand-outline"></ion-icon></button>
-              <button type="button" class="icon-btn" (click)="removeScan(scan)" aria-label="Delete"><ion-icon name="trash-outline"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="toggleScanFavorite(scan)" [attr.aria-label]="'Favorite' | t"><ion-icon [name]="scan.favorite ? 'star' : 'star-outline'"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="createFromScan(scan)" [attr.aria-label]="'Make QR' | t"><ion-icon name="color-wand-outline"></ion-icon></button>
+              <button type="button" class="icon-btn" (click)="removeScan(scan)" [attr.aria-label]="'Delete' | t"><ion-icon name="trash-outline"></ion-icon></button>
             </div>
           </article>
         </ng-container>

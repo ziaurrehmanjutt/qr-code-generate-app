@@ -5,6 +5,8 @@ import { Share } from '@capacitor/share';
 import { AlertController, IonicModule, ToastController } from '@ionic/angular';
 import { QrStorageService } from '../services/qr-storage.service';
 import { AppSettings, SettingsService, ThemeMode } from '../services/settings.service';
+import { Lang, TranslateService } from '../i18n/translate.service';
+import { SharedModule } from '../shared/shared.module';
 
 const APP_ID = 'io.zia.qrtest';
 
@@ -13,7 +15,7 @@ const APP_ID = 'io.zia.qrtest';
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink],
+  imports: [IonicModule, CommonModule, RouterLink, SharedModule],
 })
 export class SettingsPage {
   constructor(
@@ -21,6 +23,7 @@ export class SettingsPage {
     private storage: QrStorageService,
     private alerts: AlertController,
     private toasts: ToastController,
+    private i18n: TranslateService,
   ) {}
 
   get current(): AppSettings {
@@ -29,6 +32,10 @@ export class SettingsPage {
 
   setTheme(value: unknown): void {
     this.settings.update({ theme: value as ThemeMode });
+  }
+
+  setLanguage(value: unknown): void {
+    this.settings.update({ language: value as Lang });
   }
 
   setFormat(value: unknown): void {
@@ -49,7 +56,7 @@ export class SettingsPage {
 
   async shareApp(): Promise<void> {
     try {
-      await Share.share({ title: 'QR House', text: 'Create, style and scan QR codes with QR House.', url: `https://play.google.com/store/apps/details?id=${APP_ID}` });
+      await Share.share({ title: 'QR House', text: this.i18n.t('Create, style and scan QR codes with QR House.'), url: `https://play.google.com/store/apps/details?id=${APP_ID}` });
     } catch {
       // The share sheet was dismissed.
     }
@@ -60,17 +67,18 @@ export class SettingsPage {
   }
 
   private async confirm(header: string, message: string, action: () => Promise<void>, done: string): Promise<void> {
+    const t = (key: string) => this.i18n.t(key);
     const alert = await this.alerts.create({
-      header,
-      message,
+      header: t(header),
+      message: t(message),
       buttons: [
-        { text: 'Cancel', role: 'cancel' },
+        { text: t('Cancel'), role: 'cancel' },
         {
-          text: 'Delete',
+          text: t('Delete'),
           role: 'destructive',
           handler: async () => {
             await action();
-            (await this.toasts.create({ message: done, duration: 1800 })).present();
+            (await this.toasts.create({ message: t(done), duration: 1800 })).present();
           },
         },
       ],

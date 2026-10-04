@@ -384,7 +384,8 @@ export class QrService {
       dotsOptions: {
         color: c.dotsColor,
         type: c.dotsType,
-        roundSize: c.dotsRoundSize,
+        // The library draws nothing in circle shape when roundSize is false.
+        roundSize: c.shape === 'circle' ? true : c.dotsRoundSize,
       },
       backgroundOptions: {
         color: c.bgColor,
@@ -459,8 +460,10 @@ export class QrService {
   /**
    * Creates a fresh QRCodeStyling instance from the current config.
    */
-  createQrCode(): any {
-    return new QRCodeStyling(this.buildOptions());
+  createQrCode(size?: number): any {
+    const options = this.buildOptions();
+    if (size) options.width = options.height = size;
+    return new QRCodeStyling(options);
   }
 
   /**

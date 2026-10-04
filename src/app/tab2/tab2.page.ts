@@ -14,6 +14,7 @@ import {
 } from '../services/qr.service';
 import { QrStorageService } from '../services/qr-storage.service';
 import { SettingsService } from '../services/settings.service';
+import { TranslateService } from '../i18n/translate.service';
 
 type Panel = 'style' | 'colors' | 'logo' | 'more';
 type ExportAction = 'share' | 'open' | 'gallery' | 'app';
@@ -60,12 +61,14 @@ export class Tab2Page {
   downloadFormat: 'png' | 'jpeg' | 'svg' | 'webp' = 'png';
   exportAction: ExportAction = 'share';
   isLocating = false;
+  isFullOpen = false;
   notice = '';
 
   constructor(
     private qrService: QrService,
     private qrStorage: QrStorageService,
     private settings: SettingsService,
+    private i18n: TranslateService,
   ) {}
 
   ionViewWillEnter() {
@@ -128,6 +131,11 @@ export class Tab2Page {
     return this.qrService.formatValue(this.rawValue);
   }
 
+  /** True while there is nothing to encode, so no code is drawn. */
+  get isEmpty(): boolean {
+    return !this.formattedPreview;
+  }
+
   get warnings(): string[] {
     return this.qrService.getWarnings();
   }
@@ -155,8 +163,26 @@ export class Tab2Page {
   /** Rebuilds the code. update() merges options, so a removed gradient would otherwise stay. */
   generateQrCode() {
     if (this.canvas?.nativeElement) this.canvas.nativeElement.innerHTML = '';
+    if (this.isEmpty) {
+      this.qrCode = null;
+      return;
+    }
     this.qrCode = this.qrService.createQrCode();
     if (this.canvas?.nativeElement) this.qrCode.append(this.canvas.nativeElement);
+  }
+
+  /** Opens the code at full size, so a logo or the edges can be checked. */
+  openFull(open: boolean): void {
+    this.isFullOpen = open && !this.isEmpty;
+  }
+
+  renderFull(): void {
+    const target = document.getElementById('full-qr');
+    if (!target) return;
+    target.innerHTML = '';
+    // Render at the screen's pixel width so the enlarged code stays sharp.
+    const size = Math.min(1600, Math.round(Math.max(window.innerWidth, 320) * (window.devicePixelRatio || 1)));
+    this.qrService.createQrCode(size).append(target);
   }
 
   updateQrCode() {
@@ -260,6 +286,10 @@ export class Tab2Page {
   }
 
   async runExportAction(): Promise<void> {
+    if (!this.qrCode) {
+      this.flash('Nothing to export yet. Add some content first.');
+      return;
+    }
     switch (this.exportAction) {
       case 'open': return this.open();
       case 'gallery': return this.saveToGallery();
@@ -339,7 +369,7 @@ export class Tab2Page {
       }
       await Media.savePhoto({ path: dataUrl, albumIdentifier: album?.identifier, fileName });
       this.isDownloadSheetOpen = false;
-      this.flash(`Saved to the "${GALLERY_ALBUM}" gallery album.`);
+      this.flash('Saved to the QR House gallery album.');
     } catch (error) {
       console.error('Gallery save failed:', error);
       this.flash('Could not save to the gallery.');
@@ -347,6 +377,10 @@ export class Tab2Page {
   }
 
   async saveInApp(): Promise<void> {
+    if (!this.qrCode) {
+      this.flash('Nothing to export yet. Add some content first.');
+      return;
+    }
     const fileName = this.config.fileName || 'qr-code';
     const ext = this.downloadFormat;
     await this.qrStorage.saveToApp(fileName, ext, await this.rawBase64(ext), this.config);
@@ -355,7 +389,7 @@ export class Tab2Page {
   }
 
   private flash(message: string): void {
-    this.notice = message;
+    this.notice = this.i18n.t(message);
   }
 
   private blobToBase64(blob: Blob): Promise<string> {

@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { SettingsService } from '../services/settings.service';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-onboarding',
   templateUrl: 'onboarding.page.html',
   styleUrls: ['onboarding.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, SharedModule],
 })
 export class OnboardingPage {
   index = 0;

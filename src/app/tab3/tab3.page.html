@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Scan</ion-title>
+    <ion-title>{{ 'Scan' | t }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="decodedResult" (click)="clearResult()" aria-label="Clear result"><ion-icon slot="icon-only" name="close-outline"></ion-icon></ion-button>
-      <ion-button routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
+      <ion-button *ngIf="decodedResult" (click)="clearResult()" [title]="'Clear result' | t"><ion-icon slot="icon-only" name="close-outline"></ion-icon></ion-button>
+      <ion-button routerLink="/settings" [title]="'Settings' | t"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -16,11 +16,11 @@
         <ion-icon name="qr-code-outline"></ion-icon><b class="beam"></b>
       </div>
       <div class="scan-copy">
-        <h2>{{ isScanning ? 'Looking for a code…' : decodedResult ? 'Scan another code' : 'Scan a QR code' }}</h2>
-        <p class="muted">QR and barcodes from the camera or from a picture.</p>
+        <h2>{{ (isScanning ? 'Looking for a code…' : decodedResult ? 'Scan another code' : 'Scan a QR code') | t }}</h2>
+        <p class="muted">{{ 'QR and barcodes from the camera or from a picture.' | t }}</p>
         <div class="scan-buttons">
-          <button type="button" class="btn" (click)="scanBarcode()" [disabled]="isScanning"><ion-icon name="camera-outline"></ion-icon>Camera</button>
-          <button type="button" class="btn soft" (click)="picker.click()" [disabled]="isScanning"><ion-icon name="images-outline"></ion-icon>Gallery</button>
+          <button type="button" class="btn" (click)="scanBarcode()" [disabled]="isScanning"><ion-icon name="camera-outline"></ion-icon>{{ 'Camera' | t }}</button>
+          <button type="button" class="btn soft" (click)="picker.click()" [disabled]="isScanning"><ion-icon name="images-outline"></ion-icon>{{ 'Gallery' | t }}</button>
         </div>
         <input #picker type="file" accept="image/*" hidden (change)="scanFromImage($event)">
       </div>
@@ -31,42 +31,42 @@
     <section class="card result" *ngIf="decodedResult as result; else guide">
       <header class="row">
         <span class="badge-icon"><ion-icon [name]="result.icon"></ion-icon></span>
-        <div class="grow"><span class="type-tag">{{ result.label }}</span><h3>{{ result.title }}</h3><p class="muted">{{ result.subtitle }}</p></div>
+        <div class="grow"><span class="type-tag">{{ result.label | t }}</span><h3>{{ result.title | t }}</h3><p class="muted">{{ result.subtitle | t }}</p></div>
       </header>
 
-      <div class="note" *ngIf="result.warning"><ion-icon name="warning-outline"></ion-icon><span>{{ result.warning }}</span></div>
+      <div class="note" *ngIf="result.warning"><ion-icon name="warning-outline"></ion-icon><span>{{ result.warning | t }}</span></div>
 
       <dl class="details" *ngIf="result.details.length">
-        <div *ngFor="let d of result.details"><dt>{{ d.label }}</dt><dd>{{ d.value }}</dd></div>
+        <div *ngFor="let d of result.details"><dt>{{ d.label | t }}</dt><dd>{{ d.value }}</dd></div>
       </dl>
       <div class="raw" *ngIf="!result.details.length">{{ result.raw }}</div>
 
-      <button type="button" class="btn block" (click)="runMainAction()"><ion-icon [name]="result.actionIcon"></ion-icon>{{ result.actionLabel }}</button>
+      <button type="button" class="btn block" (click)="runMainAction()"><ion-icon [name]="result.actionIcon"></ion-icon>{{ result.actionLabel | t }}</button>
 
       <div class="chips actions" *ngIf="result.extraActions.length">
-        <button type="button" class="chip" *ngFor="let a of result.extraActions" (click)="runAction(a)"><ion-icon [name]="a.icon"></ion-icon>{{ a.label }}</button>
+        <button type="button" class="chip" *ngFor="let a of result.extraActions" (click)="runAction(a)"><ion-icon [name]="a.icon"></ion-icon>{{ a.label | t }}</button>
       </div>
 
       <footer class="tools">
-        <button type="button" (click)="copyResult()"><ion-icon name="copy-outline"></ion-icon><span>Copy</span></button>
-        <button type="button" (click)="shareResult()"><ion-icon name="share-social-outline"></ion-icon><span>Share</span></button>
-        <button type="button" *ngIf="savedScan" (click)="toggleFavorite()"><ion-icon [name]="savedScan.favorite ? 'star' : 'star-outline'"></ion-icon><span>Favorite</span></button>
-        <button type="button" (click)="createSimilar()"><ion-icon name="color-wand-outline"></ion-icon><span>Make QR</span></button>
+        <button type="button" (click)="copyResult()"><ion-icon name="copy-outline"></ion-icon><span>{{ 'Copy' | t }}</span></button>
+        <button type="button" (click)="shareResult()"><ion-icon name="share-social-outline"></ion-icon><span>{{ 'Share' | t }}</span></button>
+        <button type="button" *ngIf="savedScan" (click)="toggleFavorite()"><ion-icon [name]="savedScan.favorite ? 'star' : 'star-outline'"></ion-icon><span>{{ 'Favorite' | t }}</span></button>
+        <button type="button" (click)="createSimilar()"><ion-icon name="color-wand-outline"></ion-icon><span>{{ 'Make QR' | t }}</span></button>
       </footer>
     </section>
 
     <ng-template #guide>
       <section class="guide">
-        <p class="eyebrow">Understands</p>
+        <p class="eyebrow">{{ 'Understands' | t }}</p>
         <div class="chips wrap">
-          <span class="chip"><ion-icon name="link-outline"></ion-icon>Links</span>
-          <span class="chip"><ion-icon name="wifi-outline"></ion-icon>Wi-Fi</span>
-          <span class="chip"><ion-icon name="person-circle-outline"></ion-icon>Contacts</span>
-          <span class="chip"><ion-icon name="calendar-outline"></ion-icon>Events</span>
-          <span class="chip"><ion-icon name="location-outline"></ion-icon>Places</span>
-          <span class="chip"><ion-icon name="call-outline"></ion-icon>Phone</span>
-          <span class="chip"><ion-icon name="chatbubble-outline"></ion-icon>SMS</span>
-          <span class="chip"><ion-icon name="mail-outline"></ion-icon>Email</span>
+          <span class="chip"><ion-icon name="link-outline"></ion-icon>{{ 'Links' | t }}</span>
+          <span class="chip"><ion-icon name="wifi-outline"></ion-icon>{{ 'Wi-Fi' | t }}</span>
+          <span class="chip"><ion-icon name="person-circle-outline"></ion-icon>{{ 'Contacts' | t }}</span>
+          <span class="chip"><ion-icon name="calendar-outline"></ion-icon>{{ 'Events' | t }}</span>
+          <span class="chip"><ion-icon name="location-outline"></ion-icon>{{ 'Places' | t }}</span>
+          <span class="chip"><ion-icon name="call-outline"></ion-icon>{{ 'Phone' | t }}</span>
+          <span class="chip"><ion-icon name="chatbubble-outline"></ion-icon>{{ 'SMS' | t }}</span>
+          <span class="chip"><ion-icon name="mail-outline"></ion-icon>{{ 'Email' | t }}</span>
         </div>
       </section>
     </ng-template>

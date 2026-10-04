@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { QrService } from '../services/qr.service';
+import { TranslateService } from '../i18n/translate.service';
 import { QrStorageService, SavedQrCode, ScanRecord } from '../services/qr-storage.service';
 
 type LibraryTab = 'saved' | 'scanned' | 'favorites';
@@ -26,6 +27,7 @@ export class Tab1Page {
     private qrStorage: QrStorageService,
     private qrService: QrService,
     private router: Router,
+    private i18n: TranslateService,
   ) {}
 
   async ionViewWillEnter(): Promise<void> {
@@ -162,6 +164,6 @@ export class Tab1Page {
   }
 
   private flash(message: string): void {
-    this.notice = message;
+    this.notice = this.i18n.t(message);
   }
 }

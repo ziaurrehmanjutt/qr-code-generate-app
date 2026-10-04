@@ -1,12 +1,15 @@
 :host { display: block; }
 .group { margin: 18px 4px 8px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-.card { display: grid; gap: 12px; }
-.card.list { gap: 16px; }
+// Every row may shrink to the card width, so toggles and segments never push past the edge.
+.card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; overflow: hidden; }
+.block { min-width: 0; }
 .name { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; }
-ion-toggle .name { margin: 0; }
+ion-toggle { display: flex; width: 100%; font-size: 14.5px; font-weight: 700; }
+ion-segment { width: 100%; max-width: 100%; }
+ion-segment-button { min-width: 0; --padding-start: 4px; --padding-end: 4px; }
 .links { gap: 0; padding: 4px 16px; }
-.links button { display: flex; align-items: center; gap: 12px; padding: 14px 0; border: 0; color: var(--ink); background: none; font: inherit; font-size: 14.5px; font-weight: 600; text-align: left; }
+.links button { display: flex; align-items: center; gap: 12px; padding: 14px 0; border: 0; color: var(--ink); background: none; font: inherit; font-size: 14.5px; font-weight: 600; text-align: start; }
 .links button + button { border-top: 1px solid var(--line); }
-.links ion-icon { color: var(--brand); font-size: 20px; }
+.links ion-icon { flex: 0 0 auto; color: var(--brand); font-size: 20px; }
 .links .danger, .links .danger ion-icon { color: #d6452e; }
 .version { margin: 18px 0 0; text-align: center; font-size: 12px; }

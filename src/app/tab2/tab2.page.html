@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Create</ion-title>
+    <ion-title>{{ 'Create' | t }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="resetToDefaults()" aria-label="Reset"><ion-icon slot="icon-only" name="refresh-outline"></ion-icon></ion-button>
-      <ion-button routerLink="/settings" aria-label="Settings"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
+      <ion-button (click)="resetToDefaults()" [title]="'Reset' | t"><ion-icon slot="icon-only" name="refresh-outline"></ion-icon></ion-button>
+      <ion-button routerLink="/settings" [title]="'Settings' | t"><ion-icon slot="icon-only" name="settings-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -13,85 +13,89 @@
     <!-- 1. Type -->
     <div class="chips types">
       <button type="button" class="chip" *ngFor="let ct of supported.contentTypes" [class.on]="contentType === ct.id"
-        (click)="setContentType(ct.id)"><ion-icon [name]="ct.icon"></ion-icon>{{ ct.label }}</button>
+        (click)="setContentType(ct.id)"><ion-icon [name]="ct.icon"></ion-icon>{{ ct.label | t }}</button>
     </div>
 
     <!-- 2. Content -->
     <section class="card form" *ngIf="formFields.length; else single">
       <ng-container *ngFor="let f of formFields" [ngSwitch]="f.inputType">
-        <ion-textarea *ngSwitchCase="'textarea'" class="field" fill="outline" labelPlacement="floating" [label]="f.label"
-          [placeholder]="f.placeholder || ''" [value]="fieldValue(f.key)" rows="2" [autoGrow]="true"
+        <ion-textarea *ngSwitchCase="'textarea'" class="field" fill="outline" labelPlacement="floating" [label]="f.label | t"
+          [placeholder]="(f.placeholder || '') | t" [value]="fieldValue(f.key)" rows="2" [autoGrow]="true"
           (ionInput)="onFieldChange(f.key, $event.detail.value)"></ion-textarea>
-        <ion-select *ngSwitchCase="'select'" class="field" fill="outline" labelPlacement="floating" [label]="f.label"
+        <ion-select *ngSwitchCase="'select'" class="field" fill="outline" labelPlacement="floating" [label]="f.label | t"
           [value]="fieldValue(f.key) || f.options?.[0]?.value" interface="popover"
           (ionChange)="onFieldChange(f.key, $event.detail.value)">
-          <ion-select-option *ngFor="let o of f.options" [value]="o.value">{{ o.label }}</ion-select-option>
+          <ion-select-option *ngFor="let o of f.options" [value]="o.value">{{ o.label | t }}</ion-select-option>
         </ion-select>
-        <ion-toggle *ngSwitchCase="'toggle'" class="toggle-row" [checked]="fieldValue(f.key) === 'true'"
-          (ionChange)="onFieldChange(f.key, $event.detail.checked)">{{ f.label }}</ion-toggle>
-        <ion-input *ngSwitchDefault class="field" fill="outline" labelPlacement="floating" [label]="f.label"
-          [type]="$any(f.inputType || 'text')" [placeholder]="f.placeholder || ''" [value]="fieldValue(f.key)"
+        <ion-toggle *ngSwitchCase="'toggle'" class="toggle-row" justify="space-between" [checked]="fieldValue(f.key) === 'true'"
+          (ionChange)="onFieldChange(f.key, $event.detail.checked)">{{ f.label | t }}</ion-toggle>
+        <ion-input *ngSwitchDefault class="field" fill="outline" labelPlacement="floating" [label]="f.label | t"
+          [type]="$any(f.inputType || 'text')" [placeholder]="(f.placeholder || '') | t" [value]="fieldValue(f.key)"
           (ionInput)="onFieldChange(f.key, $event.detail.value)"></ion-input>
       </ng-container>
       <button type="button" class="btn soft block" *ngIf="contentType === 'location'" (click)="useMyLocation()" [disabled]="isLocating">
-        <ion-icon name="navigate-outline"></ion-icon>{{ isLocating ? 'Locating…' : 'Use my location' }}
+        <ion-icon name="navigate-outline"></ion-icon>{{ (isLocating ? 'Locating…' : 'Use my location') | t }}
       </button>
     </section>
     <ng-template #single>
       <section class="card form">
-        <ion-textarea class="field" fill="outline" labelPlacement="floating" label="Content" [placeholder]="placeholder"
+        <ion-textarea class="field" fill="outline" labelPlacement="floating" [label]="'Content' | t" [placeholder]="placeholder | t"
           [value]="rawValue" rows="2" [autoGrow]="true" [clearOnEdit]="false" (ionInput)="onDataInput($event)"></ion-textarea>
       </section>
     </ng-template>
 
     <!-- 3. Live preview (stays visible while styling) -->
     <section class="card preview">
-      <div class="qr-box"><div class="qr-container" #canvas></div></div>
+      <div class="qr-box" [class.empty]="isEmpty">
+        <div class="qr-container" #canvas [hidden]="isEmpty"></div>
+        <ion-icon *ngIf="isEmpty" name="qr-code-outline"></ion-icon>
+        <button type="button" class="expand" *ngIf="!isEmpty" (click)="openFull(true)" [attr.aria-label]="'Full preview' | t"><ion-icon name="expand-outline"></ion-icon></button>
+      </div>
       <div class="preview-side">
-        <p class="eyebrow">Live preview</p>
-        <p class="preview-text">{{ formattedPreview || 'Fill in the content to see your code' }}</p>
+        <p class="eyebrow">{{ 'Live preview' | t }}</p>
+        <p class="preview-text">{{ (formattedPreview || 'Fill in the content to see your code') | t }}</p>
         <div class="preview-actions">
-          <button type="button" class="btn soft" (click)="saveInApp()"><ion-icon name="bookmark-outline"></ion-icon>Save</button>
-          <button type="button" class="btn" (click)="setDownloadModalOpen(true)"><ion-icon name="download-outline"></ion-icon>Export</button>
+          <button type="button" class="btn soft" (click)="saveInApp()" [disabled]="isEmpty"><ion-icon name="bookmark-outline"></ion-icon>{{ 'Save' | t }}</button>
+          <button type="button" class="btn" (click)="setDownloadModalOpen(true)" [disabled]="isEmpty"><ion-icon name="download-outline"></ion-icon>{{ 'Export' | t }}</button>
         </div>
       </div>
-      <div class="note" *ngFor="let w of warnings"><ion-icon name="warning-outline"></ion-icon><span>{{ w }}</span></div>
+      <div class="note" *ngFor="let w of warnings"><ion-icon name="warning-outline"></ion-icon><span>{{ w | t }}</span></div>
     </section>
 
     <!-- 4. Style studio -->
     <section class="studio">
       <div class="chips presets">
         <button type="button" class="chip" *ngFor="let p of supported.presets" (click)="applyPreset(p)">
-          <i class="dot" [style.background]="p.color"></i>{{ p.label }}
+          <i class="dot" [style.background]="p.color"></i>{{ p.label | t }}
         </button>
       </div>
 
       <ion-segment [value]="panel" (ionChange)="setPanel($event.detail.value)">
-        <ion-segment-button *ngFor="let p of panels" [value]="p.id"><ion-icon [name]="p.icon"></ion-icon><ion-label>{{ p.label }}</ion-label></ion-segment-button>
+        <ion-segment-button *ngFor="let p of panels" [value]="p.id"><ion-icon [name]="p.icon"></ion-icon><ion-label>{{ p.label | t }}</ion-label></ion-segment-button>
       </ion-segment>
 
       <div class="card panel" [ngSwitch]="panel">
         <!-- Style -->
         <ng-container *ngSwitchCase="'style'">
-          <p class="label">Dots</p>
+          <p class="label">{{ 'Dots' | t }}</p>
           <div class="chips tiles">
             <button type="button" class="tile" *ngFor="let s of supported.dotStyles" [class.on]="config.dotsType === s.value"
-              (click)="updateStyle('dotsType', s.value)"><img [src]="s.image" [alt]="s.label"><span>{{ s.label }}</span></button>
+              (click)="updateStyle('dotsType', s.value)"><img [src]="s.image" [alt]="s.label | t"><span>{{ s.label | t }}</span></button>
           </div>
-          <p class="label">Corner frame</p>
+          <p class="label">{{ 'Corner frame' | t }}</p>
           <div class="chips tiles small">
             <button type="button" class="tile" *ngFor="let s of supported.cornerStyles" [class.on]="config.cornersSquareType === s.value"
               (click)="updateStyle('cornersSquareType', s.value)">
               <svg viewBox="0 0 48 48" aria-hidden="true">
                 <rect x="5" y="5" width="38" height="38" [attr.rx]="s.value === 'extra-rounded' ? 12 : s.value === 'rounded' ? 6 : 0" />
                 <rect class="cut" x="14" y="14" width="20" height="20" [attr.rx]="s.value === 'dot' ? 10 : 2" />
-              </svg><span>{{ s.label }}</span>
+              </svg><span>{{ s.label | t }}</span>
             </button>
           </div>
-          <p class="label">Shape</p>
+          <p class="label">{{ 'Shape' | t }}</p>
           <ion-segment [value]="config.shape" (ionChange)="onSelectChange($event, 'shape')">
-            <ion-segment-button value="square"><ion-label>Square</ion-label></ion-segment-button>
-            <ion-segment-button value="circle"><ion-label>Circle</ion-label></ion-segment-button>
+            <ion-segment-button value="square"><ion-label>{{ 'Square' | t }}</ion-label></ion-segment-button>
+            <ion-segment-button value="circle"><ion-label>{{ 'Circle' | t }}</ion-label></ion-segment-button>
           </ion-segment>
         </ng-container>
 
@@ -100,14 +104,14 @@
           <div class="color-row" *ngFor="let t of colorTargets">
             <div class="row">
               <label class="swatch" [style.background]="color(t, 'Color')"><input type="color" [value]="color(t, 'Color')" (input)="onColorInput($event, t, 'Color')"></label>
-              <span class="grow"><strong>{{ t.label }}</strong><small class="muted">{{ color(t, 'Color') }}</small></span>
-              <button type="button" class="chip" [class.on]="gradient(t) !== 'none'" (click)="toggleGradient(t)"><ion-icon name="color-filter-outline"></ion-icon>Gradient</button>
+              <span class="grow"><strong>{{ t.label | t }}</strong><small class="muted">{{ color(t, 'Color') }}</small></span>
+              <button type="button" class="chip" [class.on]="gradient(t) !== 'none'" (click)="toggleGradient(t)"><ion-icon name="color-filter-outline"></ion-icon>{{ 'Gradient' | t }}</button>
             </div>
             <div class="gradient" *ngIf="openGradients.has(t.prefix)">
               <ion-segment [value]="gradient(t)" (ionChange)="setGradient(t, $event.detail.value)">
-                <ion-segment-button value="none"><ion-label>Solid</ion-label></ion-segment-button>
-                <ion-segment-button value="linear"><ion-label>Linear</ion-label></ion-segment-button>
-                <ion-segment-button value="radial"><ion-label>Radial</ion-label></ion-segment-button>
+                <ion-segment-button value="none"><ion-label>{{ 'Solid' | t }}</ion-label></ion-segment-button>
+                <ion-segment-button value="linear"><ion-label>{{ 'Linear' | t }}</ion-label></ion-segment-button>
+                <ion-segment-button value="radial"><ion-label>{{ 'Radial' | t }}</ion-label></ion-segment-button>
               </ion-segment>
               <ng-container *ngIf="gradient(t) !== 'none'">
                 <div class="row pair">
@@ -123,58 +127,73 @@
         <!-- Logo -->
         <ng-container *ngSwitchCase="'logo'">
           <div class="row logo-actions">
-            <button type="button" class="btn soft grow" (click)="logoPicker.click()"><ion-icon name="images-outline"></ion-icon>From gallery</button>
-            <button type="button" class="btn ghost" *ngIf="config.imageUrl" (click)="setOption('imageUrl', '')"><ion-icon name="trash-outline"></ion-icon>Remove</button>
+            <button type="button" class="btn soft grow" (click)="logoPicker.click()"><ion-icon name="images-outline"></ion-icon>{{ 'From gallery' | t }}</button>
+            <button type="button" class="btn ghost" *ngIf="config.imageUrl" (click)="setOption('imageUrl', '')"><ion-icon name="trash-outline"></ion-icon>{{ 'Remove' | t }}</button>
           </div>
           <input #logoPicker type="file" accept="image/*" hidden (change)="onLogoPicked($event)">
-          <ion-input class="field" fill="outline" labelPlacement="floating" label="…or image URL" [value]="config.imageUrl.startsWith('data:') ? '' : config.imageUrl"
+          <ion-input class="field" fill="outline" labelPlacement="floating" [label]="'…or image URL' | t" [value]="config.imageUrl.startsWith('data:') ? '' : config.imageUrl"
             placeholder="https://example.com/logo.png" (ionInput)="onImageUrlInput($event)"></ion-input>
           <ng-container *ngIf="config.imageUrl">
-            <p class="label">Logo size</p>
+            <p class="label">{{ 'Logo size' | t }}</p>
             <ion-range aria-label="Logo size" [value]="config.imageSize" min="0.1" max="0.6" step="0.05" (ionChange)="onRangeChange($event, 'imageSize')"></ion-range>
-            <p class="label">Logo margin</p>
+            <p class="label">{{ 'Logo margin' | t }}</p>
             <ion-range aria-label="Logo margin" [value]="config.imageMargin" min="0" max="40" step="1" (ionChange)="onRangeChange($event, 'imageMargin')"></ion-range>
-            <ion-toggle class="toggle-row" [checked]="config.imageHideDots" (ionChange)="onToggleChange($event, 'imageHideDots')">Hide dots behind logo</ion-toggle>
+            <ion-toggle class="toggle-row" justify="space-between" [checked]="config.imageHideDots" (ionChange)="onToggleChange($event, 'imageHideDots')">{{ 'Hide dots behind logo' | t }}</ion-toggle>
           </ng-container>
         </ng-container>
 
         <!-- More -->
         <ng-container *ngSwitchCase="'more'">
-          <p class="label">Error correction <small class="muted">higher = survives damage and logos</small></p>
+          <p class="label">{{ 'Error correction' | t }} <small class="muted">{{ 'higher = survives damage and logos' | t }}</small></p>
           <ion-segment [value]="config.errorCorrectionLevel" (ionChange)="onSelectChange($event, 'errorCorrectionLevel')">
             <ion-segment-button *ngFor="let l of supported.errorLevels" [value]="l"><ion-label>{{ l }}</ion-label></ion-segment-button>
           </ion-segment>
-          <p class="label">Size</p>
+          <p class="label">{{ 'Size' | t }}</p>
           <ion-range aria-label="Size" [value]="config.width" min="150" max="600" step="10" (ionChange)="onRangeChange($event, 'width')"></ion-range>
-          <p class="label">Margin</p>
+          <p class="label">{{ 'Margin' | t }}</p>
           <ion-range aria-label="Margin" [value]="config.margin" min="0" max="40" step="1" (ionChange)="onRangeChange($event, 'margin')"></ion-range>
-          <p class="label">Background roundness</p>
+          <p class="label">{{ 'Background roundness' | t }}</p>
           <ion-range aria-label="Background roundness" [value]="config.bgRound" min="0" max="40" step="1" (ionChange)="onRangeChange($event, 'bgRound')"></ion-range>
-          <ion-input class="field" fill="outline" labelPlacement="floating" label="File name" [value]="config.fileName" (ionInput)="onFileNameInput($event)"></ion-input>
+          <ion-input class="field" fill="outline" labelPlacement="floating" [label]="'File name' | t" [value]="config.fileName" (ionInput)="onFileNameInput($event)"></ion-input>
         </ng-container>
       </div>
     </section>
   </main>
+
+  <!-- Full-size preview -->
+  <ion-modal [isOpen]="isFullOpen" (didPresent)="renderFull()" (willDismiss)="openFull(false)" class="full-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ 'Full preview' | t }}</ion-title>
+          <ion-buttons slot="end"><ion-button (click)="openFull(false)" [title]="'Close' | t"><ion-icon slot="icon-only" name="close-outline"></ion-icon></ion-button></ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="full-wrap"><div id="full-qr"></div></div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
   <!-- Export sheet -->
   <ion-modal (willDismiss)="setDownloadModalOpen(false)" [isOpen]="isDownloadSheetOpen" [initialBreakpoint]="0.62" [breakpoints]="[0, 0.62, 0.9]">
     <ng-template>
       <ion-content class="sheet">
         <div class="sheet-body">
-          <h2 class="title">Export</h2>
-          <p class="label">Format</p>
+          <h2 class="title">{{ 'Export' | t }}</h2>
+          <p class="label">{{ 'Format' | t }}</p>
           <div class="chips">
             <button type="button" class="chip" *ngFor="let f of supported.extensions" [class.on]="downloadFormat === f"
               (click)="selectFormat($any(f))">{{ f | uppercase }}</button>
           </div>
-          <p class="label">What to do</p>
+          <p class="label">{{ 'What to do' | t }}</p>
           <div class="actions-list">
-            <button type="button" class="action" [class.on]="exportAction === 'share'" (click)="exportAction = 'share'"><ion-icon name="share-social-outline"></ion-icon><span><strong>Share</strong><small>WhatsApp, mail, Drive…</small></span></button>
-            <button type="button" class="action" [class.on]="exportAction === 'gallery'" (click)="exportAction = 'gallery'"><ion-icon name="images-outline"></ion-icon><span><strong>Save to gallery</strong><small>Album “QR House”</small></span></button>
-            <button type="button" class="action" [class.on]="exportAction === 'app'" (click)="exportAction = 'app'"><ion-icon name="bookmark-outline"></ion-icon><span><strong>Save in app</strong><small>Keep it editable in Home</small></span></button>
-            <button type="button" class="action" [class.on]="exportAction === 'open'" (click)="exportAction = 'open'"><ion-icon name="open-outline"></ion-icon><span><strong>Open with…</strong><small>Another app</small></span></button>
+            <button type="button" class="action" [class.on]="exportAction === 'share'" (click)="exportAction = 'share'"><ion-icon name="share-social-outline"></ion-icon><span><strong>{{ 'Share' | t }}</strong><small>{{ 'WhatsApp, mail, Drive…' | t }}</small></span></button>
+            <button type="button" class="action" [class.on]="exportAction === 'gallery'" (click)="exportAction = 'gallery'"><ion-icon name="images-outline"></ion-icon><span><strong>{{ 'Save to gallery' | t }}</strong><small>{{ 'Album “QR House”' | t }}</small></span></button>
+            <button type="button" class="action" [class.on]="exportAction === 'app'" (click)="exportAction = 'app'"><ion-icon name="bookmark-outline"></ion-icon><span><strong>{{ 'Save in app' | t }}</strong><small>{{ 'Keep it editable in Home' | t }}</small></span></button>
+            <button type="button" class="action" [class.on]="exportAction === 'open'" (click)="exportAction = 'open'"><ion-icon name="open-outline"></ion-icon><span><strong>{{ 'Open with…' | t }}</strong><small>{{ 'Another app' | t }}</small></span></button>
           </div>
-          <button type="button" class="btn block" (click)="runExportAction()"><ion-icon name="arrow-forward-outline"></ion-icon>Continue</button>
+          <button type="button" class="btn block" (click)="runExportAction()"><ion-icon name="arrow-forward-outline"></ion-icon>{{ 'Continue' | t }}</button>
         </div>
       </ion-content>
     </ng-template>
