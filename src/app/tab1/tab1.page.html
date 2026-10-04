@@ -28,31 +28,67 @@
       </a>
     </section>
 
+    <section class="stats-section">
+      <div class="stat-grid">
+        <div class="stat-card"><ion-icon name="qr-code-outline"></ion-icon><strong>{{ savedCodes.length }}</strong><span>Created</span></div>
+        <div class="stat-card"><ion-icon name="scan-outline"></ion-icon><strong>{{ scans.length }}</strong><span>Scanned</span></div>
+        <div class="stat-card"><ion-icon name="star-outline"></ion-icon><strong>{{ favoriteCount }}</strong><span>Favorites</span></div>
+        <div class="stat-card"><ion-icon name="flash-outline"></ion-icon><strong>{{ weekCount }}</strong><span>This week</span></div>
+      </div>
+      <div class="week-chart" aria-label="Activity in the last 7 days">
+        <div class="week-bar" *ngFor="let bar of weekBars" [title]="bar.count + ' actions'">
+          <i [style.height.%]="bar.height" [class.active]="bar.count"></i><span>{{ bar.label }}</span>
+        </div>
+      </div>
+    </section>
+
     <section class="saved-section">
       <div class="section-heading">
-        <div><p class="section-kicker">YOUR LIBRARY</p><h2>Saved QR codes</h2></div>
-        <span class="count-badge">{{ savedCodes.length }}</span>
+        <div><p class="section-kicker">YOUR LIBRARY</p><h2>Codes &amp; scans</h2></div>
       </div>
+      <ion-segment [value]="tab" (ionChange)="setTab($event.detail.value)">
+        <ion-segment-button value="saved"><ion-label>Saved</ion-label></ion-segment-button>
+        <ion-segment-button value="scanned"><ion-label>Scanned</ion-label></ion-segment-button>
+        <ion-segment-button value="favorites"><ion-label>Favorites</ion-label></ion-segment-button>
+      </ion-segment>
+      <ion-searchbar class="library-search" placeholder="Search" [debounce]="150" (ionInput)="setQuery($event.detail.value)"></ion-searchbar>
 
       <div class="loading-state" *ngIf="isLoading"><ion-spinner name="crescent"></ion-spinner><span>Loading library...</span></div>
-      <div class="empty-state" *ngIf="!isLoading && !savedCodes.length">
-        <div class="empty-icon"><ion-icon name="archive-outline"></ion-icon></div>
-        <h3>Your library is ready</h3>
-        <p>Saved QR codes will appear here so you can find and use them again.</p>
-        <a class="text-link" href="/tabs/tab2">Create your first code <ion-icon name="arrow-forward-outline"></ion-icon></a>
-      </div>
-      <div class="saved-list" *ngIf="!isLoading && savedCodes.length">
-        <article class="saved-item" *ngFor="let code of savedCodes">
-          <div class="saved-icon"><ion-icon name="qr-code-outline"></ion-icon></div>
-          <div class="saved-info"><strong>{{ code.name }}</strong><small>{{ code.format | uppercase }} · {{ formatDate(code.createdAt) }}</small></div>
-          <ion-icon class="saved-arrow" name="chevron-forward-outline"></ion-icon>
-        </article>
-      </div>
-    </section>
 
-    <section class="coming-section">
-      <div class="section-heading"><div><p class="section-kicker">MORE TO COME</p><h2>Built around your codes</h2></div></div>
-      <div class="feature-row"><div><ion-icon name="images-outline"></ion-icon><span>Gallery saves</span></div><div><ion-icon name="folder-open-outline"></ion-icon><span>Organized folders</span></div><div><ion-icon name="cloud-outline"></ion-icon><span>Sync everywhere</span></div></div>
+      <div class="empty-state" *ngIf="!isLoading && !visibleCodes.length && !visibleScans.length">
+        <div class="empty-icon"><ion-icon [name]="tab === 'scanned' ? 'scan-outline' : tab === 'favorites' ? 'star-outline' : 'archive-outline'"></ion-icon></div>
+        <h3>{{ query ? 'Nothing matches' : tab === 'scanned' ? 'No scans yet' : tab === 'favorites' ? 'No favorites yet' : 'Your library is ready' }}</h3>
+        <p>{{ query ? 'Try a different search.' : tab === 'scanned' ? 'Scanned codes appear here.' : tab === 'favorites' ? 'Star a code or a scan to keep it here.' : 'Saved QR codes appear here so you can use them again.' }}</p>
+        <a class="text-link" href="/tabs/tab2" *ngIf="tab === 'saved' && !query">Create your first code <ion-icon name="arrow-forward-outline"></ion-icon></a>
+      </div>
+
+      <div class="saved-list" *ngIf="!isLoading">
+        <ng-container *ngIf="tab !== 'scanned'">
+          <article class="saved-item" *ngFor="let code of visibleCodes">
+              <img class="saved-thumb" [src]="thumb(code)" [alt]="code.name">
+              <div class="saved-info" (click)="edit(code)"><strong>{{ code.name }}</strong><small>{{ code.format | uppercase }} · {{ formatDate(code.createdAt) }}</small></div>
+              <div class="item-actions">
+                <button type="button" (click)="toggleFavorite(code)" title="Favorite"><ion-icon [name]="code.favorite ? 'star' : 'star-outline'"></ion-icon></button>
+                <button type="button" (click)="edit(code)" title="Edit"><ion-icon name="create-outline"></ion-icon></button>
+                <button type="button" (click)="share(code)" title="Share"><ion-icon name="share-social-outline"></ion-icon></button>
+                <button type="button" (click)="remove(code)" title="Delete"><ion-icon name="trash-outline"></ion-icon></button>
+              </div>
+          </article>
+        </ng-container>
+
+        <ng-container *ngIf="tab !== 'saved'">
+          <article class="saved-item" *ngFor="let scan of visibleScans">
+              <div class="saved-icon"><ion-icon [name]="scan.icon"></ion-icon></div>
+              <div class="saved-info" (click)="copyScan(scan)"><strong>{{ scan.title }}</strong><small>{{ scan.type | titlecase }} · {{ formatDate(scan.scannedAt) }}</small></div>
+              <div class="item-actions">
+                <button type="button" (click)="toggleScanFavorite(scan)" title="Favorite"><ion-icon [name]="scan.favorite ? 'star' : 'star-outline'"></ion-icon></button>
+                <button type="button" (click)="createFromScan(scan)" title="Create QR"><ion-icon name="color-wand-outline"></ion-icon></button>
+                <button type="button" (click)="removeScan(scan)" title="Delete"><ion-icon name="trash-outline"></ion-icon></button>
+              </div>
+          </article>
+        </ng-container>
+      </div>
     </section>
   </main>
+<ion-toast [isOpen]="!!notice" [message]="notice" [duration]="1800" (didDismiss)="notice = ''"></ion-toast>
 </ion-content>

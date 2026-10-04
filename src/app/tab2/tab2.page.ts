@@ -5,7 +5,9 @@ import { Share } from '@capacitor/share';
 import { FileOpener, FileOpenerOptions } from '@capacitor-community/file-opener';
 import {
   QrService,
+  QrConfig,
   QrContentType,
+  QrField,
   SUPPORTED_OPTIONS,
 } from '../services/qr.service';
 import { QrStorageService } from '../services/qr-storage.service';
@@ -45,6 +47,9 @@ export class Tab2Page {
   constructor(private qrService: QrService, private qrStorage: QrStorageService) {}
 
   ionViewWillEnter() {
+    // The config may have been replaced elsewhere (edit a saved code, create similar).
+    this.config = this.qrService.config;
+    this.rawValue = this.config.data;
     this.generateQrCode();
   }
 
@@ -55,8 +60,38 @@ export class Tab2Page {
   }
 
   setContentType(type: any) {
+    if (!type || type === this.config.contentType) return;
+    const wasForm = this.qrService.isFormType();
     this.qrService.setContentType(type as QrContentType);
+    if (this.qrService.isFormType()) this.rawValue = this.qrService.buildPayload();
+    else if (wasForm) this.rawValue = '';
+    this.qrService.setData(this.rawValue);
     this.generateQrCode();
+  }
+
+  /** Form layout of the selected content type, empty for single-input types. */
+  get formFields(): QrField[] {
+    return this.supported.forms[this.config.contentType] ?? [];
+  }
+
+  fieldValue(key: string): string {
+    return this.config.fields[key] ?? '';
+  }
+
+  onFieldChange(key: string, value: unknown): void {
+    this.qrService.setField(key, String(value ?? ''));
+    this.rawValue = this.qrService.buildPayload();
+    this.qrService.setData(this.rawValue);
+    this.updateQrCode();
+  }
+
+  applyPreset(preset: { patch: Partial<QrConfig> }): void {
+    Object.assign(this.config, preset.patch);
+    this.updateQrCode();
+  }
+
+  get warnings(): string[] {
+    return this.qrService.getWarnings();
   }
 
   onDataInput($event: any) {
@@ -107,12 +142,9 @@ export class Tab2Page {
     }
   }
 
+  /** Rebuilds the code. update() merges options, so a removed gradient would otherwise stay. */
   updateQrCode() {
-    if (this.qrCode) {
-      this.qrCode.update(this.qrService.buildOptions());
-    } else {
-      this.generateQrCode();
-    }
+    this.generateQrCode();
   }
 
   onColorChange($event: any, prop: string) {
@@ -279,7 +311,7 @@ export class Tab2Page {
     const blob: Blob = await this.qrCode.getRawData(ext);
     const base64 = await this.blobToBase64(blob);
     const base64Data = base64.includes('base64,') ? base64.split('base64,')[1] : base64;
-    await this.qrStorage.saveToApp(fileName, ext, base64Data);
+    await this.qrStorage.saveToApp(fileName, ext, base64Data, this.config);
     this.exportMessage = 'Saved to your app library.';
     this.isDownloadSheetOpen = false;
   }

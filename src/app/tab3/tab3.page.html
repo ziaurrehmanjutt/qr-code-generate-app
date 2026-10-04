@@ -2,8 +2,8 @@
   <ion-toolbar>
     <ion-title>QR Lens</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="decodedResult" (click)="shareResult()" title="Share result">
-        <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+      <ion-button *ngIf="decodedResult" (click)="clearResult()" title="Clear result">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,7 +29,7 @@
         <p>{{ isScanning ? 'Hold the code inside the frame.' : 'Your decoded result will appear here with the right action.' }}</p>
         <ion-button color="primary" (click)="scanBarcode()" [disabled]="isScanning">
           <ion-icon slot="start" [name]="isScanning ? 'scan-outline' : 'camera-outline'"></ion-icon>
-          {{ isScanning ? 'Scanning' : 'Start camera' }}
+          {{ isScanning ? 'Scanning' : (decodedResult ? 'Scan again' : 'Start camera') }}
         </ion-button>
       </div>
     </section>
@@ -43,12 +43,18 @@
       </div>
       <article class="result-card">
         <div class="result-title"><div class="result-icon"><ion-icon [name]="result.icon"></ion-icon></div><div><h3>{{ result.title }}</h3><p>{{ result.subtitle }}</p></div></div>
+        <div class="warning-note" *ngIf="result.warning"><ion-icon name="warning-outline"></ion-icon><span>{{ result.warning }}</span></div>
         <div class="decoded-value">{{ result.raw }}</div>
         <dl class="detail-list" *ngIf="result.details.length"><div *ngFor="let detail of result.details"><dt>{{ detail.label }}</dt><dd>{{ detail.value }}</dd></div></dl>
         <div class="result-actions">
-          <ion-button expand="block" (click)="openResult()"><ion-icon slot="start" [name]="result.actionIcon"></ion-icon>{{ result.actionLabel }}</ion-button>
-          <ion-button fill="outline" (click)="copyResult()"><ion-icon slot="start" [name]="copied ? 'checkmark-outline' : 'copy-outline'"></ion-icon>{{ copied ? 'Copied' : 'Copy' }}</ion-button>
-          <ion-button fill="outline" (click)="shareResult()"><ion-icon slot="start" name="share-social-outline"></ion-icon>Share</ion-button>
+          <ion-button expand="block" (click)="runMainAction()"><ion-icon slot="start" [name]="result.actionIcon"></ion-icon>{{ result.actionLabel }}</ion-button>
+          <ion-button fill="outline" *ngFor="let action of result.extraActions" (click)="runAction(action)"><ion-icon slot="start" [name]="action.icon"></ion-icon>{{ action.label }}</ion-button>
+        </div>
+        <div class="result-tools">
+          <button type="button" (click)="copyResult()"><ion-icon name="copy-outline"></ion-icon>Copy</button>
+          <button type="button" (click)="shareResult()"><ion-icon name="share-social-outline"></ion-icon>Share</button>
+          <button type="button" (click)="toggleFavorite()"><ion-icon [name]="savedScan?.favorite ? 'star' : 'star-outline'"></ion-icon>Favorite</button>
+          <button type="button" (click)="createSimilar()"><ion-icon name="color-wand-outline"></ion-icon>Create similar</button>
         </div>
       </article>
     </section>
@@ -59,4 +65,5 @@
       </section>
     </ng-template>
   </main>
+<ion-toast [isOpen]="!!notice" [message]="notice" [duration]="1800" position="bottom" (didDismiss)="notice = ''"></ion-toast>
 </ion-content>

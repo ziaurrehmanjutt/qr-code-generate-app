@@ -23,15 +23,33 @@
     </section>
 
     <div class="segment-wrap">
-      <ion-segment [value]="contentType" (ionChange)="setContentType($event.detail.value)">
+      <ion-segment [value]="contentType" [scrollable]="true" (ionChange)="setContentType($event.detail.value)">
         <ion-segment-button *ngFor="let ct of supported.contentTypes" [value]="ct.id">
           <ion-icon [name]="ct.icon"></ion-icon>
-          <!-- <ion-label>{{ ct.label }}</ion-label> -->
+          <ion-label>{{ ct.label }}</ion-label>
         </ion-segment-button>
       </ion-segment>
     </div>
 
-    <div class="input-wrap">
+    <div class="input-wrap form-grid" *ngIf="formFields.length">
+      <ng-container *ngFor="let f of formFields" [ngSwitch]="f.inputType">
+        <ion-textarea *ngSwitchCase="'textarea'" class="data-input" fill="outline" labelPlacement="floating" [label]="f.label"
+          [placeholder]="f.placeholder || ''" [value]="fieldValue(f.key)" rows="3" [autoGrow]="true"
+          (ionInput)="onFieldChange(f.key, $event.detail.value)"></ion-textarea>
+        <ion-select *ngSwitchCase="'select'" class="data-input" fill="outline" labelPlacement="floating" [label]="f.label"
+          [value]="fieldValue(f.key) || f.options?.[0]?.value" interface="popover"
+          (ionChange)="onFieldChange(f.key, $event.detail.value)">
+          <ion-select-option *ngFor="let o of f.options" [value]="o.value">{{ o.label }}</ion-select-option>
+        </ion-select>
+        <ion-toggle *ngSwitchCase="'toggle'" class="form-toggle" [checked]="fieldValue(f.key) === 'true'"
+          (ionChange)="onFieldChange(f.key, $event.detail.checked)">{{ f.label }}</ion-toggle>
+        <ion-input *ngSwitchDefault class="data-input" fill="outline" labelPlacement="floating" [label]="f.label"
+          [type]="$any(f.inputType || 'text')" [placeholder]="f.placeholder || ''" [value]="fieldValue(f.key)"
+          (ionInput)="onFieldChange(f.key, $event.detail.value)"></ion-input>
+      </ng-container>
+    </div>
+
+    <div class="input-wrap" *ngIf="!formFields.length">
       <ion-textarea class="data-input" label="" label-placement="stacked" [placeholder]="placeholder" [value]="rawValue"
         rows="3" autoGrow="true" (ionInput)="onDataInput($event)" row="3" clearInput>
       </ion-textarea>
@@ -42,11 +60,21 @@
 
 
       <div class="qr-container" #canvas></div>
+      <div class="qr-warning" *ngFor="let w of warnings"><ion-icon name="warning-outline"></ion-icon><span>{{ w }}</span></div>
       <div class="qr-actions">
         <ion-button expand="block" color="primary" (click)="setDownloadModalOpen(true)">
           <ion-icon slot="start" name="download-outline"></ion-icon>
           Export code
         </ion-button>
+      </div>
+    </section>
+
+    <section class="presets-wrap">
+      <div class="style-label"><span>Quick styles</span><small>One tap</small></div>
+      <div class="preset-row">
+        <button type="button" class="preset-chip" *ngFor="let p of supported.presets" (click)="applyPreset(p)">
+          <span class="preset-dot" [style.background]="p.color"></span>{{ p.label }}
+        </button>
       </div>
     </section>
 

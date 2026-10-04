@@ -761,3 +761,11 @@
     color: var(--ion-color-medium, #666);
   }
 }
+.form-grid { display: grid; gap: 12px; }
+.form-toggle { padding: 4px 2px; }
+.qr-warning { display: flex; align-items: flex-start; gap: 8px; margin: 12px 4px 0; padding: 10px 12px; border-left: 3px solid #d9a21b; color: #7a5a06; background: #fff8e1; font-size: 12px; line-height: 1.45; }
+.qr-warning ion-icon { flex: 0 0 auto; margin-top: 1px; font-size: 16px; }
+.presets-wrap { margin: 18px 0 6px; }
+.preset-row { display: flex; gap: 8px; padding: 6px 2px; overflow-x: auto; }
+.preset-chip { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; padding: 9px 14px; border: 1px solid #dfe7e3; border-radius: 999px; color: #17252b; background: #fff; font-size: 13px; font-weight: 700; }
+.preset-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .15); }
