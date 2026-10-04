@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/tab1" text=""></ion-back-button></ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="page">
+    <p class="group">Appearance</p>
+    <section class="card">
+      <p class="name">Theme</p>
+      <ion-segment [value]="current.theme" (ionChange)="setTheme($event.detail.value)">
+        <ion-segment-button value="system"><ion-label>System</ion-label></ion-segment-button>
+        <ion-segment-button value="light"><ion-label>Light</ion-label></ion-segment-button>
+        <ion-segment-button value="dark"><ion-label>Dark</ion-label></ion-segment-button>
+      </ion-segment>
+    </section>
+
+    <p class="group">Preferences</p>
+    <section class="card list">
+      <ion-toggle [checked]="current.haptics" (ionChange)="toggle('haptics', $event.detail.checked)" justify="space-between">
+        <span class="name">Vibrate on scan</span>
+      </ion-toggle>
+      <ion-toggle [checked]="current.saveHistory" (ionChange)="toggle('saveHistory', $event.detail.checked)" justify="space-between">
+        <span class="name">Save scan history</span>
+      </ion-toggle>
+      <div>
+        <p class="name">Default export format</p>
+        <ion-segment [value]="current.defaultFormat" (ionChange)="setFormat($event.detail.value)">
+          <ion-segment-button value="png"><ion-label>PNG</ion-label></ion-segment-button>
+          <ion-segment-button value="jpeg"><ion-label>JPEG</ion-label></ion-segment-button>
+          <ion-segment-button value="svg"><ion-label>SVG</ion-label></ion-segment-button>
+          <ion-segment-button value="webp"><ion-label>WebP</ion-label></ion-segment-button>
+        </ion-segment>
+      </div>
+    </section>
+
+    <p class="group">Your data</p>
+    <section class="card links">
+      <button type="button" (click)="clearHistory()"><ion-icon name="time-outline"></ion-icon>Clear scan history</button>
+      <button type="button" class="danger" (click)="clearSaved()"><ion-icon name="trash-outline"></ion-icon>Delete all saved codes</button>
+    </section>
+
+    <p class="group">About</p>
+    <section class="card links">
+      <button type="button" (click)="shareApp()"><ion-icon name="share-social-outline"></ion-icon>Share the app</button>
+      <button type="button" (click)="rateApp()"><ion-icon name="star-outline"></ion-icon>Rate on Google Play</button>
+      <button type="button" routerLink="/onboarding"><ion-icon name="help-circle-outline"></ion-icon>Show intro again</button>
+    </section>
+    <p class="version muted">QR House · version 1.0</p>
+  </main>
+</ion-content>

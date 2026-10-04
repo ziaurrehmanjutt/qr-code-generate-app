@@ -37,3 +37,16 @@ describe('QR payloads', () => {
     expect(decoder.decode('https://bit.ly/abc').warning).toBeTruthy();
   });
 });
+
+describe('Calendar event payload', () => {
+  it('round-trips an event and exposes an .ics', () => {
+    const qr = new QrService();
+    qr.setContentType('event');
+    qr.setField('title', 'Demo');
+    qr.setField('start', '2026-10-04T14:30');
+    const result = new QrDecodeService().decode(qr.formatValue(''));
+    expect(result.type).toBe('event');
+    expect(result.title).toBe('Demo');
+    expect(result.actionIcs).toContain('DTSTART:20261004T143000');
+  });
+});

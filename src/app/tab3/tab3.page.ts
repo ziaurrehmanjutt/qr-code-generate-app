@@ -4,10 +4,13 @@ import { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } from '@capac
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Haptics, NotificationType } from '@capacitor/haptics';
 import { Share } from '@capacitor/share';
+import { CapacitorWifi } from '@capgo/capacitor-wifi';
+import jsQR from 'jsqr';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { DecodedQrResult, QrDecodeService, QuickAction } from '../services/qr-decode.service';
 import { QrStorageService, ScanRecord } from '../services/qr-storage.service';
 import { QrService } from '../services/qr.service';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-tab3',
@@ -27,6 +30,7 @@ export class Tab3Page {
     private qrStorage: QrStorageService,
     private qrService: QrService,
     private router: Router,
+    private settings: SettingsService,
   ) {}
 
   async scanBarcode(): Promise<void> {
@@ -47,19 +51,49 @@ export class Tab3Page {
   /** Decodes a value, shows it, and records it in the scan history. */
   async showResult(raw: string): Promise<void> {
     this.decodedResult = this.qrDecodeService.decode(raw);
-    this.savedScan = await this.qrStorage.addScan({
-      type: this.decodedResult.type,
-      icon: this.decodedResult.icon,
-      title: this.decodedResult.title,
-      raw,
-    });
-    Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
+    this.savedScan = null;
+    if (this.settings.settings.saveHistory) {
+      this.savedScan = await this.qrStorage.addScan({
+        type: this.decodedResult.type,
+        icon: this.decodedResult.icon,
+        title: this.decodedResult.title,
+        raw,
+      });
+    }
+    if (this.settings.settings.haptics) Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
+  }
+
+  /** Reads a QR code from a picture chosen in the gallery. */
+  async scanFromImage(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    this.scanError = '';
+    try {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      const context = canvas.getContext('2d', { willReadFrequently: true })!;
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(pixels.data, pixels.width, pixels.height, { inversionAttempts: 'attemptBoth' });
+      if (code?.data) await this.showResult(code.data);
+      else this.scanError = 'No QR code was found in that image.';
+    } catch (error) {
+      console.error(error);
+      this.scanError = 'That image could not be read.';
+    }
   }
 
   async runMainAction(): Promise<void> {
     const result = this.decodedResult;
     if (!result) return;
-    if (result.actionVcard) await this.saveContact(result.actionVcard);
+    if (result.actionWifi) await this.connectWifi(result.actionWifi);
+    else if (result.actionIcs) await this.openFile('scanned-event.ics', result.actionIcs, 'text/calendar');
+    else if (result.actionVcard) await this.openFile('scanned-contact.vcf', result.actionVcard, 'text/x-vcard');
     else if (result.actionUrl) this.openUrl(result.actionUrl);
     else await this.copy(result.actionCopy || result.raw);
   }
@@ -114,13 +148,25 @@ export class Tab3Page {
     }
   }
 
-  /** Saves a vCard to a file and hands it to the contacts app. */
-  private async saveContact(vcard: string): Promise<void> {
+  /** Writes text to a cache file and hands it to the matching app (contacts, calendar). */
+  private async openFile(path: string, text: string, contentType: string): Promise<void> {
     try {
-      const file = await Filesystem.writeFile({ path: 'scanned-contact.vcf', data: btoa(String.fromCharCode(...new TextEncoder().encode(vcard))), directory: Directory.Cache });
-      await FileOpener.open({ filePath: file.uri, contentType: 'text/x-vcard', openWithDefault: true });
+      const file = await Filesystem.writeFile({ path, data: btoa(String.fromCharCode(...new TextEncoder().encode(text))), directory: Directory.Cache });
+      await FileOpener.open({ filePath: file.uri, contentType, openWithDefault: true });
     } catch {
-      await this.copy(vcard);
+      await this.copy(text);
+    }
+  }
+
+  /** Asks Android to join the scanned Wi-Fi network. */
+  private async connectWifi(wifi: { ssid: string; password: string; hidden: boolean }): Promise<void> {
+    try {
+      await CapacitorWifi.requestPermissions();
+      await CapacitorWifi.addNetwork({ ssid: wifi.ssid, password: wifi.password || undefined, isHiddenSsid: wifi.hidden });
+      this.flash('Network added. Confirm in the system prompt if asked.');
+    } catch {
+      if (wifi.password) await this.copy(wifi.password);
+      this.flash('Could not connect here. Password copied instead.');
     }
   }
 

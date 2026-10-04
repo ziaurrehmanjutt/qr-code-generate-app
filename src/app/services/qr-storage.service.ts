@@ -97,6 +97,15 @@ export class QrStorageService {
     await this.writeJson(this.scansPath, (await this.scans()).filter((s) => s.id !== id));
   }
 
+  async clearScans(): Promise<void> {
+    await this.writeJson(this.scansPath, []);
+  }
+
+  async clearSaved(): Promise<void> {
+    await Filesystem.rmdir({ path: 'saved-qr', directory: Directory.Data, recursive: true }).catch(() => undefined);
+    await this.writeJson(this.indexPath, []);
+  }
+
   // ---------------- Helpers ----------------
 
   private async readJson<T>(path: string): Promise<T[]> {

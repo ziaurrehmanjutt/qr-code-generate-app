@@ -5,14 +5,14 @@ import QRCodeStyling from 'qr-code-styling';
  * Supported QR content types shown in the segment control.
  * Each type knows how to format its raw value into a scannable QR payload.
  */
-export type QrContentType = 'text' | 'url' | 'email' | 'mobile' | 'sms' | 'whatsapp' | 'wifi' | 'vcard' | 'location';
+export type QrContentType = 'text' | 'url' | 'email' | 'mobile' | 'sms' | 'whatsapp' | 'wifi' | 'vcard' | 'location' | 'event';
 
 /** One input of a structured (multi-field) content type. */
 export interface QrField {
   key: string;
   label: string;
   placeholder?: string;
-  inputType?: 'text' | 'email' | 'tel' | 'url' | 'password' | 'number' | 'textarea' | 'select' | 'toggle';
+  inputType?: 'text' | 'email' | 'tel' | 'url' | 'password' | 'number' | 'datetime-local' | 'textarea' | 'select' | 'toggle';
   options?: { value: string; label: string }[];
 }
 
@@ -138,6 +138,7 @@ export const SUPPORTED_OPTIONS = {
     { id: 'wifi' as QrContentType, label: 'Wi-Fi', icon: 'wifi-outline' },
     { id: 'vcard' as QrContentType, label: 'Contact', icon: 'person-circle-outline' },
     { id: 'location' as QrContentType, label: 'Location', icon: 'location-outline' },
+    { id: 'event' as QrContentType, label: 'Event', icon: 'calendar-outline' },
   ],
   /** Form layouts of the structured content types. */
   forms: {
@@ -166,6 +167,13 @@ export const SUPPORTED_OPTIONS = {
       { key: 'company', label: 'Company', placeholder: 'Company' },
       { key: 'website', label: 'Website', placeholder: 'example.com', inputType: 'url' },
       { key: 'address', label: 'Address', placeholder: 'Street, City, Country' },
+    ],
+    event: [
+      { key: 'title', label: 'Title', placeholder: 'Team meeting' },
+      { key: 'start', label: 'Starts', inputType: 'datetime-local' },
+      { key: 'end', label: 'Ends', inputType: 'datetime-local' },
+      { key: 'place', label: 'Place', placeholder: 'Office, Riyadh' },
+      { key: 'details', label: 'Notes', placeholder: 'Details', inputType: 'textarea' },
     ],
     location: [
       { key: 'lat', label: 'Latitude', placeholder: '24.7136', inputType: 'number' },
@@ -259,6 +267,15 @@ export class QrService {
       }
       case 'location':
         return v('lat') && v('lng') ? `geo:${v('lat')},${v('lng')}` : '';
+      case 'event': {
+        if (!v('title') || !v('start')) return '';
+        const stamp = (value: string) => value.replace(/[-:]/g, '').padEnd(15, '0').slice(0, 15);
+        const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT', `SUMMARY:${v('title')}`, `DTSTART:${stamp(v('start'))}`, `DTEND:${stamp(v('end') || v('start'))}`];
+        if (v('place')) lines.push(`LOCATION:${v('place')}`);
+        if (v('details')) lines.push(`DESCRIPTION:${v('details').replace(/\n/g, '\\n')}`);
+        lines.push('END:VEVENT', 'END:VCALENDAR');
+        return lines.join('\n');
+      }
       default:
         return '';
     }
@@ -323,6 +340,7 @@ export class QrService {
       case 'wifi':
       case 'vcard':
       case 'location':
+      case 'event':
         return this.buildPayload();
       case 'mobile': {
         // Normalize: strip spaces, dashes, parentheses and leading +

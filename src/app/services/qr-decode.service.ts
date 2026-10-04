@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type DecodedQrType = 'url' | 'email' | 'phone' | 'sms' | 'whatsapp' | 'wifi' | 'vcard' | 'location' | 'text';
+export type DecodedQrType = 'url' | 'email' | 'phone' | 'sms' | 'whatsapp' | 'wifi' | 'vcard' | 'location' | 'event' | 'text';
 
 /** A one-tap action offered for a scanned code. Exactly one of url or copy is set. */
 export interface QuickAction {
@@ -27,6 +27,10 @@ export interface DecodedQrResult {
   actionCopy?: string;
   /** vCard saved as a contact file when the main action is "Save contact". */
   actionVcard?: string;
+  /** iCalendar text that is saved as a .ics file and opened in the calendar. */
+  actionIcs?: string;
+  /** Network to join when the main action is "Connect". */
+  actionWifi?: { ssid: string; password: string; hidden: boolean };
   /** Secondary quick actions shown next to the main one. */
   extraActions: QuickAction[];
   /** Safety hint, for example for shortened links. */
@@ -43,6 +47,7 @@ export class QrDecodeService {
     if (wifi) return this.decodeWifi(value, wifi[1]);
 
     if (/BEGIN:VCARD/i.test(value)) return this.decodeVcard(value);
+    if (/BEGIN:VEVENT/i.test(value)) return this.decodeEvent(value);
 
     if (/^mailto:/i.test(value)) {
       const email = value.replace(/^mailto:/i, '').split('?')[0];
@@ -104,13 +109,38 @@ export class QrDecodeService {
     const fields = this.parseFields(payload);
     const security = fields.get('T') || 'nopass';
     const password = fields.get('P');
-    return this.result('wifi', 'Wi-Fi', 'wifi-outline', raw, fields.get('S') || 'Wi-Fi network', 'Network details', [
-      { label: 'Network', value: fields.get('S') || 'Hidden network' },
+    const ssid = fields.get('S') || '';
+    const result = this.result('wifi', 'Wi-Fi', 'wifi-outline', raw, ssid || 'Wi-Fi network', 'Network details', [
+      { label: 'Network', value: ssid || 'Hidden network' },
       { label: 'Security', value: security.toUpperCase() },
       ...(password ? [{ label: 'Password', value: password }] : []),
-    ], password ? 'Copy password' : 'Copy network name', 'copy-outline', undefined, password || fields.get('S') || raw, [
-      ...(password ? [{ label: 'Copy network name', icon: 'wifi-outline', copy: fields.get('S') || '' }] : []),
+    ], 'Connect', 'wifi-outline', undefined, password || ssid || raw, [
+      ...(password ? [{ label: 'Copy password', icon: 'copy-outline', copy: password }] : []),
     ]);
+    result.actionWifi = { ssid, password: password || '', hidden: (fields.get('H') || '').toLowerCase() === 'true' };
+    return result;
+  }
+
+  private decodeEvent(raw: string): DecodedQrResult {
+    const fields = new Map<string, string>();
+    raw.split(/\r?\n/).forEach((line) => {
+      const separator = line.indexOf(':');
+      if (separator > 0) fields.set(line.slice(0, separator).split(';')[0].toUpperCase(), line.slice(separator + 1).trim());
+    });
+    const when = (value?: string) => {
+      const m = value?.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2}))?/);
+      if (!m) return value || '';
+      const date = new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0));
+      return new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric', ...(m[4] ? { hour: '2-digit', minute: '2-digit' } : {}) }).format(date);
+    };
+    const result = this.result('event', 'Event', 'calendar-outline', raw, fields.get('SUMMARY') || 'Calendar event', 'Event details', [
+      ...(fields.get('DTSTART') ? [{ label: 'Starts', value: when(fields.get('DTSTART')) }] : []),
+      ...(fields.get('DTEND') ? [{ label: 'Ends', value: when(fields.get('DTEND')) }] : []),
+      ...(fields.get('LOCATION') ? [{ label: 'Place', value: fields.get('LOCATION') as string }] : []),
+      ...(fields.get('DESCRIPTION') ? [{ label: 'Notes', value: fields.get('DESCRIPTION') as string }] : []),
+    ], 'Add to calendar', 'calendar-outline', undefined, raw);
+    result.actionIcs = /BEGIN:VCALENDAR/i.test(raw) ? raw : `BEGIN:VCALENDAR\nVERSION:2.0\n${raw}\nEND:VCALENDAR`;
+    return result;
   }
 
   private decodeVcard(raw: string): DecodedQrResult {

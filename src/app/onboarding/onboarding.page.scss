@@ -1,0 +1,13 @@
+:host { display: block; }
+.intro { display: grid; grid-template-rows: 1fr auto; height: 100%; padding: 24px 24px 32px; }
+.skip { position: absolute; top: 16px; right: 16px; padding: 8px 12px; border: 0; color: var(--muted); background: none; font: inherit; font-weight: 700; }
+.slide { display: grid; align-content: center; justify-items: center; gap: 12px; text-align: center; }
+.slide[hidden] { display: none; }
+.art { display: grid; place-items: center; width: 120px; height: 120px; margin-bottom: 12px; border-radius: 36px; color: #fff; background: linear-gradient(135deg, var(--brand), var(--accent)); box-shadow: var(--shadow); }
+.art ion-icon { font-size: 58px; }
+h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+p { max-width: 320px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+footer { display: grid; gap: 18px; }
+.dots { display: flex; justify-content: center; gap: 6px; }
+.dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--line); transition: width 0.2s; }
+.dots i.on { width: 24px; background: var(--brand); }

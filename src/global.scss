@@ -34,4 +34,76 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-// @import "@ionic/angular/css/palettes/dark.system.css";
+@import "@ionic/angular/css/palettes/dark.class.css";
+
+/**
+ * App design system
+ * Tokens + a few shared building blocks used by every page.
+ */
+:root {
+  --bg: #f4f7f6;
+  --surface: #ffffff;
+  --surface-2: #eef3f1;
+  --line: #e1e8e5;
+  --ink: #0f1f24;
+  --muted: #64767a;
+  --brand: #0f7d70;
+  --brand-soft: #dcf2ec;
+  --accent: #e9785c;
+  --warn-bg: #fff6dc;
+  --warn-ink: #7a5a06;
+  --shadow: 0 6px 24px rgba(15, 31, 36, 0.07);
+  --radius: 16px;
+  --ion-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ion-palette-dark {
+  --bg: #0c1316;
+  --surface: #152126;
+  --surface-2: #1c2b31;
+  --line: #263a40;
+  --ink: #eaf2f0;
+  --muted: #8fa6aa;
+  --brand: #3cc4b0;
+  --brand-soft: #14332f;
+  --accent: #f08f76;
+  --warn-bg: #3a3012;
+  --warn-ink: #f2d98a;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+ion-content { --background: var(--bg); color: var(--ink); }
+ion-toolbar { --background: var(--bg); --color: var(--ink); --border-width: 0; }
+ion-title { font-weight: 800; letter-spacing: -0.2px; }
+ion-tab-bar { --background: var(--surface); --border: 1px solid var(--line); --color: var(--muted); --color-selected: var(--brand); }
+ion-tab-button { font-weight: 700; }
+ion-modal { --background: var(--surface); --color: var(--ink); }
+ion-searchbar, ion-segment { --background: var(--surface-2); }
+ion-segment { --color: var(--muted); }
+ion-segment-button { --color-checked: var(--brand); --indicator-color: var(--surface); text-transform: none; font-weight: 700; }
+
+.page { width: min(720px, 100%); margin: 0 auto; padding: 4px 16px 32px; }
+.card { padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.eyebrow { margin: 0 0 4px; color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; }
+.title { margin: 0; color: var(--ink); font-size: 24px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.15; }
+.muted { color: var(--muted); }
+.row { display: flex; align-items: center; gap: 10px; }
+.chips { display: flex; gap: 8px; padding: 2px 0; overflow-x: auto; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: var(--surface); font: inherit; font-size: 13px; font-weight: 700; }
+.chip ion-icon { font-size: 17px; }
+.chip.on { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 18px; border: 0; border-radius: 14px; color: #fff; background: var(--brand); font: inherit; font-size: 15px; font-weight: 800; }
+.btn.soft { color: var(--brand); background: var(--brand-soft); }
+.btn.ghost { color: var(--ink); background: var(--surface-2); }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: 0.55; }
+.icon-btn { display: grid; flex: 0 0 auto; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 12px; color: var(--muted); background: transparent; }
+.icon-btn ion-icon { font-size: 20px; }
+.note { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 12px; color: var(--warn-ink); background: var(--warn-bg); font-size: 12.5px; line-height: 1.45; }
+.note ion-icon { flex: 0 0 auto; margin-top: 1px; font-size: 16px; }
+.empty { display: grid; justify-items: center; gap: 6px; padding: 28px 16px; text-align: center; color: var(--muted); }
+.empty ion-icon { color: var(--brand); font-size: 34px; }
+.empty h3 { margin: 0; color: var(--ink); font-size: 16px; }
+.empty p { margin: 0; font-size: 13px; }
+.field { --background: var(--surface); --border-radius: 12px; --color: var(--ink); margin-bottom: 10px; }
