@@ -19,7 +19,9 @@
       </div>
       <div class="block">
         <p class="name">{{ 'Language' | t }}</p>
-        <ion-segment [value]="current.language" (ionChange)="setLanguage($event.detail.value)">
+        <!-- dir="ltr": the buttons must not swap places when the app flips to RTL, or the touch
+             "click" that follows lands on the other language and switches back. -->
+        <ion-segment dir="ltr" [value]="current.language" (ionChange)="setLanguage($event.detail.value)">
           <ion-segment-button value="en"><ion-label>English</ion-label></ion-segment-button>
           <ion-segment-button value="ar"><ion-label>العربية</ion-label></ion-segment-button>
         </ion-segment>
