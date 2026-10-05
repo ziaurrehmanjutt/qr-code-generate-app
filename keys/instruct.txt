@@ -1,0 +1,2 @@
+alices  -> key0
+password for all => 123456

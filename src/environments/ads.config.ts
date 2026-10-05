@@ -7,7 +7,7 @@
  * To go live, see README-ADS.md: set `USE_TEST_ADS` to false and switch `admob_app_id` in
  * android/app/src/main/res/values/strings.xml to the real app id.
  */
-const USE_TEST_ADS = true;
+const USE_TEST_ADS = false;
 
 const TEST_ADS = {
   banner: 'ca-app-pub-3940256099942544/6300978111',
@@ -19,7 +19,7 @@ const LIVE_ADS = {
   banner: 'ca-app-pub-9813075579951410/3325869978',
   // No interstitial ad unit exists yet. Create one in AdMob and paste its id here;
   // until then interstitials are simply skipped.
-  interstitial: 'ca-app-pub-REPLACE_ME/REPLACE_ME',
+  interstitial: 'ca-app-pub-9813075579951410/3857187165',
 };
 
 /** True when an ad unit id has really been filled in. */

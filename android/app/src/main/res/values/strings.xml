@@ -6,5 +6,6 @@
     <string name="custom_url_scheme">io.zia.diyaqr</string>
     <!-- AdMob app id. TEST id for now. For release replace the value below with the real one:
          ca-app-pub-9813075579951410~9000954205   (see README-ADS.md) -->
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <!-- <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string> -->
+    <string name="admob_app_id">ca-app-pub-9813075579951410~9000954205</string>
 </resources>
