@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { AlertController, IonicModule, ToastController } from '@ionic/angular';
+import { appLinks } from '../../environments/app-links';
+import { AdService } from '../services/ad.service';
 import { QrStorageService } from '../services/qr-storage.service';
 import { AppSettings, SettingsService, ThemeMode } from '../services/settings.service';
 import { Lang, TranslateService } from '../i18n/translate.service';
@@ -24,7 +26,14 @@ export class SettingsPage {
     private alerts: AlertController,
     private toasts: ToastController,
     private i18n: TranslateService,
+    public ads: AdService,
   ) {}
+
+  readonly privacyPolicyUrl = appLinks.privacyPolicyUrl;
+
+  openPrivacyPolicy(): void {
+    window.open(this.privacyPolicyUrl, '_blank');
+  }
 
   get current(): AppSettings {
     return this.settings.settings;

@@ -231,6 +231,8 @@ export const AR: Record<string, string> = {
   'Share the app': 'شارك التطبيق',
   'Rate on Google Play': 'قيّم على Google Play',
   'Show intro again': 'عرض المقدمة مجدداً',
+  'Privacy policy': 'سياسة الخصوصية',
+  'Ad privacy choices': 'خيارات خصوصية الإعلانات',
   'Clear scan history?': 'مسح سجل المسح؟',
   'Favorite scans are cleared too.': 'سيتم مسح المفضلة أيضاً.',
   'Delete all saved codes?': 'حذف كل الرموز المحفوظة؟',

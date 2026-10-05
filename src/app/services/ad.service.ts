@@ -8,7 +8,7 @@ import {
   BannerAdSize,
   InterstitialAdPluginEvents,
 } from '@capacitor-community/admob';
-import { adsConfig } from '../../environments/ads.config';
+import { adsConfig, isConfigured } from '../../environments/ads.config';
 
 /**
  * Banner and interstitial ads (Android only). Everything is a no-op in the browser, and every
@@ -18,6 +18,9 @@ import { adsConfig } from '../../environments/ads.config';
 export class AdService {
   /** True while a banner is on screen, so pages can keep their content above it. */
   bannerVisible = false;
+
+  /** True when the user must be able to change their ad privacy choices (shown in Settings). */
+  privacyOptionsRequired = false;
 
   private ready = false;
   private starting: Promise<void> | null = null;
@@ -42,6 +45,7 @@ export class AdService {
       if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
         await AdMob.showConsentForm();
       }
+      this.privacyOptionsRequired = String(consent.privacyOptionsRequirementStatus) === 'REQUIRED';
       await AdMob.initialize({ initializeForTesting: adsConfig.useTestAds });
       AdMob.addListener(BannerAdPluginEvents.Loaded, () => (this.bannerVisible = true));
       AdMob.addListener(BannerAdPluginEvents.FailedToLoad, () => (this.bannerVisible = false));
@@ -55,7 +59,7 @@ export class AdService {
 
   async showBanner(): Promise<void> {
     await this.init();
-    if (!this.ready) return;
+    if (!this.ready || !isConfigured(adsConfig.banner)) return;
     try {
       await AdMob.showBanner({
         adId: adsConfig.banner,
@@ -81,7 +85,7 @@ export class AdService {
 
   /** Call after a completed user action. Shows an interstitial every Nth action, at most once per cooldown. */
   async recordAction(): Promise<void> {
-    if (!this.ready) return;
+    if (!this.ready || !isConfigured(adsConfig.interstitial)) return;
     this.actions++;
     const cooledDown = Date.now() - this.lastInterstitial >= adsConfig.interstitialCooldownMs;
     if (this.actions % adsConfig.interstitialEvery !== 0 || !cooledDown || !this.interstitialLoaded) return;
@@ -94,7 +98,17 @@ export class AdService {
     }
   }
 
+  /** Opens Google's privacy choices form (consent withdrawal / ad personalisation). */
+  async showPrivacyOptions(): Promise<void> {
+    try {
+      await AdMob.showPrivacyOptionsForm();
+    } catch (error) {
+      console.warn('Privacy options failed:', error);
+    }
+  }
+
   private async loadInterstitial(): Promise<void> {
+    if (!isConfigured(adsConfig.interstitial)) return;
     try {
       await AdMob.prepareInterstitial({ adId: adsConfig.interstitial, isTesting: adsConfig.useTestAds });
       this.interstitialLoaded = true;

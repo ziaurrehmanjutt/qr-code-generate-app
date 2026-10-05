@@ -1,12 +1,11 @@
 /**
  * AdMob configuration, shared by the dev and production builds.
  *
- * The IDs below are Google's official TEST ids, so no real ads are served and the account
- * cannot be penalised for invalid traffic. Before the Play Store release:
- *   1. Create the app and ad units in AdMob.
- *   2. Put the real ids in `LIVE_ADS` below.
- *   3. Set `USE_TEST_ADS` to false.
- *   4. Replace `admob_app_id` in android/app/src/main/res/values/strings.xml with the real app id.
+ * While `USE_TEST_ADS` is true the app uses Google's official TEST ids, so no real ads are served
+ * and the account cannot be penalised for invalid traffic.
+ *
+ * To go live, see README-ADS.md: set `USE_TEST_ADS` to false and switch `admob_app_id` in
+ * android/app/src/main/res/values/strings.xml to the real app id.
  */
 const USE_TEST_ADS = true;
 
@@ -16,9 +15,15 @@ const TEST_ADS = {
 };
 
 const LIVE_ADS = {
-  banner: 'ca-app-pub-REPLACE_ME/REPLACE_ME',
+  // AdMob app: DiyaQR (ca-app-pub-9813075579951410~9000954205)
+  banner: 'ca-app-pub-9813075579951410/3325869978',
+  // No interstitial ad unit exists yet. Create one in AdMob and paste its id here;
+  // until then interstitials are simply skipped.
   interstitial: 'ca-app-pub-REPLACE_ME/REPLACE_ME',
 };
+
+/** True when an ad unit id has really been filled in. */
+export const isConfigured = (adUnitId: string): boolean => !adUnitId.includes('REPLACE_ME');
 
 export const adsConfig = {
   useTestAds: USE_TEST_ADS,

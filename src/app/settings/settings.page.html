@@ -57,6 +57,8 @@
     <section class="card links">
       <button type="button" (click)="shareApp()"><ion-icon name="share-social-outline"></ion-icon>{{ 'Share the app' | t }}</button>
       <button type="button" (click)="rateApp()"><ion-icon name="star-outline"></ion-icon>{{ 'Rate on Google Play' | t }}</button>
+      <button type="button" *ngIf="privacyPolicyUrl" (click)="openPrivacyPolicy()"><ion-icon name="shield-checkmark-outline"></ion-icon>{{ 'Privacy policy' | t }}</button>
+      <button type="button" *ngIf="ads.privacyOptionsRequired" (click)="ads.showPrivacyOptions()"><ion-icon name="options-outline"></ion-icon>{{ 'Ad privacy choices' | t }}</button>
       <button type="button" routerLink="/onboarding"><ion-icon name="help-circle-outline"></ion-icon>{{ 'Show intro again' | t }}</button>
     </section>
     <p class="version muted">{{ 'DiyaQR · version 1.0' | t }}</p>
