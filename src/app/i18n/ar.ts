@@ -202,13 +202,14 @@ export const AR: Record<string, string> = {
   'What to do': 'ماذا تريد؟',
   'WhatsApp, mail, Drive…': 'واتساب، بريد، Drive…',
   'Save to gallery': 'حفظ في المعرض',
-  'Album “QR House”': 'ألبوم «QR House»',
+  'DiyaQR': 'ضياء QR',
+  'Album “DiyaQR”': 'ألبوم «ضياء QR»',
   'Save in app': 'حفظ في التطبيق',
   'Keep it editable in Home': 'يبقى قابلاً للتعديل في الرئيسية',
   'Open with…': 'فتح باستخدام…',
   'Another app': 'تطبيق آخر',
   'Could not open the file with another app.': 'تعذّر فتح الملف بتطبيق آخر.',
-  'Saved to the QR House gallery album.': 'تم الحفظ في ألبوم QR House بالمعرض.',
+  'Saved to the DiyaQR gallery album.': 'تم الحفظ في ألبوم ضياء QR بالمعرض.',
   'Could not save to the gallery.': 'تعذّر الحفظ في المعرض.',
   'Saved to your library.': 'تم الحفظ في مكتبتك.',
 
@@ -236,8 +237,8 @@ export const AR: Record<string, string> = {
   'This cannot be undone.': 'لا يمكن التراجع عن هذا الإجراء.',
   'Scan history cleared': 'تم مسح سجل المسح',
   'Saved codes deleted': 'تم حذف الرموز المحفوظة',
-  'QR House · version 1.0': 'QR House · الإصدار 1.0',
-  'Create, style and scan QR codes with QR House.': 'أنشئ رموز QR وصمّمها وامسحها مع QR House.',
+  'DiyaQR · version 1.0': 'ضياء QR · الإصدار 1.0',
+  'Create, style and scan QR codes with DiyaQR.': 'أنشئ رموز QR وصمّمها وامسحها مع ضياء QR.',
 
   // Onboarding
   'Create beautiful codes': 'أنشئ رموزاً جميلة',

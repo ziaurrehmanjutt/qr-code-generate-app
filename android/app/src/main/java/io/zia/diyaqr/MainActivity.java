@@ -1,4 +1,4 @@
-package io.zia.qrtest;
+package io.zia.diyaqr;
 
 import com.getcapacitor.BridgeActivity;
 

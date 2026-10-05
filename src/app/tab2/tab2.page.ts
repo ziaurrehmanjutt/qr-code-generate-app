@@ -21,7 +21,7 @@ type Panel = 'style' | 'colors' | 'logo' | 'more';
 type ExportAction = 'share' | 'open' | 'gallery' | 'app';
 type ColorTarget = { prefix: 'dots' | 'bg' | 'cornersSquare' | 'cornersDot'; label: string };
 
-const GALLERY_ALBUM = 'QR House';
+const GALLERY_ALBUM = 'DiyaQR';
 
 @Component({
   selector: 'app-tab2',
@@ -354,7 +354,7 @@ export class Tab2Page {
     }
   }
 
-  /** Saves the code as a picture into the "QR House" album of the gallery. */
+  /** Saves the code as a picture into the "DiyaQR" album of the gallery. */
   async saveToGallery(): Promise<void> {
     const fileName = this.config.fileName || 'qr-code';
     if (await this.isBrowser()) {
@@ -373,7 +373,7 @@ export class Tab2Page {
       }
       await Media.savePhoto({ path: dataUrl, albumIdentifier: album?.identifier, fileName });
       this.isDownloadSheetOpen = false;
-      this.flash('Saved to the QR House gallery album.');
+      this.flash('Saved to the DiyaQR gallery album.');
     } catch (error) {
       console.error('Gallery save failed:', error);
       this.flash('Could not save to the gallery.');

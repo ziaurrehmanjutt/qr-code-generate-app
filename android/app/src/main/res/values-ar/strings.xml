@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- Launcher name on Arabic devices -->
+    <string name="app_name">ضياء QR</string>
+    <string name="title_activity_main">ضياء QR</string>
+</resources>

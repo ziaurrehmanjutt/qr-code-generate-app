@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "io.zia.qrtest"
+    namespace = "io.zia.diyaqr"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.zia.qrtest"
+        applicationId "io.zia.diyaqr"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

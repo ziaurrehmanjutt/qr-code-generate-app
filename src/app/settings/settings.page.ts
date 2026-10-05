@@ -8,7 +8,7 @@ import { AppSettings, SettingsService, ThemeMode } from '../services/settings.se
 import { Lang, TranslateService } from '../i18n/translate.service';
 import { SharedModule } from '../shared/shared.module';
 
-const APP_ID = 'io.zia.qrtest';
+const APP_ID = 'io.zia.diyaqr';
 
 @Component({
   selector: 'app-settings',
@@ -56,7 +56,7 @@ export class SettingsPage {
 
   async shareApp(): Promise<void> {
     try {
-      await Share.share({ title: 'QR House', text: this.i18n.t('Create, style and scan QR codes with QR House.'), url: `https://play.google.com/store/apps/details?id=${APP_ID}` });
+      await Share.share({ title: 'DiyaQR', text: this.i18n.t('Create, style and scan QR codes with DiyaQR.'), url: `https://play.google.com/store/apps/details?id=${APP_ID}` });
     } catch {
       // The share sheet was dismissed.
     }
