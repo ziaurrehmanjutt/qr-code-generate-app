@@ -108,3 +108,6 @@ ion-segment-button { --color-checked: var(--brand); --indicator-color: var(--sur
 .empty p { margin: 0; font-size: 13px; }
 .field { --background: var(--surface); --border-radius: 12px; --color: var(--ink); margin-bottom: 10px; }
 #full-qr { width: 100%; canvas { width: 100%; height: auto; } }
+
+/* Keeps content above the ad banner (banner + tab bar) while one is on screen. */
+.page.has-banner { padding-bottom: 96px; }

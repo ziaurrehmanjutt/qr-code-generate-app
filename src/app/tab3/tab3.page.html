@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <main class="page">
+  <main class="page" [class.has-banner]="ads.bannerVisible">
     <section class="card scan-card" [class.scanning]="isScanning">
       <div class="viewfinder" aria-hidden="true">
         <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>

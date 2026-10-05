@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <main class="page">
+  <main class="page" [class.has-banner]="ads.bannerVisible">
     <!-- Quick actions -->
     <section class="hero">
       <button type="button" class="hero-btn create" (click)="go('/tabs/tab2')">

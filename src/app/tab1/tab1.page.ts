@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Share } from '@capacitor/share';
+import { AdService } from '../services/ad.service';
 import { QrService } from '../services/qr.service';
 import { TranslateService } from '../i18n/translate.service';
 import { QrStorageService, SavedQrCode, ScanRecord } from '../services/qr-storage.service';
@@ -28,7 +29,16 @@ export class Tab1Page {
     private qrService: QrService,
     private router: Router,
     private i18n: TranslateService,
+    public ads: AdService,
   ) {}
+
+  ionViewDidEnter(): void {
+    this.ads.showBanner();
+  }
+
+  ionViewWillLeave(): void {
+    this.ads.hideBanner();
+  }
 
   async ionViewWillEnter(): Promise<void> {
     this.isLoading = true;

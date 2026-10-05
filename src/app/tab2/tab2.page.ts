@@ -12,6 +12,7 @@ import {
   QrField,
   SUPPORTED_OPTIONS,
 } from '../services/qr.service';
+import { AdService } from '../services/ad.service';
 import { QrStorageService } from '../services/qr-storage.service';
 import { SettingsService } from '../services/settings.service';
 import { TranslateService } from '../i18n/translate.service';
@@ -69,6 +70,7 @@ export class Tab2Page {
     private qrStorage: QrStorageService,
     private settings: SettingsService,
     private i18n: TranslateService,
+    private ads: AdService,
   ) {}
 
   ionViewWillEnter() {
@@ -291,11 +293,13 @@ export class Tab2Page {
       return;
     }
     switch (this.exportAction) {
-      case 'open': return this.open();
-      case 'gallery': return this.saveToGallery();
-      case 'app': return this.saveInApp();
-      default: return this.download();
+      case 'open': await this.open(); break;
+      case 'gallery': await this.saveToGallery(); break;
+      case 'app': await this.saveInApp(); break;
+      default: await this.download();
     }
+    // Save in app already counts itself.
+    if (this.exportAction !== 'app') this.ads.recordAction();
   }
 
   private get mimeMap(): Record<string, string> {
@@ -386,6 +390,7 @@ export class Tab2Page {
     await this.qrStorage.saveToApp(fileName, ext, await this.rawBase64(ext), this.config);
     this.isDownloadSheetOpen = false;
     this.flash('Saved to your library.');
+    this.ads.recordAction();
   }
 
   private flash(message: string): void {
