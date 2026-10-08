@@ -83,14 +83,14 @@
               (click)="updateStyle('dotsType', s.value)"><img [src]="s.image" [alt]="s.label | t"><span>{{ s.label | t }}</span></button>
           </div>
           <p class="label">{{ 'Corner frame' | t }}</p>
-          <div class="chips tiles small">
+          <div class="chips tiles">
             <button type="button" class="tile" *ngFor="let s of supported.cornerStyles" [class.on]="config.cornersSquareType === s.value"
-              (click)="updateStyle('cornersSquareType', s.value)">
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <rect x="5" y="5" width="38" height="38" [attr.rx]="s.value === 'extra-rounded' ? 12 : s.value === 'rounded' ? 6 : 0" />
-                <rect class="cut" x="14" y="14" width="20" height="20" [attr.rx]="s.value === 'dot' ? 10 : 2" />
-              </svg><span>{{ s.label | t }}</span>
-            </button>
+              (click)="updateStyle('cornersSquareType', s.value)"><img [src]="s.image" [alt]="s.label | t"><span>{{ s.label | t }}</span></button>
+          </div>
+          <p class="label">{{ 'Corner dot' | t }}</p>
+          <div class="chips tiles">
+            <button type="button" class="tile" *ngFor="let s of supported.cornerDotStyles" [class.on]="config.cornersDotType === s.value"
+              (click)="updateStyle('cornersDotType', s.value)"><img [src]="s.image" [alt]="s.label | t"><span>{{ s.label | t }}</span></button>
           </div>
           <p class="label">{{ 'Shape' | t }}</p>
           <ion-segment [value]="config.shape" (ionChange)="onSelectChange($event, 'shape')">
@@ -102,25 +102,13 @@
         <!-- Colors -->
         <ng-container *ngSwitchCase="'colors'">
           <div class="color-row" *ngFor="let t of colorTargets">
-            <div class="row">
-              <label class="swatch" [style.background]="color(t, 'Color')"><input type="color" [value]="color(t, 'Color')" (input)="onColorInput($event, t, 'Color')"></label>
-              <span class="grow"><strong>{{ t.label | t }}</strong><small class="muted">{{ color(t, 'Color') }}</small></span>
-              <button type="button" class="chip" [class.on]="gradient(t) !== 'none'" (click)="toggleGradient(t)"><ion-icon name="color-filter-outline"></ion-icon>{{ 'Gradient' | t }}</button>
-            </div>
-            <div class="gradient" *ngIf="openGradients.has(t.prefix)">
-              <ion-segment [value]="gradient(t)" (ionChange)="setGradient(t, $event.detail.value)">
-                <ion-segment-button value="none"><ion-label>{{ 'Solid' | t }}</ion-label></ion-segment-button>
-                <ion-segment-button value="linear"><ion-label>{{ 'Linear' | t }}</ion-label></ion-segment-button>
-                <ion-segment-button value="radial"><ion-label>{{ 'Radial' | t }}</ion-label></ion-segment-button>
-              </ion-segment>
-              <ng-container *ngIf="gradient(t) !== 'none'">
-                <div class="row pair">
-                  <label class="swatch" [style.background]="color(t, 'GradientColor1')"><input type="color" [value]="color(t, 'GradientColor1')" (input)="onColorInput($event, t, 'GradientColor1')"></label>
-                  <label class="swatch" [style.background]="color(t, 'GradientColor2')"><input type="color" [value]="color(t, 'GradientColor2')" (input)="onColorInput($event, t, 'GradientColor2')"></label>
-                  <ion-range class="grow" aria-label="Rotation" [value]="rotation(t)" min="0" max="360" step="15" (ionChange)="setRotation($event, t)"></ion-range>
-                </div>
-              </ng-container>
-            </div>
+            <button type="button" class="color-head" (click)="toggleGradient(t)" [attr.aria-expanded]="openGradients.has(t.prefix)">
+              <span class="color-dot" [style.background]="previewCss(t)"></span>
+              <span class="grow"><strong>{{ t.label | t }}</strong><small class="muted">{{ summary(t) | t }}</small></span>
+              <ion-icon [name]="openGradients.has(t.prefix) ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            </button>
+            <app-gradient-editor *ngIf="openGradients.has(t.prefix)" [solid]="color(t)" [gradient]="gradientOf(t)"
+              (solidChange)="setSolid(t, $event)" (gradientChange)="setGradientConfig(t, $event)"></app-gradient-editor>
           </div>
         </ng-container>
 
@@ -144,10 +132,14 @@
 
         <!-- More -->
         <ng-container *ngSwitchCase="'more'">
-          <p class="label">{{ 'Error correction' | t }} <small class="muted">{{ 'higher = survives damage and logos' | t }}</small></p>
+          <div class="label-row">
+            <p class="label">{{ 'Error correction' | t }}</p>
+            <button type="button" class="help-btn" (click)="setEcHelp(true)" [attr.aria-label]="'What is this?' | t"><ion-icon name="help-circle-outline"></ion-icon>{{ 'What is this?' | t }}</button>
+          </div>
           <ion-segment [value]="config.errorCorrectionLevel" (ionChange)="onSelectChange($event, 'errorCorrectionLevel')">
-            <ion-segment-button *ngFor="let l of supported.errorLevels" [value]="l"><ion-label>{{ l }}</ion-label></ion-segment-button>
+            <ion-segment-button *ngFor="let l of ecInfo" [value]="l.id"><ion-label>{{ l.id }}</ion-label></ion-segment-button>
           </ion-segment>
+          <p class="ec-hint"><strong>{{ currentEc.name | t }} · {{ currentEc.percent }}%</strong> — {{ currentEc.summary | t }}</p>
           <p class="label">{{ 'Size' | t }}</p>
           <ion-range aria-label="Size" [value]="config.width" min="150" max="600" step="10" (ionChange)="onRangeChange($event, 'width')"></ion-range>
           <p class="label">{{ 'Margin' | t }}</p>
@@ -171,6 +163,29 @@
       </ion-header>
       <ion-content>
         <div class="full-wrap"><div id="full-qr"></div></div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Error correction help -->
+  <ion-modal [isOpen]="isEcHelpOpen" (willDismiss)="setEcHelp(false)" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85, 1]">
+    <ng-template>
+      <ion-content class="sheet">
+        <div class="sheet-body ec-help">
+          <h2 class="title">{{ 'Error correction' | t }}</h2>
+          <p class="muted">{{ 'A QR code carries extra "repair" data. If part of it gets dirty, scratched or covered by a logo, a scanner can still read it. A higher level repairs more damage, but makes the pattern denser.' | t }}</p>
+          <button type="button" class="ec-card" *ngFor="let l of ecInfo" [class.on]="config.errorCorrectionLevel === l.id" (click)="chooseEc(l.id)">
+            <span class="ec-badge">{{ l.id }}</span>
+            <span class="ec-text">
+              <strong>{{ l.name | t }} <em>{{ l.percent }}%</em></strong>
+              <small class="ec-sum">{{ l.summary | t }}</small>
+              <small>{{ l.detail | t }}</small>
+            </span>
+            <ion-icon *ngIf="config.errorCorrectionLevel === l.id" name="checkmark-circle"></ion-icon>
+          </button>
+          <p class="note"><ion-icon name="bulb-outline"></ion-icon><span>{{ 'Not sure? Keep M or Q. Adding a logo? Use Q or H.' | t }}</span></p>
+          <button type="button" class="btn block" (click)="setEcHelp(false)">{{ 'Done' | t }}</button>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>

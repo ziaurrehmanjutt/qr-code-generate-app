@@ -16,6 +16,20 @@ export interface QrField {
   options?: { value: string; label: string }[];
 }
 
+/** One color of a gradient. `offset` runs from 0 (start) to 1 (end). */
+export interface GradientStop {
+  offset: number;
+  color: string;
+}
+
+/** A solid color ('none') or a linear / radial gradient with any number of color stops. */
+export interface GradientConfig {
+  type: 'none' | 'linear' | 'radial';
+  /** Direction of a linear gradient in degrees, clockwise, 0 = left to right. */
+  rotation: number;
+  stops: GradientStop[];
+}
+
 /**
  * The full set of configurable options for the QR code.
  * Mirrors the qr-code-styling Options API plus a few UI helpers.
@@ -39,35 +53,23 @@ export interface QrConfig {
   // Dots options
   dotsColor: string;
   dotsType: 'square' | 'rounded' | 'dots' | 'classy' | 'classy-rounded' | 'extra-rounded';
-  dotsGradientType: 'none' | 'linear' | 'radial';
-  dotsGradientColor1: string;
-  dotsGradientColor2: string;
-  dotsGradientRotation: number;
+  dotsGradient: GradientConfig;
   dotsRoundSize: boolean;
 
   // Background options
   bgColor: string;
-  bgGradientType: 'none' | 'linear' | 'radial';
-  bgGradientColor1: string;
-  bgGradientColor2: string;
-  bgGradientRotation: number;
+  bgGradient: GradientConfig;
   bgRound: number;
 
   // Corner squares
   cornersSquareColor: string;
   cornersSquareType: 'dot' | 'square' | 'extra-rounded' | 'rounded' | 'dots' | 'classy' | 'classy-rounded';
-  cornersSquareGradientType: 'none' | 'linear' | 'radial';
-  cornersSquareGradientColor1: string;
-  cornersSquareGradientColor2: string;
-  cornersSquareGradientRotation: number;
+  cornersSquareGradient: GradientConfig;
 
   // Corner dots
   cornersDotColor: string;
   cornersDotType: 'dot' | 'square' | 'rounded' | 'dots' | 'classy' | 'classy-rounded' | 'extra-rounded';
-  cornersDotGradientType: 'none' | 'linear' | 'radial';
-  cornersDotGradientColor1: string;
-  cornersDotGradientColor2: string;
-  cornersDotGradientRotation: number;
+  cornersDotGradient: GradientConfig;
 
   // Image / Logo
   imageUrl: string;
@@ -79,6 +81,21 @@ export interface QrConfig {
   extension: 'svg' | 'png' | 'jpeg' | 'webp';
   fileName: string;
 }
+
+/** CSS for previewing a color or gradient (the same direction rules as the QR code). */
+export function gradientCss(solid: string, g: GradientConfig): string {
+  if (g.type === 'none') return solid;
+  const list = [...g.stops].sort((x, y) => x.offset - y.offset).map((stop) => `${stop.color} ${Math.round(stop.offset * 100)}%`).join(', ');
+  // The library draws rotation 0 from left to right; CSS angle 90deg is the same direction.
+  return g.type === 'linear' ? `linear-gradient(${90 + g.rotation}deg, ${list})` : `radial-gradient(circle, ${list})`;
+}
+
+/** Two-stop gradient used for the defaults and the "solid" state (the stops are kept for later). */
+const stops = (from: string, to: string, type: GradientConfig['type'] = 'none', rotation = 0): GradientConfig => ({
+  type,
+  rotation,
+  stops: [{ offset: 0, color: from }, { offset: 1, color: to }],
+});
 
 /** Default, sensible starting configuration. */
 export const DEFAULT_CONFIG: QrConfig = {
@@ -92,29 +109,17 @@ export const DEFAULT_CONFIG: QrConfig = {
   errorCorrectionLevel: 'Q',
   dotsColor: '#000000',
   dotsType: 'rounded',
-  dotsGradientType: 'none',
-  dotsGradientColor1: '#8688B2',
-  dotsGradientColor2: '#77779C',
-  dotsGradientRotation: 0,
+  dotsGradient: stops('#0b6b60', '#1fb39e'),
   dotsRoundSize: false,
   bgColor: '#ffffff',
-  bgGradientType: 'none',
-  bgGradientColor1: '#ededff',
-  bgGradientColor2: '#e6e7ff',
-  bgGradientRotation: 0,
+  bgGradient: stops('#ffffff', '#e6f4f1'),
   bgRound: 0,
   cornersSquareColor: '#000000',
   cornersSquareType: 'extra-rounded',
-  cornersSquareGradientType: 'none',
-  cornersSquareGradientColor1: '#25456e',
-  cornersSquareGradientColor2: '#4267b2',
-  cornersSquareGradientRotation: 180,
+  cornersSquareGradient: stops('#0b6b60', '#1fb39e'),
   cornersDotColor: '#000000',
   cornersDotType: 'dot',
-  cornersDotGradientType: 'none',
-  cornersDotGradientColor1: '#00266e',
-  cornersDotGradientColor2: '#4060b3',
-  cornersDotGradientRotation: 180,
+  cornersDotGradient: stops('#0b6b60', '#1fb39e'),
   imageUrl: '',
   imageSize: 0.4,
   imageMargin: 20,
@@ -181,12 +186,21 @@ export const SUPPORTED_OPTIONS = {
     ],
   } as Partial<Record<QrContentType, QrField[]>>,
   presets: [
-    { id: 'classic', label: 'Classic', color: '#000000', patch: { dotsColor: '#000000', dotsType: 'square', dotsGradientType: 'none', bgColor: '#ffffff', bgGradientType: 'none', cornersSquareColor: '#000000', cornersSquareType: 'square', cornersSquareGradientType: 'none', cornersDotColor: '#000000', cornersDotType: 'square', cornersDotGradientType: 'none' } },
-    { id: 'ocean', label: 'Ocean', color: '#147d72', patch: { dotsColor: '#147d72', dotsType: 'rounded', dotsGradientType: 'linear', dotsGradientColor1: '#0163aa', dotsGradientColor2: '#147d72', dotsGradientRotation: 45, bgColor: '#ffffff', bgGradientType: 'none', cornersSquareColor: '#0163aa', cornersSquareType: 'extra-rounded', cornersSquareGradientType: 'none', cornersDotColor: '#147d72', cornersDotType: 'dot', cornersDotGradientType: 'none' } },
-    { id: 'sunset', label: 'Sunset', color: '#e9785c', patch: { dotsColor: '#e9785c', dotsType: 'dots', dotsGradientType: 'linear', dotsGradientColor1: '#e9785c', dotsGradientColor2: '#b5179e', dotsGradientRotation: 90, bgColor: '#fff7f3', bgGradientType: 'none', cornersSquareColor: '#b5179e', cornersSquareType: 'extra-rounded', cornersSquareGradientType: 'none', cornersDotColor: '#e9785c', cornersDotType: 'dot', cornersDotGradientType: 'none' } },
-    { id: 'neon', label: 'Neon', color: '#39ff88', patch: { dotsColor: '#39ff88', dotsType: 'classy-rounded', dotsGradientType: 'none', bgColor: '#101820', bgGradientType: 'none', cornersSquareColor: '#00e5ff', cornersSquareType: 'extra-rounded', cornersSquareGradientType: 'none', cornersDotColor: '#00e5ff', cornersDotType: 'dot', cornersDotGradientType: 'none' } },
-    { id: 'minimal', label: 'Minimal', color: '#17252b', patch: { dotsColor: '#17252b', dotsType: 'dots', dotsGradientType: 'none', bgColor: '#fbfcf8', bgGradientType: 'none', cornersSquareColor: '#17252b', cornersSquareType: 'dot', cornersSquareGradientType: 'none', cornersDotColor: '#17252b', cornersDotType: 'dot', cornersDotGradientType: 'none' } },
+    { id: 'classic', label: 'Classic', color: '#000000', patch: { dotsColor: '#000000', dotsType: 'square', dotsGradient: stops('#000000', '#444444'), bgColor: '#ffffff', bgGradient: stops('#ffffff', '#eeeeee'), cornersSquareColor: '#000000', cornersSquareType: 'square', cornersSquareGradient: stops('#000000', '#444444'), cornersDotColor: '#000000', cornersDotType: 'square', cornersDotGradient: stops('#000000', '#444444') } },
+    { id: 'ocean', label: 'Ocean', color: '#147d72', patch: { dotsColor: '#147d72', dotsType: 'rounded', dotsGradient: stops('#0163aa', '#147d72', 'linear', 45), bgColor: '#ffffff', bgGradient: stops('#ffffff', '#e6f4f1'), cornersSquareColor: '#0163aa', cornersSquareType: 'extra-rounded', cornersSquareGradient: stops('#0163aa', '#147d72'), cornersDotColor: '#147d72', cornersDotType: 'dot', cornersDotGradient: stops('#0163aa', '#147d72') } },
+    { id: 'sunset', label: 'Sunset', color: '#e9785c', patch: { dotsColor: '#e9785c', dotsType: 'dots', dotsGradient: stops('#e9785c', '#b5179e', 'linear', 90), bgColor: '#fff7f3', bgGradient: stops('#fff7f3', '#ffe3d6'), cornersSquareColor: '#b5179e', cornersSquareType: 'extra-rounded', cornersSquareGradient: stops('#e9785c', '#b5179e'), cornersDotColor: '#e9785c', cornersDotType: 'dot', cornersDotGradient: stops('#e9785c', '#b5179e') } },
+    { id: 'neon', label: 'Neon', color: '#39ff88', patch: { dotsColor: '#39ff88', dotsType: 'classy-rounded', dotsGradient: stops('#39ff88', '#00e5ff'), bgColor: '#101820', bgGradient: stops('#101820', '#1c2b36'), cornersSquareColor: '#00e5ff', cornersSquareType: 'extra-rounded', cornersSquareGradient: stops('#00e5ff', '#39ff88'), cornersDotColor: '#00e5ff', cornersDotType: 'dot', cornersDotGradient: stops('#00e5ff', '#39ff88') } },
+    { id: 'minimal', label: 'Minimal', color: '#17252b', patch: { dotsColor: '#17252b', dotsType: 'dots', dotsGradient: stops('#17252b', '#4b5f66'), bgColor: '#fbfcf8', bgGradient: stops('#fbfcf8', '#eef1ea'), cornersSquareColor: '#17252b', cornersSquareType: 'dot', cornersSquareGradient: stops('#17252b', '#4b5f66'), cornersDotColor: '#17252b', cornersDotType: 'dot', cornersDotGradient: stops('#17252b', '#4b5f66') } },
   ] as { id: string; label: string; color: string; patch: Partial<QrConfig> }[],
+  /** Ready-made gradients offered in the gradient editor. */
+  gradientPresets: [
+    { id: 'ocean', label: 'Ocean', stops: ['#0163aa', '#147d72'] },
+    { id: 'sunset', label: 'Sunset', stops: ['#e9785c', '#b5179e'] },
+    { id: 'forest', label: 'Forest', stops: ['#0b6b60', '#7bd389'] },
+    { id: 'berry', label: 'Berry', stops: ['#6a11cb', '#e83e8c'] },
+    { id: 'gold', label: 'Gold', stops: ['#f7971e', '#ffd200'] },
+    { id: 'rainbow', label: 'Rainbow', stops: ['#e83e3e', '#f7b500', '#2dd55b', '#0163aa', '#6a11cb'] },
+  ],
   dotTypes: ['square', 'rounded', 'dots', 'classy', 'classy-rounded', 'extra-rounded'],
   cornerSquareTypes: ['dot', 'square', 'extra-rounded', 'rounded', 'dots', 'classy', 'classy-rounded'],
   cornerDotTypes: ['dot', 'square', 'rounded', 'dots', 'classy', 'classy-rounded', 'extra-rounded'],
@@ -195,32 +209,72 @@ export const SUPPORTED_OPTIONS = {
   gradientTypes: ['none', 'linear', 'radial'],
   extensions: ['svg', 'png', 'jpeg', 'webp'],
   dotStyles: [
-    { value: 'square', label: 'Square', image: 'assets/qr/square-qr.png' },
-    { value: 'rounded', label: 'Rounded', image: 'assets/qr/rounded-qr.png' },
-    { value: 'dots', label: 'Dots', image: 'assets/qr/dots-qr.png' },
-    { value: 'classy', label: 'Classy', image: 'assets/qr/classy-qr.png' },
-    { value: 'classy-rounded', label: 'Classy rounded', image: 'assets/qr/classy-rounded-qr.png' },
-    { value: 'extra-rounded', label: 'Extra rounded', image: 'assets/qr/extra-rounded-qr.png' },
+    { value: 'square', label: 'Square', image: 'assets/qr/thumb-dots-square.png' },
+    { value: 'rounded', label: 'Rounded', image: 'assets/qr/thumb-dots-rounded.png' },
+    { value: 'dots', label: 'Dots', image: 'assets/qr/thumb-dots-dots.png' },
+    { value: 'classy', label: 'Classy', image: 'assets/qr/thumb-dots-classy.png' },
+    { value: 'classy-rounded', label: 'Classy rounded', image: 'assets/qr/thumb-dots-classy-rounded.png' },
+    { value: 'extra-rounded', label: 'Extra rounded', image: 'assets/qr/thumb-dots-extra-rounded.png' },
   ],
+  /** Outer square of the three corner markers. */
   cornerStyles: [
-    { value: 'square', label: 'Square' },
-    { value: 'dot', label: 'Dot' },
-    { value: 'extra-rounded', label: 'Extra rounded' },
-    { value: 'rounded', label: 'Rounded' },
+    { value: 'square', label: 'Square', image: 'assets/qr/thumb-frame-square.png' },
+    { value: 'rounded', label: 'Rounded', image: 'assets/qr/thumb-frame-rounded.png' },
+    { value: 'extra-rounded', label: 'Extra rounded', image: 'assets/qr/thumb-frame-extra-rounded.png' },
+    { value: 'dot', label: 'Dot', image: 'assets/qr/thumb-frame-dot.png' },
+    { value: 'dots', label: 'Dots', image: 'assets/qr/thumb-frame-dots.png' },
+    { value: 'classy', label: 'Classy', image: 'assets/qr/thumb-frame-classy.png' },
+    { value: 'classy-rounded', label: 'Classy rounded', image: 'assets/qr/thumb-frame-classy-rounded.png' },
+  ],
+  /** The inner (big) dot of the three corner markers. */
+  cornerDotStyles: [
+    { value: 'square', label: 'Square', image: 'assets/qr/thumb-eye-square.png' },
+    { value: 'dot', label: 'Dot', image: 'assets/qr/thumb-eye-dot.png' },
+    { value: 'rounded', label: 'Rounded', image: 'assets/qr/thumb-eye-rounded.png' },
+    { value: 'extra-rounded', label: 'Extra rounded', image: 'assets/qr/thumb-eye-extra-rounded.png' },
+    { value: 'dots', label: 'Dots', image: 'assets/qr/thumb-eye-dots.png' },
+    { value: 'classy', label: 'Classy', image: 'assets/qr/thumb-eye-classy.png' },
+    { value: 'classy-rounded', label: 'Classy rounded', image: 'assets/qr/thumb-eye-classy-rounded.png' },
+  ],
+  /** Plain-language explanation of the four error correction levels. */
+  errorLevelInfo: [
+    { id: 'L', name: 'Low', percent: 7, icon: 'flash-outline', summary: 'Simplest code', detail: 'Repairs about 7% damage. The pattern stays small and clean. Best for short text on a clear screen.' },
+    { id: 'M', name: 'Medium', percent: 15, icon: 'checkmark-circle-outline', summary: 'Good everyday choice', detail: 'Repairs about 15% damage. A balanced choice for most codes.' },
+    { id: 'Q', name: 'Quartile', percent: 25, icon: 'shield-half-outline', summary: 'Printed codes and small logos', detail: 'Repairs about 25% damage. Good for printed codes that may get dirty, and for a small logo.' },
+    { id: 'H', name: 'High', percent: 30, icon: 'shield-checkmark-outline', summary: 'Big logos and rough surfaces', detail: 'Repairs about 30% damage. The most reliable, but the pattern is denser. Best with a large logo or on stickers.' },
   ],
 };
 
+/** A copy of the defaults that shares no objects with them. */
+const freshConfig = (): QrConfig => structuredClone({ ...DEFAULT_CONFIG, fields: {} });
+
 @Injectable({ providedIn: 'root' })
 export class QrService {
-  config: QrConfig = { ...DEFAULT_CONFIG, fields: {} };
+  config: QrConfig = freshConfig();
 
   setContentType(contentType: QrContentType): void {
     this.config.contentType = contentType;
   }
 
   /** Replaces the working config (used to re-edit a saved code). */
-  loadConfig(config: QrConfig): void {
-    this.config = { ...DEFAULT_CONFIG, ...config, fields: { ...(config.fields || {}) } };
+  loadConfig(config: Partial<QrConfig>): void {
+    const saved: any = config;
+    const merged: any = { ...freshConfig(), ...saved, fields: { ...(saved.fields || {}) } };
+    // Codes saved before gradients had color stops store two colors and a rotation per group.
+    for (const g of ['dots', 'bg', 'cornersSquare', 'cornersDot']) {
+      if (!saved[`${g}Gradient`] && saved[`${g}GradientType`] !== undefined) {
+        merged[`${g}Gradient`] = {
+          type: saved[`${g}GradientType`],
+          rotation: saved[`${g}GradientRotation`] ?? 0,
+          stops: [
+            { offset: 0, color: saved[`${g}GradientColor1`] },
+            { offset: 1, color: saved[`${g}GradientColor2`] },
+          ],
+        };
+      }
+      for (const key of ['Type', 'Color1', 'Color2', 'Rotation']) delete merged[`${g}Gradient${key}`];
+    }
+    this.config = merged as QrConfig;
   }
 
   /** True for content types that are filled through a multi-field form. */
@@ -285,7 +339,7 @@ export class QrService {
   getWarnings(): string[] {
     const c = this.config;
     const warnings: string[] = [];
-    if (c.bgGradientType === 'none' && c.dotsGradientType === 'none') {
+    if (c.bgGradient.type === 'none' && c.dotsGradient.type === 'none') {
       if (this.contrastRatio(c.dotsColor, c.bgColor) < 3) {
         warnings.push('Low contrast between the dots and the background. The code may be hard to scan.');
       } else if (this.luminance(c.dotsColor) > this.luminance(c.bgColor)) {
@@ -407,47 +461,16 @@ export class QrService {
       },
     };
 
-    // Gradients
-    if (c.dotsGradientType !== 'none') {
-      opts.dotsOptions.gradient = {
-        type: c.dotsGradientType,
-        rotation: c.dotsGradientRotation,
-        colorStops: [
-          { offset: 0, color: c.dotsGradientColor1 },
-          { offset: 1, color: c.dotsGradientColor2 },
-        ],
-      };
-    }
-    if (c.bgGradientType !== 'none') {
-      opts.backgroundOptions.gradient = {
-        type: c.bgGradientType,
-        rotation: c.bgGradientRotation,
-        colorStops: [
-          { offset: 0, color: c.bgGradientColor1 },
-          { offset: 1, color: c.bgGradientColor2 },
-        ],
-      };
-    }
-    if (c.cornersSquareGradientType !== 'none') {
-      opts.cornersSquareOptions.gradient = {
-        type: c.cornersSquareGradientType,
-        rotation: c.cornersSquareGradientRotation,
-        colorStops: [
-          { offset: 0, color: c.cornersSquareGradientColor1 },
-          { offset: 1, color: c.cornersSquareGradientColor2 },
-        ],
-      };
-    }
-    if (c.cornersDotGradientType !== 'none') {
-      opts.cornersDotOptions.gradient = {
-        type: c.cornersDotGradientType,
-        rotation: c.cornersDotGradientRotation,
-        colorStops: [
-          { offset: 0, color: c.cornersDotGradientColor1 },
-          { offset: 1, color: c.cornersDotGradientColor2 },
-        ],
-      };
-    }
+    // Gradients. The library measures the rotation in radians.
+    const gradient = (g: GradientConfig) => ({
+      type: g.type,
+      rotation: (g.rotation * Math.PI) / 180,
+      colorStops: [...g.stops].sort((x, y) => x.offset - y.offset).map((stop) => ({ offset: stop.offset, color: stop.color })),
+    });
+    if (c.dotsGradient.type !== 'none') opts.dotsOptions.gradient = gradient(c.dotsGradient);
+    if (c.bgGradient.type !== 'none') opts.backgroundOptions.gradient = gradient(c.bgGradient);
+    if (c.cornersSquareGradient.type !== 'none') opts.cornersSquareOptions.gradient = gradient(c.cornersSquareGradient);
+    if (c.cornersDotGradient.type !== 'none') opts.cornersDotOptions.gradient = gradient(c.cornersDotGradient);
 
     // Image / Logo
     if (c.imageUrl && c.imageUrl.trim()) {
@@ -470,6 +493,6 @@ export class QrService {
    * Resets every option back to the defaults.
    */
   resetToDefaults(): void {
-    this.config = { ...DEFAULT_CONFIG, fields: {} };
+    this.config = freshConfig();
   }
 }

@@ -10,6 +10,8 @@ import {
   QrConfig,
   QrContentType,
   QrField,
+  GradientConfig,
+  gradientCss,
   SUPPORTED_OPTIONS,
 } from '../services/qr.service';
 import { AdService } from '../services/ad.service';
@@ -63,6 +65,8 @@ export class Tab2Page {
   exportAction: ExportAction = 'share';
   isLocating = false;
   isFullOpen = false;
+  isEcHelpOpen = false;
+  readonly ecInfo = SUPPORTED_OPTIONS.errorLevelInfo;
   notice = '';
 
   constructor(
@@ -138,6 +142,19 @@ export class Tab2Page {
     return !this.formattedPreview;
   }
 
+  /** The explanation of the error correction level that is selected now. */
+  get currentEc() {
+    return this.ecInfo.find((level) => level.id === this.config.errorCorrectionLevel) ?? this.ecInfo[2];
+  }
+
+  setEcHelp(open: boolean): void {
+    this.isEcHelpOpen = open;
+  }
+
+  chooseEc(level: string): void {
+    this.setOption('errorCorrectionLevel', level);
+  }
+
   get warnings(): string[] {
     return this.qrService.getWarnings();
   }
@@ -196,7 +213,7 @@ export class Tab2Page {
     this.updateQrCode();
   }
 
-  updateStyle(option: 'dotsType' | 'cornersSquareType', value: string): void {
+  updateStyle(option: 'dotsType' | 'cornersSquareType' | 'cornersDotType', value: string): void {
     this.setOption(option, value);
   }
 
@@ -217,29 +234,31 @@ export class Tab2Page {
     this.setOption(prop, event.detail?.checked);
   }
 
-  // Color rows are addressed by prefix, for example dots -> dotsColor, dotsGradientType...
-  color(target: ColorTarget, suffix: 'Color' | 'GradientColor1' | 'GradientColor2'): string {
-    return (this.config as any)[target.prefix + suffix];
+  // Color rows are addressed by prefix, for example dots -> dotsColor and dotsGradient.
+  color(target: ColorTarget): string {
+    return (this.config as any)[target.prefix + 'Color'];
   }
 
-  gradient(target: ColorTarget): string {
-    return (this.config as any)[target.prefix + 'GradientType'];
+  gradientOf(target: ColorTarget): GradientConfig {
+    return (this.config as any)[target.prefix + 'Gradient'];
   }
 
-  rotation(target: ColorTarget): number {
-    return (this.config as any)[target.prefix + 'GradientRotation'];
+  /** CSS used for the round preview of a color row. */
+  previewCss(target: ColorTarget): string {
+    return gradientCss(this.color(target), this.gradientOf(target));
   }
 
-  onColorInput(event: any, target: ColorTarget, suffix: string): void {
-    this.setOption(target.prefix + suffix, event.target?.value);
+  summary(target: ColorTarget): string {
+    const type = this.gradientOf(target).type;
+    return type === 'none' ? this.color(target) : type === 'linear' ? 'Linear gradient' : 'Radial gradient';
   }
 
-  setGradient(target: ColorTarget, type: unknown): void {
-    this.setOption(target.prefix + 'GradientType', type);
+  setSolid(target: ColorTarget, color: string): void {
+    this.setOption(target.prefix + 'Color', color);
   }
 
-  setRotation(event: any, target: ColorTarget): void {
-    this.setOption(target.prefix + 'GradientRotation', Number(event.detail?.value));
+  setGradientConfig(target: ColorTarget, gradient: GradientConfig): void {
+    this.setOption(target.prefix + 'Gradient', gradient);
   }
 
   toggleGradient(target: ColorTarget): void {

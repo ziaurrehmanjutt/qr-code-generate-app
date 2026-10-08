@@ -1,0 +1,58 @@
+<div class="ge">
+  <ion-segment [value]="gradient.type" (ionChange)="setType($event.detail.value)">
+    <ion-segment-button value="none"><ion-label>{{ 'Solid' | t }}</ion-label></ion-segment-button>
+    <ion-segment-button value="linear"><ion-label>{{ 'Linear' | t }}</ion-label></ion-segment-button>
+    <ion-segment-button value="radial"><ion-label>{{ 'Radial' | t }}</ion-label></ion-segment-button>
+  </ion-segment>
+
+  <!-- Solid color -->
+  <ng-container *ngIf="gradient.type === 'none'">
+    <div class="solid">
+      <label class="swatch big" [style.background]="solid"><input type="color" [value]="solid" (input)="solidChange.emit($any($event.target).value)"></label>
+      <span class="hex">{{ solid }}</span>
+    </div>
+    <div class="quick">
+      <button type="button" *ngFor="let c of quickColors" class="quick-dot" [class.on]="solid.toLowerCase() === c" [style.background]="c"
+        [attr.aria-label]="c" (click)="solidChange.emit(c)"></button>
+    </div>
+  </ng-container>
+
+  <!-- Gradient -->
+  <ng-container *ngIf="gradient.type !== 'none'">
+    <div class="bar-wrap">
+      <div class="bar" [style.background]="css"></div>
+      <i class="marker" *ngFor="let s of gradient.stops" [style.left.%]="s.offset * 100" [style.background]="s.color"></i>
+    </div>
+
+    <div class="stops">
+      <div class="stop" *ngFor="let s of gradient.stops; let i = index; trackBy: trackByIndex">
+        <label class="swatch" [style.background]="s.color"><input type="color" [value]="s.color" (input)="setStopColor(i, $any($event.target).value)"></label>
+        <ion-range class="grow" [attr.aria-label]="'Position' | t" min="0" max="100" step="1" [value]="percent(s.offset)" (ionInput)="setStopPercent(i, $event.detail.value)"></ion-range>
+        <span class="pct">{{ percent(s.offset) }}%</span>
+        <button type="button" class="icon-btn" *ngIf="gradient.stops.length > 2" (click)="removeStop(i)" [attr.aria-label]="'Remove' | t"><ion-icon name="close-circle-outline"></ion-icon></button>
+      </div>
+    </div>
+
+    <div class="chips">
+      <button type="button" class="chip" (click)="addStop()" [disabled]="gradient.stops.length >= maxStops"><ion-icon name="add-circle-outline"></ion-icon>{{ 'Add color' | t }}</button>
+      <button type="button" class="chip" (click)="reverse()"><ion-icon name="swap-horizontal-outline"></ion-icon>{{ 'Reverse' | t }}</button>
+    </div>
+
+    <ng-container *ngIf="gradient.type === 'linear'">
+      <p class="label">{{ 'Direction' | t }} <b>{{ gradient.rotation }}°</b></p>
+      <div class="chips dirs">
+        <button type="button" class="dir" *ngFor="let d of directions" [class.on]="gradient.rotation === d" (click)="setRotation(d)" [attr.aria-label]="d + '°'">
+          <ion-icon name="arrow-forward-outline" [style.transform]="'rotate(' + d + 'deg)'"></ion-icon>
+        </button>
+      </div>
+      <ion-range [attr.aria-label]="'Direction' | t" min="0" max="360" step="5" [value]="gradient.rotation" (ionInput)="setRotation($event.detail.value)"></ion-range>
+    </ng-container>
+
+    <p class="label">{{ 'Ready-made' | t }}</p>
+    <div class="chips">
+      <button type="button" class="chip" *ngFor="let p of presets" (click)="applyPreset(p.stops)">
+        <i class="dot" [style.background]="presetCss(p.stops)"></i>{{ p.label | t }}
+      </button>
+    </div>
+  </ng-container>
+</div>
