@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <main class="page" [class.has-banner]="ads.bannerVisible">
+  <main class="page">
     <section class="card scan-card" [class.scanning]="isScanning">
       <div class="viewfinder" aria-hidden="true">
         <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
@@ -56,6 +56,16 @@
     </section>
 
     <ng-template #guide>
+      <section class="recent" *ngIf="recent.length">
+        <p class="eyebrow">{{ 'Recent scans' | t }}</p>
+        <div class="recent-list">
+          <button type="button" class="recent-item" *ngFor="let scan of recent" (click)="openRecent(scan)">
+            <span class="ico"><ion-icon [name]="scan.icon"></ion-icon></span>
+            <span class="txt"><strong>{{ scan.title | t }}</strong><small>{{ (scan.type | titlecase) | t }} · {{ formatDate(scan.scannedAt) }}</small></span>
+            <ion-icon name="chevron-forward-outline" class="chev"></ion-icon>
+          </button>
+        </div>
+      </section>
       <section class="guide">
         <p class="eyebrow">{{ 'Understands' | t }}</p>
         <div class="chips wrap">

@@ -13,6 +13,7 @@
 .bars { display: flex; align-items: flex-end; gap: 3px; height: 26px; }
 .bars i { flex: 1; min-height: 3px; border-radius: 2px; background: var(--line); }
 .bars i.on { background: var(--brand); }
+.empty-cta { margin-top: 10px; }
 .search { --border-radius: 12px; --box-shadow: none; padding: 8px 0 4px; }
 .list { display: grid; gap: 8px; }
 .item { display: flex; align-items: center; gap: 12px; padding: 10px 6px 10px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }

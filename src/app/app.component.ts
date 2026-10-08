@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     await this.settings.init();
     if (!this.settings.settings.onboarded) this.router.navigateByUrl('/onboarding', { replaceUrl: true });
     // Not awaited: ads must never delay the app.
+    this.ads.watchRoutes(this.router);
     this.ads.init();
   }
 }

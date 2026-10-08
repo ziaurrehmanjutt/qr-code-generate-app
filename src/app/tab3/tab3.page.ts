@@ -22,6 +22,7 @@ import { TranslateService } from '../i18n/translate.service';
 })
 export class Tab3Page {
   decodedResult: DecodedQrResult | null = null;
+  recent: ScanRecord[] = [];
   savedScan: ScanRecord | null = null;
   isScanning = false;
   scanError = '';
@@ -37,12 +38,18 @@ export class Tab3Page {
     public ads: AdService,
   ) {}
 
-  ionViewDidEnter(): void {
-    this.ads.showBanner();
+  async ionViewWillEnter(): Promise<void> {
+    this.recent = (await this.qrStorage.scans()).slice(0, 4);
   }
 
-  ionViewWillLeave(): void {
-    this.ads.hideBanner();
+  /** Shows an earlier scan again without adding it to the history a second time. */
+  openRecent(scan: ScanRecord): void {
+    this.decodedResult = this.qrDecodeService.decode(scan.raw);
+    this.savedScan = scan;
+  }
+
+  formatDate(date: string): string {
+    return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(new Date(date));
   }
 
   async scanBarcode(): Promise<void> {
@@ -73,6 +80,7 @@ export class Tab3Page {
       });
     }
     this.ads.recordAction();
+    this.recent = (await this.qrStorage.scans()).slice(0, 4);
     if (this.settings.settings.haptics) Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
   }
 

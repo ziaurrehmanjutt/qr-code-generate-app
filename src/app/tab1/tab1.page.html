@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <main class="page" [class.has-banner]="ads.bannerVisible">
+  <main class="page">
     <!-- Quick actions -->
     <section class="hero">
       <button type="button" class="hero-btn create" (click)="go('/tabs/tab2')">
@@ -45,6 +45,9 @@
         <ion-icon [name]="tab === 'scanned' ? 'scan-outline' : tab === 'favorites' ? 'star-outline' : 'qr-code-outline'"></ion-icon>
         <h3>{{ (query ? 'Nothing matches' : tab === 'scanned' ? 'No scans yet' : tab === 'favorites' ? 'No favorites yet' : 'No saved codes yet') | t }}</h3>
         <p>{{ (query ? 'Try a different search.' : tab === 'scanned' ? 'Scanned codes show up here.' : tab === 'favorites' ? 'Star a code or a scan to keep it here.' : 'Create a code and tap Save.') | t }}</p>
+        <button type="button" class="btn soft empty-cta" *ngIf="!query && tab !== 'favorites'" (click)="go(tab === 'scanned' ? '/tabs/tab3' : '/tabs/tab2')">
+          <ion-icon [name]="tab === 'scanned' ? 'scan-outline' : 'color-wand-outline'"></ion-icon>{{ (tab === 'scanned' ? 'Scan now' : 'Create your first code') | t }}
+        </button>
       </div>
 
       <div class="list" *ngIf="!isLoading">

@@ -12,9 +12,9 @@ describe('AdService', () => {
     expect(ads.bannerVisible).toBeFalse();
   });
 
-  it('uses Google test ad ids while test ads are on', () => {
-    expect(adsConfig.useTestAds).toBeTrue();
-    expect(adsConfig.banner).toContain('ca-app-pub-3940256099942544');
-    expect(adsConfig.interstitial).toContain('ca-app-pub-3940256099942544');
+  it('uses ad ids that match the selected mode', () => {
+    const publisher = adsConfig.useTestAds ? 'ca-app-pub-3940256099942544' : 'ca-app-pub-9813075579951410';
+    expect(adsConfig.banner).toContain(publisher);
+    expect(adsConfig.interstitial).toContain(publisher);
   });
 });

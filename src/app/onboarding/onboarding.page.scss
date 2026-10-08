@@ -1,13 +1,27 @@
 :host { display: block; }
-.intro { display: grid; grid-template-rows: 1fr auto; height: 100%; padding: 24px 24px 32px; }
-.skip { position: absolute; top: 16px; right: 16px; padding: 8px 12px; border: 0; color: var(--muted); background: none; font: inherit; font-weight: 700; }
-.slide { display: grid; align-content: center; justify-items: center; gap: 12px; text-align: center; }
+.intro { display: grid; grid-template-rows: 1fr auto; height: 100%; padding: calc(24px + var(--ion-safe-area-top, 0px)) 24px calc(24px + var(--ion-safe-area-bottom, 0px)); }
+.skip { position: absolute; top: calc(12px + var(--ion-safe-area-top, 0px)); inset-inline-end: 16px; padding: 8px 12px; border: 0; color: var(--muted); background: none; font: inherit; font-weight: 700; }
+.slide { display: grid; align-content: center; justify-items: center; gap: 12px; text-align: center; animation: rise 0.35s ease both; }
 .slide[hidden] { display: none; }
+.logo { width: 112px; height: 112px; margin-bottom: 8px; border-radius: 28px; box-shadow: var(--shadow); }
+.choose { font-weight: 700; color: var(--ink); }
 .art { display: grid; place-items: center; width: 120px; height: 120px; margin-bottom: 12px; border-radius: 36px; color: #fff; background: linear-gradient(135deg, var(--brand), var(--accent)); box-shadow: var(--shadow); }
 .art ion-icon { font-size: 58px; }
 h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
 p { max-width: 320px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+
+.languages { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 12px; }
+.lang { position: relative; display: grid; gap: 2px; justify-items: center; padding: 18px 10px; border: 2px solid var(--line); border-radius: 18px; color: var(--ink); background: var(--surface); font: inherit; transition: transform 0.12s, border-color 0.2s, background 0.2s; }
+.lang:active { transform: scale(0.97); }
+.lang .name { font-size: 22px; font-weight: 800; }
+.lang small { color: var(--muted); font-size: 12px; }
+.lang ion-icon { position: absolute; top: 8px; inset-inline-end: 8px; color: var(--brand); font-size: 22px; }
+.lang.on { border-color: var(--brand); background: var(--brand-soft); }
+
 footer { display: grid; gap: 18px; }
 .dots { display: flex; justify-content: center; gap: 6px; }
-.dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--line); transition: width 0.2s; }
+.dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--line); transition: width 0.2s, background 0.2s; }
 .dots i.on { width: 24px; background: var(--brand); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .slide { animation: none; } }

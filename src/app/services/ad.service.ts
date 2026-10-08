@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import {
   AdMob,
   AdmobConsentStatus,
@@ -16,7 +18,7 @@ import { adsConfig, isConfigured } from '../../environments/ads.config';
  */
 @Injectable({ providedIn: 'root' })
 export class AdService {
-  /** True while a banner is on screen, so pages can keep their content above it. */
+  /** True while a banner is on screen. Pages reserve its space through the --ad-height CSS variable. */
   bannerVisible = false;
 
   /** True when the user must be able to change their ad privacy choices (shown in Settings). */
@@ -27,6 +29,8 @@ export class AdService {
   private actions = 0;
   private lastInterstitial = 0;
   private interstitialLoaded = false;
+  private bannerState: 'none' | 'shown' | 'hidden' = 'none';
+  private bannerHeight = 0;
 
   private get native(): boolean {
     return Capacitor.isNativePlatform();
@@ -47,8 +51,15 @@ export class AdService {
       }
       this.privacyOptionsRequired = String(consent.privacyOptionsRequirementStatus) === 'REQUIRED';
       await AdMob.initialize({ initializeForTesting: adsConfig.useTestAds });
+      AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size) => {
+        this.bannerHeight = size.height;
+        if (this.bannerState === 'shown') this.reserveSpace(size.height);
+      });
       AdMob.addListener(BannerAdPluginEvents.Loaded, () => (this.bannerVisible = true));
-      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, () => (this.bannerVisible = false));
+      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, () => {
+        this.bannerVisible = false;
+        this.reserveSpace(0);
+      });
       AdMob.addListener(InterstitialAdPluginEvents.Dismissed, () => this.loadInterstitial());
       this.ready = true;
       this.loadInterstitial();
@@ -57,30 +68,52 @@ export class AdService {
     }
   }
 
+  /**
+   * Keeps one banner for the whole tab area: it is shown when the user is inside the tabs and hidden
+   * on every other page (Settings, intro), so it never covers content and never reloads when
+   * switching tabs.
+   */
+  watchRoutes(router: Router): void {
+    const sync = (url: string) => (url.startsWith('/tabs') ? this.showBanner() : this.hideBanner());
+    router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd)).subscribe((event) => sync(event.urlAfterRedirects));
+  }
+
   async showBanner(): Promise<void> {
     await this.init();
-    if (!this.ready || !isConfigured(adsConfig.banner)) return;
+    if (!this.ready || !isConfigured(adsConfig.banner) || this.bannerState === 'shown') return;
     try {
-      await AdMob.showBanner({
-        adId: adsConfig.banner,
-        isTesting: adsConfig.useTestAds,
-        adSize: BannerAdSize.ADAPTIVE_BANNER,
-        position: BannerAdPosition.BOTTOM_CENTER,
-        margin: adsConfig.bannerBottomMargin,
-      });
+      if (this.bannerState === 'hidden') {
+        await AdMob.resumeBanner();
+        this.reserveSpace(this.bannerHeight);
+      } else {
+        await AdMob.showBanner({
+          adId: adsConfig.banner,
+          isTesting: adsConfig.useTestAds,
+          adSize: BannerAdSize.ADAPTIVE_BANNER,
+          position: BannerAdPosition.BOTTOM_CENTER,
+          margin: adsConfig.bannerBottomMargin,
+        });
+      }
+      this.bannerState = 'shown';
     } catch (error) {
       console.warn('Banner failed:', error);
     }
   }
 
   async hideBanner(): Promise<void> {
-    this.bannerVisible = false;
-    if (!this.ready) return;
+    if (!this.ready || this.bannerState !== 'shown') return;
+    this.bannerState = 'hidden';
+    this.reserveSpace(0);
     try {
-      await AdMob.removeBanner();
+      await AdMob.hideBanner();
     } catch {
-      // Nothing to remove.
+      // Nothing to hide.
     }
+  }
+
+  /** Publishes the banner height so page content keeps clear of it. */
+  private reserveSpace(height: number): void {
+    document.documentElement.style.setProperty('--ad-height', `${height}px`);
   }
 
   /** Call after a completed user action. Shows an interstitial every Nth action, at most once per cooldown. */

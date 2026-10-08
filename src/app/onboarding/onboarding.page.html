@@ -1,13 +1,31 @@
 <ion-content [fullscreen]="true" [scrollY]="false">
   <main class="intro">
-    <button type="button" class="skip" (click)="finish()" *ngIf="!last">{{ 'Skip' | t }}</button>
-    <section class="slide" *ngFor="let s of slides; let i = index" [hidden]="i !== index">
+    <button type="button" class="skip" (click)="finish()" *ngIf="index > 0 && !last">{{ 'Skip' | t }}</button>
+
+    <!-- Step 0: language. Shown in both languages, because the user has not chosen one yet. -->
+    <section class="slide" *ngIf="index === 0">
+      <img class="logo" src="assets/icon/logo.svg" alt="DiyaQR">
+      <h1>DiyaQR</h1>
+      <p class="choose">Choose your language · اختر لغتك</p>
+      <!-- dir="ltr": the two options must not swap places when the app flips to RTL. -->
+      <div class="languages" dir="ltr" role="radiogroup">
+        <button type="button" class="lang" *ngFor="let l of languages" role="radio" [attr.aria-checked]="language === l.code"
+          [class.on]="language === l.code" (click)="chooseLanguage(l.code)">
+          <span class="name">{{ l.name }}</span>
+          <small>{{ l.hint }}</small>
+          <ion-icon name="checkmark-circle" *ngIf="language === l.code"></ion-icon>
+        </button>
+      </div>
+    </section>
+
+    <section class="slide" *ngFor="let s of slides; let i = index" [hidden]="index !== i + 1">
       <span class="art"><ion-icon [name]="s.icon"></ion-icon></span>
       <h1>{{ s.title | t }}</h1>
       <p>{{ s.text | t }}</p>
     </section>
+
     <footer>
-      <div class="dots"><i *ngFor="let s of slides; let i = index" [class.on]="i === index"></i></div>
+      <div class="dots"><i *ngFor="let i of steps" [class.on]="i === index"></i></div>
       <button type="button" class="btn block" (click)="next()">{{ (last ? 'Get started' : 'Next') | t }}</button>
     </footer>
   </main>
