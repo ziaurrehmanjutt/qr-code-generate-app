@@ -1,4 +1,3 @@
-:host { display: block; }
 .group { margin: 18px 4px 8px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
 // Every row may shrink to the card width, so toggles and segments never push past the edge.
 .card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; overflow: hidden; }

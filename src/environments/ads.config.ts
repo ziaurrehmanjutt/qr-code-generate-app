@@ -34,4 +34,6 @@ export const adsConfig = {
   interstitialCooldownMs: 60_000,
   /** Space kept free at the bottom for the tab bar, in dp, so the banner sits above it. */
   bannerBottomMargin: 56,
+  /** Height reserved for the banner until its real size is known (adaptive banners are 50-60 dp). */
+  bannerHeightFallback: 60,
 };

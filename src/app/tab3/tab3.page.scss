@@ -1,4 +1,3 @@
-:host { display: block; }
 .scan-card { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 14px; margin-top: 4px; padding: 20px 16px; text-align: center; }
 .scan-copy { width: 100%; }
 .viewfinder { position: relative; display: grid; place-items: center; width: 148px; aspect-ratio: 1; border-radius: 14px; background: var(--brand-soft); overflow: hidden; }

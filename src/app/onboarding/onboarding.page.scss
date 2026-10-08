@@ -1,5 +1,4 @@
-:host { display: block; }
-.intro { display: grid; grid-template-rows: 1fr auto; height: 100%; padding: calc(24px + var(--ion-safe-area-top, 0px)) 24px calc(24px + var(--ion-safe-area-bottom, 0px)); }
+.intro { display: grid; grid-template-rows: 1fr auto; height: 100%; padding: calc(24px + var(--ion-safe-area-top, 0px)) 24px calc(24px + max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px), 24px)); }
 .skip { position: absolute; top: calc(12px + var(--ion-safe-area-top, 0px)); inset-inline-end: 16px; padding: 8px 12px; border: 0; color: var(--muted); background: none; font: inherit; font-weight: 700; }
 .slide { display: grid; align-content: center; justify-items: center; gap: 12px; text-align: center; animation: rise 0.35s ease both; }
 .slide[hidden] { display: none; }

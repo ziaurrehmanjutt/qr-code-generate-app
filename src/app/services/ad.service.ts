@@ -52,6 +52,8 @@ export class AdService {
       this.privacyOptionsRequired = String(consent.privacyOptionsRequirementStatus) === 'REQUIRED';
       await AdMob.initialize({ initializeForTesting: adsConfig.useTestAds });
       AdMob.addListener(BannerAdPluginEvents.SizeChanged, (size) => {
+        // A size of 0 is reported while the banner loads or is removed; keep the last real height.
+        if (size.height <= 0) return;
         this.bannerHeight = size.height;
         if (this.bannerState === 'shown') this.reserveSpace(size.height);
       });
@@ -81,10 +83,13 @@ export class AdService {
   async showBanner(): Promise<void> {
     await this.init();
     if (!this.ready || !isConfigured(adsConfig.banner) || this.bannerState === 'shown') return;
+    const previous = this.bannerState;
+    // Marked as shown before the call: the size event can arrive before the call returns.
+    this.bannerState = 'shown';
+    this.reserveSpace(this.bannerHeight || adsConfig.bannerHeightFallback);
     try {
-      if (this.bannerState === 'hidden') {
+      if (previous === 'hidden') {
         await AdMob.resumeBanner();
-        this.reserveSpace(this.bannerHeight);
       } else {
         await AdMob.showBanner({
           adId: adsConfig.banner,
@@ -94,9 +99,10 @@ export class AdService {
           margin: adsConfig.bannerBottomMargin,
         });
       }
-      this.bannerState = 'shown';
     } catch (error) {
       console.warn('Banner failed:', error);
+      this.bannerState = previous;
+      this.reserveSpace(0);
     }
   }
 
