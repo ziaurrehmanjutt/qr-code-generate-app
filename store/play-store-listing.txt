@@ -1,0 +1,534 @@
+DIYAQR - GOOGLE PLAY STORE LISTING TEXT
+=======================================
+Limits: App name max 30 characters. Short description max 80. Full description max 4000.
+Add each language in Play Console > Grow > Store presence > Main store listing > Manage translations.
+Play locale to use is shown in brackets for every language.
+Also remember: this app shows ads, so tick "Contains ads" in Play Console > App content.
+
+
+#######################################################################
+ 1. ENGLISH  [en-US]  (default language)
+#######################################################################
+
+APP NAME
+DiyaQR - QR Scanner & Creator
+
+SHORT DESCRIPTION
+Create stylish QR codes with logos and colors. Scan fast. Save, share, edit.
+
+FULL DESCRIPTION
+DiyaQR is a fast, beautiful QR code creator and scanner. Make a QR code for a link, Wi-Fi, contact, event or location, style it your way, then save or share it in seconds. Scan any QR code or barcode with the camera or from a picture, and act on it in one tap.
+
+✨ CREATE ANY QR CODE
+• Text, links, email, phone, SMS, WhatsApp, Wi-Fi, contact cards, calendar events and map locations
+• Live preview while you type
+• Use your current location for map codes
+
+🎨 MAKE IT YOURS
+• Ready-made color styles, plus linear and radial gradients
+• Choose the shape of the dots, the corner frames and the corner dots
+• Add your own logo from the gallery or an image link
+• Simple error-correction levels with clear explanations, and a warning when a design may be hard to scan
+
+📷 SCAN AND ACT FAST
+• Scan with the camera or pick a picture from the gallery
+• Smart actions: open a website, call, send an SMS or email, open in Maps, add to calendar, save a contact or connect to Wi-Fi
+• Safety hints for shortened links, plain http links and links that point to an IP address
+
+💾 SAVE, SHARE, EDIT
+• Export as PNG, JPEG, SVG or WebP
+• Save to your gallery, share to any app, or keep a code in the app and edit it later
+• Scan history, favorites and search
+
+🌍 MADE FOR EVERYONE
+• 12 languages: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino and فارسی, with full right-to-left support
+• Light, dark and system themes
+
+🔒 PRIVATE BY DESIGN
+No account needed. Your codes and scans stay on your phone.
+
+Download DiyaQR and make your first QR code today.
+
+
+#######################################################################
+ 2. ARABIC  [ar]
+#######################################################################
+
+APP NAME
+DiyaQR - ماسح ومنشئ QR
+
+SHORT DESCRIPTION
+أنشئ رموز QR أنيقة بالشعارات والألوان. امسح بسرعة، واحفظ وشارك وعدّل.
+
+FULL DESCRIPTION
+«ضياء QR» (DiyaQR) تطبيق سريع وجميل لإنشاء رموز QR ومسحها. أنشئ رمز QR لرابط أو شبكة واي فاي أو جهة اتصال أو حدث أو موقع، وصمّمه بالشكل الذي تريد، ثم احفظه أو شاركه في ثوانٍ. وامسح أي رمز QR أو باركود بالكاميرا أو من صورة، وتصرّف بنقرة واحدة.
+
+✨ أنشئ أي رمز QR
+• نص وروابط وبريد إلكتروني وهاتف ورسائل SMS وواتساب وواي فاي وبطاقات اتصال وأحداث التقويم ومواقع الخريطة
+• معاينة مباشرة أثناء الكتابة
+• استخدم موقعك الحالي لإنشاء رموز الخرائط
+
+🎨 اجعله بتصميمك
+• أنماط ألوان جاهزة وتدرّجات خطية ودائرية
+• اختر شكل النقاط وإطارات الزوايا ونقاط الزوايا
+• أضف شعارك الخاص من المعرض أو من رابط صورة
+• مستويات تصحيح أخطاء بسيطة مع شرح واضح، وتنبيه عندما يصعب مسح التصميم
+
+📷 امسح وتصرّف بسرعة
+• امسح بالكاميرا أو اختر صورة من المعرض
+• إجراءات ذكية: فتح موقع ويب، اتصال، إرسال رسالة أو بريد، فتح في الخرائط، إضافة إلى التقويم، حفظ جهة اتصال، أو الاتصال بشبكة واي فاي
+• تنبيهات أمان للروابط المختصرة وروابط http غير المشفّرة والروابط التي تشير إلى عنوان IP
+
+💾 احفظ وشارك وعدّل
+• تصدير بصيغ PNG وJPEG وSVG وWebP
+• احفظ في المعرض، أو شارك مع أي تطبيق، أو أبقِ الرمز داخل التطبيق وعدّله لاحقاً
+• سجل المسح والمفضلة والبحث
+
+🌍 لكل المستخدمين
+• 12 لغة: English والعربية وEspañol وFrançais وहिन्दी واردو وBahasa Indonesia وPortuguês وTürkçe وবাংলা وFilipino وفارسی، مع دعم كامل للكتابة من اليمين إلى اليسار
+• سمات فاتحة وداكنة وتلقائية
+
+🔒 خصوصيتك أولاً
+لا حاجة إلى حساب. تبقى رموزك وعمليات المسح على هاتفك.
+
+نزّل «ضياء QR» وأنشئ أول رمز QR لك اليوم.
+
+
+#######################################################################
+ 3. SPANISH  [es-419]  (use es-ES for Spain, same text)
+#######################################################################
+
+APP NAME
+DiyaQR: Escáner y Creador QR
+
+SHORT DESCRIPTION
+Crea códigos QR con estilo, logo y colores. Escanea rápido. Guarda y comparte.
+
+FULL DESCRIPTION
+DiyaQR es un creador y escáner de códigos QR rápido y elegante. Crea un código QR para un enlace, una red Wi-Fi, un contacto, un evento o una ubicación, personalízalo a tu gusto y guárdalo o compártelo en segundos. Escanea cualquier código QR o de barras con la cámara o desde una imagen y actúa con un solo toque.
+
+✨ CREA CUALQUIER CÓDIGO QR
+• Texto, enlaces, correo, teléfono, SMS, WhatsApp, Wi-Fi, tarjetas de contacto, eventos de calendario y ubicaciones en el mapa
+• Vista previa en vivo mientras escribes
+• Usa tu ubicación actual para los códigos de mapa
+
+🎨 HAZLO TUYO
+• Estilos de color predefinidos y degradados lineales y radiales
+• Elige la forma de los puntos, de los marcos de las esquinas y de los puntos de las esquinas
+• Añade tu propio logotipo desde la galería o con un enlace a una imagen
+• Niveles de corrección de errores sencillos con explicaciones claras, y un aviso cuando un diseño puede ser difícil de escanear
+
+📷 ESCANEA Y ACTÚA RÁPIDO
+• Escanea con la cámara o elige una imagen de la galería
+• Acciones inteligentes: abrir un sitio web, llamar, enviar un SMS o un correo, abrir en Mapas, añadir al calendario, guardar un contacto o conectarte al Wi-Fi
+• Avisos de seguridad para enlaces acortados, enlaces http sin cifrar y enlaces que apuntan a una dirección IP
+
+💾 GUARDA, COMPARTE, EDITA
+• Exporta en PNG, JPEG, SVG o WebP
+• Guarda en la galería, comparte con cualquier app o conserva el código en la app para editarlo después
+• Historial de escaneos, favoritos y búsqueda
+
+🌍 PARA TODOS
+• 12 idiomas: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino y فارسی, con compatibilidad total con la escritura de derecha a izquierda
+• Temas claro, oscuro y del sistema
+
+🔒 PRIVADO POR DISEÑO
+No necesitas cuenta. Tus códigos y escaneos se quedan en tu teléfono.
+
+Descarga DiyaQR y crea hoy tu primer código QR.
+
+
+#######################################################################
+ 4. FRENCH  [fr-FR]
+#######################################################################
+
+APP NAME
+DiyaQR : Scanner & Créer QR
+
+SHORT DESCRIPTION
+Créez de beaux codes QR avec logo et couleurs. Scannez vite. Enregistrez.
+
+FULL DESCRIPTION
+DiyaQR est un créateur et lecteur de codes QR rapide et élégant. Créez un code QR pour un lien, un Wi-Fi, un contact, un événement ou un lieu, personnalisez-le comme vous voulez, puis enregistrez-le ou partagez-le en quelques secondes. Scannez n’importe quel code QR ou code-barres avec l’appareil photo ou depuis une image, et agissez en un geste.
+
+✨ CRÉEZ TOUS LES CODES QR
+• Texte, liens, e-mail, téléphone, SMS, WhatsApp, Wi-Fi, fiches de contact, événements de calendrier et lieux sur la carte
+• Aperçu en direct pendant la saisie
+• Utilisez votre position actuelle pour les codes de carte
+
+🎨 PERSONNALISEZ-LE
+• Styles de couleurs prêts à l’emploi, dégradés linéaires et radiaux
+• Choisissez la forme des points, des cadres de coin et des points de coin
+• Ajoutez votre propre logo depuis la galerie ou un lien d’image
+• Niveaux de correction d’erreurs simples avec des explications claires, et un avertissement quand un design risque d’être difficile à scanner
+
+📷 SCANNEZ ET AGISSEZ VITE
+• Scannez avec l’appareil photo ou choisissez une image dans la galerie
+• Actions intelligentes : ouvrir un site web, appeler, envoyer un SMS ou un e-mail, ouvrir dans Plans, ajouter au calendrier, enregistrer un contact ou se connecter au Wi-Fi
+• Alertes de sécurité pour les liens raccourcis, les liens http non chiffrés et les liens pointant vers une adresse IP
+
+💾 ENREGISTREZ, PARTAGEZ, MODIFIEZ
+• Export en PNG, JPEG, SVG ou WebP
+• Enregistrez dans la galerie, partagez vers n’importe quelle app ou gardez le code dans l’app pour le modifier plus tard
+• Historique des scans, favoris et recherche
+
+🌍 POUR TOUT LE MONDE
+• 12 langues : English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino et فارسی, avec une prise en charge complète de l’écriture de droite à gauche
+• Thèmes clair, sombre et système
+
+🔒 CONFIDENTIEL PAR CONCEPTION
+Aucun compte requis. Vos codes et vos scans restent sur votre téléphone.
+
+Téléchargez DiyaQR et créez dès aujourd’hui votre premier code QR.
+
+
+#######################################################################
+ 5. HINDI  [hi-IN]
+#######################################################################
+
+APP NAME
+DiyaQR - QR स्कैनर और जनरेटर
+
+SHORT DESCRIPTION
+लोगो और रंगों वाले सुंदर QR कोड बनाएँ। तेज़ स्कैन करें। सेव, शेयर और एडिट करें।
+
+FULL DESCRIPTION
+DiyaQR एक तेज़ और सुंदर QR कोड क्रिएटर और स्कैनर है। किसी लिंक, वाई-फ़ाई, संपर्क, इवेंट या लोकेशन के लिए QR कोड बनाएँ, उसे अपनी पसंद से सजाएँ, और कुछ ही सेकंड में सेव या शेयर करें। कैमरे से या किसी तस्वीर से कोई भी QR कोड या बारकोड स्कैन करें और एक टैप में काम पूरा करें।
+
+✨ कोई भी QR कोड बनाएँ
+• टेक्स्ट, लिंक, ईमेल, फ़ोन, एसएमएस, व्हाट्सऐप, वाई-फ़ाई, संपर्क कार्ड, कैलेंडर इवेंट और मैप लोकेशन
+• टाइप करते समय लाइव प्रीव्यू
+• मैप कोड के लिए अपनी मौजूदा लोकेशन इस्तेमाल करें
+
+🎨 इसे अपना बनाएँ
+• तैयार रंग शैलियाँ, साथ में रेखीय और रेडियल ग्रेडिएंट
+• बिंदुओं, कोने के फ्रेम और कोने के बिंदुओं का आकार चुनें
+• गैलरी या तस्वीर के लिंक से अपना लोगो जोड़ें
+• आसान एरर-करेक्शन स्तर और साफ़ व्याख्या, और जब डिज़ाइन स्कैन करने में कठिन हो तो चेतावनी
+
+📷 स्कैन करें और तुरंत काम करें
+• कैमरे से स्कैन करें या गैलरी से तस्वीर चुनें
+• स्मार्ट एक्शन: वेबसाइट खोलें, कॉल करें, एसएमएस या ईमेल भेजें, मैप्स में खोलें, कैलेंडर में जोड़ें, संपर्क सेव करें या वाई-फ़ाई से जुड़ें
+• छोटे किए गए लिंक, बिना एन्क्रिप्शन वाले http लिंक और IP पते की ओर जाने वाले लिंक के लिए सुरक्षा संकेत
+
+💾 सेव, शेयर और एडिट
+• PNG, JPEG, SVG या WebP में एक्सपोर्ट करें
+• गैलरी में सेव करें, किसी भी ऐप में शेयर करें, या कोड को ऐप में रखकर बाद में एडिट करें
+• स्कैन इतिहास, पसंदीदा और खोज
+
+🌍 सबके लिए
+• 12 भाषाएँ: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino और فارسی, दाएँ-से-बाएँ लिखावट के पूरे समर्थन के साथ
+• हल्की, गहरी और सिस्टम थीम
+
+🔒 डिज़ाइन से ही निजी
+खाता बनाने की ज़रूरत नहीं। आपके कोड और स्कैन आपके फ़ोन में ही रहते हैं।
+
+DiyaQR डाउनलोड करें और आज ही अपना पहला QR कोड बनाएँ।
+
+
+#######################################################################
+ 6. URDU  [ur]
+#######################################################################
+
+APP NAME
+DiyaQR - QR اسکینر اور جنریٹر
+
+SHORT DESCRIPTION
+لوگو اور رنگوں کے ساتھ خوبصورت QR کوڈ بنائیں۔ تیز اسکین، محفوظ اور شیئر۔
+
+FULL DESCRIPTION
+DiyaQR ایک تیز اور خوبصورت QR کوڈ بنانے اور اسکین کرنے والی ایپ ہے۔ کسی لنک، وائی فائی، رابطے، ایونٹ یا مقام کے لیے QR کوڈ بنائیں، اسے اپنے انداز میں سجائیں، اور چند سیکنڈ میں محفوظ یا شیئر کریں۔ کیمرے سے یا کسی تصویر سے کوئی بھی QR کوڈ یا بار کوڈ اسکین کریں اور ایک ٹیپ میں کام مکمل کریں۔
+
+✨ کوئی بھی QR کوڈ بنائیں
+• ٹیکسٹ، لنکس، ای میل، فون، ایس ایم ایس، واٹس ایپ، وائی فائی، رابطہ کارڈ، کیلنڈر ایونٹس اور نقشے کے مقامات
+• ٹائپ کرتے وقت لائیو پیش منظر
+• نقشے کے کوڈ کے لیے اپنا موجودہ مقام استعمال کریں
+
+🎨 اسے اپنا بنائیں
+• تیار رنگوں کے انداز، ساتھ لکیری اور ریڈیل گریڈینٹ
+• نقطوں، کونوں کے فریم اور کونوں کے نقطوں کی شکل منتخب کریں
+• گیلری یا تصویر کے لنک سے اپنا لوگو شامل کریں
+• ایرر کریکشن کے آسان درجے واضح وضاحت کے ساتھ، اور جب ڈیزائن اسکین کرنا مشکل ہو تو انتباہ
+
+📷 اسکین کریں اور فوراً عمل کریں
+• کیمرے سے اسکین کریں یا گیلری سے تصویر چنیں
+• اسمارٹ ایکشنز: ویب سائٹ کھولیں، کال کریں، ایس ایم ایس یا ای میل بھیجیں، میپس میں کھولیں، کیلنڈر میں شامل کریں، رابطہ محفوظ کریں یا وائی فائی سے جڑیں
+• مختصر کیے گئے لنکس، غیر انکرپٹڈ http لنکس اور IP ایڈریس کی طرف جانے والے لنکس کے لیے حفاظتی اشارے
+
+💾 محفوظ کریں، شیئر کریں، ایڈٹ کریں
+• PNG، JPEG، SVG یا WebP میں ایکسپورٹ کریں
+• گیلری میں محفوظ کریں، کسی بھی ایپ میں شیئر کریں، یا کوڈ کو ایپ میں رکھ کر بعد میں ایڈٹ کریں
+• اسکین ہسٹری، پسندیدہ اور تلاش
+
+🌍 سب کے لیے
+• 12 زبانیں: English، العربية، Español، Français، हिन्दी، اردو، Bahasa Indonesia، Português، Türkçe، বাংলা، Filipino اور فارسی، دائیں سے بائیں تحریر کی مکمل سپورٹ کے ساتھ
+• ہلکی، گہری اور سسٹم تھیم
+
+🔒 ڈیزائن ہی سے پرائیویٹ
+اکاؤنٹ کی ضرورت نہیں۔ آپ کے کوڈ اور اسکین آپ کے فون ہی میں رہتے ہیں۔
+
+DiyaQR ڈاؤن لوڈ کریں اور آج ہی اپنا پہلا QR کوڈ بنائیں۔
+
+
+#######################################################################
+ 7. INDONESIAN  [id]
+#######################################################################
+
+APP NAME
+DiyaQR - Pemindai & Pembuat QR
+
+SHORT DESCRIPTION
+Buat kode QR bergaya dengan logo dan warna. Pindai cepat. Simpan, bagikan.
+
+FULL DESCRIPTION
+DiyaQR adalah pembuat dan pemindai kode QR yang cepat dan indah. Buat kode QR untuk tautan, Wi-Fi, kontak, acara, atau lokasi, percantik sesuai selera, lalu simpan atau bagikan dalam hitungan detik. Pindai kode QR atau barcode apa pun dengan kamera atau dari gambar, dan langsung bertindak hanya dengan satu ketukan.
+
+✨ BUAT KODE QR APA PUN
+• Teks, tautan, email, telepon, SMS, WhatsApp, Wi-Fi, kartu kontak, acara kalender, dan lokasi peta
+• Pratinjau langsung saat Anda mengetik
+• Gunakan lokasi Anda saat ini untuk kode peta
+
+🎨 BUAT JADI MILIK ANDA
+• Gaya warna siap pakai, plus gradasi linear dan radial
+• Pilih bentuk titik, bingkai sudut, dan titik sudut
+• Tambahkan logo Anda sendiri dari galeri atau tautan gambar
+• Level koreksi kesalahan yang sederhana dengan penjelasan jelas, serta peringatan jika desain mungkin sulit dipindai
+
+📷 PINDAI DAN BERTINDAK CEPAT
+• Pindai dengan kamera atau pilih gambar dari galeri
+• Aksi cerdas: buka situs web, telepon, kirim SMS atau email, buka di Maps, tambahkan ke kalender, simpan kontak, atau sambungkan ke Wi-Fi
+• Petunjuk keamanan untuk tautan yang dipersingkat, tautan http tanpa enkripsi, dan tautan yang mengarah ke alamat IP
+
+💾 SIMPAN, BAGIKAN, EDIT
+• Ekspor sebagai PNG, JPEG, SVG, atau WebP
+• Simpan ke galeri, bagikan ke aplikasi apa pun, atau simpan kode di aplikasi dan edit nanti
+• Riwayat pindaian, favorit, dan pencarian
+
+🌍 UNTUK SEMUA ORANG
+• 12 bahasa: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino, dan فارسی, dengan dukungan penuh tulisan kanan-ke-kiri
+• Tema terang, gelap, dan ikuti sistem
+
+🔒 PRIVAT SEJAK AWAL
+Tanpa akun. Kode dan hasil pindaian Anda tetap di ponsel Anda.
+
+Unduh DiyaQR dan buat kode QR pertama Anda hari ini.
+
+
+#######################################################################
+ 8. PORTUGUESE (BRAZIL)  [pt-BR]
+#######################################################################
+
+APP NAME
+DiyaQR: Leitor e Criador QR
+
+SHORT DESCRIPTION
+Crie QR codes estilosos com logo e cores. Escaneie rápido. Salve e compartilhe.
+
+FULL DESCRIPTION
+O DiyaQR é um criador e leitor de QR code rápido e bonito. Crie um QR code para um link, Wi-Fi, contato, evento ou local, personalize do seu jeito e salve ou compartilhe em segundos. Escaneie qualquer QR code ou código de barras com a câmera ou por uma imagem e resolva tudo com um toque.
+
+✨ CRIE QUALQUER QR CODE
+• Texto, links, e-mail, telefone, SMS, WhatsApp, Wi-Fi, cartões de contato, eventos de calendário e locais no mapa
+• Pré-visualização ao vivo enquanto você digita
+• Use sua localização atual para códigos de mapa
+
+🎨 DEIXE COM A SUA CARA
+• Estilos de cores prontos, além de gradientes lineares e radiais
+• Escolha o formato dos pontos, das molduras dos cantos e dos pontos dos cantos
+• Adicione seu próprio logo da galeria ou de um link de imagem
+• Níveis simples de correção de erros com explicações claras e um aviso quando um design pode ser difícil de escanear
+
+📷 ESCANEIE E AJA RÁPIDO
+• Escaneie com a câmera ou escolha uma imagem da galeria
+• Ações inteligentes: abrir um site, ligar, enviar SMS ou e-mail, abrir no Mapas, adicionar ao calendário, salvar um contato ou conectar ao Wi-Fi
+• Alertas de segurança para links encurtados, links http sem criptografia e links que apontam para um endereço IP
+
+💾 SALVE, COMPARTILHE, EDITE
+• Exporte em PNG, JPEG, SVG ou WebP
+• Salve na galeria, compartilhe com qualquer app ou mantenha o código no app para editar depois
+• Histórico de escaneamentos, favoritos e busca
+
+🌍 PARA TODOS
+• 12 idiomas: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino e فارسی, com suporte completo à escrita da direita para a esquerda
+• Temas claro, escuro e do sistema
+
+🔒 PRIVADO POR DESIGN
+Sem necessidade de conta. Seus códigos e escaneamentos ficam no seu celular.
+
+Baixe o DiyaQR e crie hoje o seu primeiro QR code.
+
+
+#######################################################################
+ 9. TURKISH  [tr-TR]
+#######################################################################
+
+APP NAME
+DiyaQR - QR Tara ve Oluştur
+
+SHORT DESCRIPTION
+Logo ve renklerle şık QR kodlar oluşturun. Hızlı tarayın. Kaydedin, paylaşın.
+
+FULL DESCRIPTION
+DiyaQR, hızlı ve şık bir QR kod oluşturucu ve tarayıcıdır. Bir bağlantı, Wi-Fi, kişi, etkinlik veya konum için QR kod oluşturun, dilediğiniz gibi tasarlayın, saniyeler içinde kaydedin veya paylaşın. Kamerayla ya da bir resimden herhangi bir QR kodu veya barkodu tarayın ve tek dokunuşla işlem yapın.
+
+✨ HER TÜRLÜ QR KODU OLUŞTURUN
+• Metin, bağlantı, e-posta, telefon, SMS, WhatsApp, Wi-Fi, kişi kartı, takvim etkinliği ve harita konumu
+• Yazarken canlı önizleme
+• Harita kodları için mevcut konumunuzu kullanın
+
+🎨 KENDİNİZE ÖZEL YAPIN
+• Hazır renk stilleri, ayrıca doğrusal ve dairesel gradyanlar
+• Noktaların, köşe çerçevelerinin ve köşe noktalarının şeklini seçin
+• Galeriden veya bir resim bağlantısından kendi logonuzu ekleyin
+• Net açıklamalı, basit hata düzeltme seviyeleri ve tasarımın taranması zor olabileceğinde uyarı
+
+📷 TARAYIN VE HIZLA HAREKETE GEÇİN
+• Kamerayla tarayın veya galeriden bir resim seçin
+• Akıllı eylemler: web sitesini açın, arayın, SMS veya e-posta gönderin, Haritalar’da açın, takvime ekleyin, kişiyi kaydedin veya Wi-Fi’ye bağlanın
+• Kısaltılmış bağlantılar, şifrelenmemiş http bağlantıları ve IP adresine giden bağlantılar için güvenlik uyarıları
+
+💾 KAYDEDİN, PAYLAŞIN, DÜZENLEYİN
+• PNG, JPEG, SVG veya WebP olarak dışa aktarın
+• Galeriye kaydedin, herhangi bir uygulamayla paylaşın veya kodu uygulamada tutup sonra düzenleyin
+• Tarama geçmişi, favoriler ve arama
+
+🌍 HERKES İÇİN
+• 12 dil: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino ve فارسی, sağdan sola yazım için tam destekle
+• Açık, koyu ve sistem temaları
+
+🔒 TASARIMI GEREĞİ GİZLİ
+Hesap gerekmez. Kodlarınız ve taramalarınız telefonunuzda kalır.
+
+DiyaQR’ı indirin ve ilk QR kodunuzu bugün oluşturun.
+
+
+#######################################################################
+ 10. BENGALI  [bn-BD]
+#######################################################################
+
+APP NAME
+DiyaQR - QR স্ক্যানার
+
+SHORT DESCRIPTION
+লোগো ও রঙে সুন্দর QR কোড বানান। দ্রুত স্ক্যান, সংরক্ষণ ও শেয়ার করুন।
+
+FULL DESCRIPTION
+DiyaQR একটি দ্রুত ও সুন্দর QR কোড নির্মাতা এবং স্ক্যানার। লিংক, ওয়াই-ফাই, যোগাযোগ, ইভেন্ট বা অবস্থানের জন্য QR কোড বানান, নিজের মতো সাজান, তারপর কয়েক সেকেন্ডে সংরক্ষণ বা শেয়ার করুন। ক্যামেরা বা ছবি থেকে যেকোনো QR কোড বা বারকোড স্ক্যান করুন এবং এক ট্যাপে কাজ সারুন।
+
+✨ যেকোনো QR কোড বানান
+• টেক্সট, লিংক, ইমেইল, ফোন, এসএমএস, হোয়াটসঅ্যাপ, ওয়াই-ফাই, যোগাযোগ কার্ড, ক্যালেন্ডার ইভেন্ট ও মানচিত্রের অবস্থান
+• টাইপ করার সময় লাইভ প্রিভিউ
+• মানচিত্রের কোডের জন্য আপনার বর্তমান অবস্থান ব্যবহার করুন
+
+🎨 নিজের মতো সাজান
+• তৈরি রঙের স্টাইল, সঙ্গে রৈখিক ও রেডিয়াল গ্রেডিয়েন্ট
+• বিন্দু, কোণের ফ্রেম ও কোণের বিন্দুর আকৃতি বেছে নিন
+• গ্যালারি বা ছবির লিংক থেকে নিজের লোগো যোগ করুন
+• পরিষ্কার ব্যাখ্যাসহ সহজ এরর কারেকশন স্তর, আর ডিজাইন স্ক্যান করা কঠিন হলে সতর্কতা
+
+📷 স্ক্যান করুন, দ্রুত কাজ সারুন
+• ক্যামেরায় স্ক্যান করুন বা গ্যালারি থেকে ছবি বেছে নিন
+• স্মার্ট অ্যাকশন: ওয়েবসাইট খুলুন, কল করুন, এসএমএস বা ইমেইল পাঠান, ম্যাপসে খুলুন, ক্যালেন্ডারে যোগ করুন, যোগাযোগ সংরক্ষণ করুন বা ওয়াই-ফাইয়ে সংযুক্ত হন
+• সংক্ষিপ্ত লিংক, এনক্রিপশনহীন http লিংক এবং IP ঠিকানায় যাওয়া লিংকের জন্য নিরাপত্তা সংকেত
+
+💾 সংরক্ষণ, শেয়ার, সম্পাদনা
+• PNG, JPEG, SVG বা WebP হিসেবে এক্সপোর্ট করুন
+• গ্যালারিতে সংরক্ষণ করুন, যেকোনো অ্যাপে শেয়ার করুন, অথবা কোডটি অ্যাপে রেখে পরে সম্পাদনা করুন
+• স্ক্যানের ইতিহাস, প্রিয় ও অনুসন্ধান
+
+🌍 সবার জন্য
+• ১২টি ভাষা: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino ও فارسی, ডান-থেকে-বামে লেখার পূর্ণ সমর্থনসহ
+• হালকা, গাঢ় ও সিস্টেম থিম
+
+🔒 শুরু থেকেই ব্যক্তিগত
+অ্যাকাউন্ট লাগে না। আপনার কোড ও স্ক্যান আপনার ফোনেই থাকে।
+
+DiyaQR ডাউনলোড করুন এবং আজই আপনার প্রথম QR কোড বানান।
+
+
+#######################################################################
+ 11. FILIPINO  [fil]
+#######################################################################
+
+APP NAME
+DiyaQR - QR Scanner at Gumawa
+
+SHORT DESCRIPTION
+Gumawa ng magagandang QR code na may logo at kulay. Mabilis mag-scan.
+
+FULL DESCRIPTION
+Ang DiyaQR ay mabilis at magandang QR code creator at scanner. Gumawa ng QR code para sa link, Wi-Fi, contact, event, o lokasyon, i-istilo ayon sa gusto mo, at i-save o ibahagi sa loob ng ilang segundo. Mag-scan ng anumang QR code o barcode gamit ang camera o mula sa larawan, at kumilos agad sa isang tap.
+
+✨ GUMAWA NG ANUMANG QR CODE
+• Teksto, link, email, telepono, SMS, WhatsApp, Wi-Fi, contact card, event sa kalendaryo, at lokasyon sa mapa
+• Live preview habang nagta-type
+• Gamitin ang kasalukuyan mong lokasyon para sa mga map code
+
+🎨 GAWIN MONG IYONG-IYO
+• Mga handang istilo ng kulay, pati linear at radial na gradient
+• Piliin ang hugis ng mga tuldok, frame ng sulok, at tuldok ng sulok
+• Magdagdag ng sarili mong logo mula sa gallery o link ng larawan
+• Simpleng antas ng error correction na may malinaw na paliwanag, at babala kapag mahirap i-scan ang disenyo
+
+📷 MAG-SCAN AT KUMILOS AGAD
+• Mag-scan gamit ang camera o pumili ng larawan mula sa gallery
+• Mga smart action: buksan ang website, tumawag, magpadala ng SMS o email, buksan sa Maps, idagdag sa kalendaryo, i-save ang contact, o kumonekta sa Wi-Fi
+• Mga paalala sa seguridad para sa pinaikling link, hindi naka-encrypt na http link, at link na nakaturo sa IP address
+
+💾 I-SAVE, IBAHAGI, I-EDIT
+• I-export bilang PNG, JPEG, SVG, o WebP
+• I-save sa gallery, ibahagi sa anumang app, o itago ang code sa app at i-edit mamaya
+• Kasaysayan ng scan, mga paborito, at paghahanap
+
+🌍 PARA SA LAHAT
+• 12 wika: English, العربية, Español, Français, हिन्दी, اردو, Bahasa Indonesia, Português, Türkçe, বাংলা, Filipino, at فارسی, na may buong suporta sa pagsulat mula kanan pakaliwa
+• Maliwanag, madilim, at system na tema
+
+🔒 PRIVATE SA DISENYO
+Hindi kailangan ng account. Nananatili sa iyong telepono ang mga code at scan mo.
+
+I-download ang DiyaQR at gawin ang una mong QR code ngayon.
+
+
+#######################################################################
+ 12. PERSIAN (FARSI)  [fa]
+#######################################################################
+
+APP NAME
+DiyaQR - اسکنر و سازنده QR
+
+SHORT DESCRIPTION
+کدهای QR شیک با لوگو و رنگ بسازید. سریع اسکن کنید و ذخیره کنید.
+
+FULL DESCRIPTION
+DiyaQR یک سازنده و اسکنر سریع و زیبای کد QR است. برای یک پیوند، وای‌فای، مخاطب، رویداد یا مکان کد QR بسازید، آن را به سلیقه خودتان طراحی کنید و در چند ثانیه ذخیره یا به اشتراک بگذارید. هر کد QR یا بارکدی را با دوربین یا از روی تصویر اسکن کنید و با یک لمس عمل کنید.
+
+✨ هر کد QR را بسازید
+• متن، پیوند، ایمیل، تلفن، پیامک، واتس‌اپ، وای‌فای، کارت مخاطب، رویداد تقویم و مکان روی نقشه
+• پیش‌نمایش زنده هنگام تایپ
+• برای کدهای نقشه از مکان فعلی خود استفاده کنید
+
+🎨 آن را مال خودتان کنید
+• سبک‌های رنگی آماده، به‌همراه گرادیان خطی و شعاعی
+• شکل نقطه‌ها، قاب گوشه‌ها و نقطه گوشه‌ها را انتخاب کنید
+• لوگوی خودتان را از گالری یا پیوند تصویر اضافه کنید
+• سطوح ساده تصحیح خطا با توضیح روشن، و هشدار وقتی اسکن طرح ممکن است دشوار باشد
+
+📷 اسکن کنید و سریع عمل کنید
+• با دوربین اسکن کنید یا تصویری از گالری انتخاب کنید
+• اقدامات هوشمند: باز کردن وب‌سایت، تماس، ارسال پیامک یا ایمیل، باز کردن در نقشه، افزودن به تقویم، ذخیره مخاطب یا اتصال به وای‌فای
+• هشدارهای امنیتی برای پیوندهای کوتاه‌شده، پیوندهای http رمزگذاری‌نشده و پیوندهایی که به نشانی IP اشاره می‌کنند
+
+💾 ذخیره، اشتراک‌گذاری، ویرایش
+• خروجی به‌صورت PNG، JPEG، SVG یا WebP
+• در گالری ذخیره کنید، با هر برنامه‌ای به اشتراک بگذارید، یا کد را در برنامه نگه دارید و بعداً ویرایش کنید
+• تاریخچه اسکن، علاقه‌مندی‌ها و جستجو
+
+🌍 برای همه
+• ۱۲ زبان: English، العربية، Español، Français، हिन्दी، اردو، Bahasa Indonesia، Português، Türkçe، বাংলা، Filipino و فارسی، با پشتیبانی کامل از نوشتار راست‌به‌چپ
+• پوسته‌های روشن، تیره و سیستم
+
+🔒 خصوصی از پایه
+نیازی به حساب کاربری نیست. کدها و اسکن‌های شما روی گوشی‌تان می‌مانند.
+
+DiyaQR را دانلود کنید و همین امروز اولین کد QR خود را بسازید.
