@@ -7,7 +7,7 @@ import { appLinks } from '../../environments/app-links';
 import { AdService } from '../services/ad.service';
 import { QrStorageService } from '../services/qr-storage.service';
 import { AppSettings, SettingsService, ThemeMode } from '../services/settings.service';
-import { Lang, TranslateService } from '../i18n/translate.service';
+import { LANGUAGES, Lang, TranslateService } from '../i18n/translate.service';
 import { SharedModule } from '../shared/shared.module';
 
 const APP_ID = 'io.zia.diyaqr';
@@ -29,6 +29,7 @@ export class SettingsPage {
     public ads: AdService,
   ) {}
 
+  readonly languages = LANGUAGES;
   readonly privacyPolicyUrl = appLinks.privacyPolicyUrl;
 
   openPrivacyPolicy(): void {

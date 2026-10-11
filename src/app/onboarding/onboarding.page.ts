@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { Lang } from '../i18n/translate.service';
+import { LANGUAGES, Lang } from '../i18n/translate.service';
 import { SettingsService } from '../services/settings.service';
 import { SharedModule } from '../shared/shared.module';
 
@@ -21,10 +21,7 @@ export class OnboardingPage {
     { icon: 'scan-outline', title: 'Scan and act fast', text: 'Scan with the camera or from a picture, then open, call, connect or save in one tap.' },
     { icon: 'bookmark-outline', title: 'Keep everything', text: 'Your codes and scans stay on your phone, ready to edit, share or save to the gallery.' },
   ];
-  languages: { code: Lang; name: string; hint: string }[] = [
-    { code: 'en', name: 'English', hint: 'Continue in English' },
-    { code: 'ar', name: 'العربية', hint: 'المتابعة بالعربية' },
-  ];
+  languages = LANGUAGES;
 
   constructor(private settings: SettingsService, private router: Router) {}
 

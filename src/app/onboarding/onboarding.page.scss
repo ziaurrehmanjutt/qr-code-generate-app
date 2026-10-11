@@ -9,10 +9,10 @@
 h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
 p { max-width: 320px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
 
-.languages { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 12px; }
-.lang { position: relative; display: grid; gap: 2px; justify-items: center; padding: 18px 10px; border: 2px solid var(--line); border-radius: 18px; color: var(--ink); background: var(--surface); font: inherit; transition: transform 0.12s, border-color 0.2s, background 0.2s; }
+.languages { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; max-height: 46vh; overflow-y: auto; margin-top: 12px; }
+.lang { position: relative; display: grid; gap: 2px; justify-items: center; padding: 14px 10px; border: 2px solid var(--line); border-radius: 18px; color: var(--ink); background: var(--surface); font: inherit; transition: transform 0.12s, border-color 0.2s, background 0.2s; }
 .lang:active { transform: scale(0.97); }
-.lang .name { font-size: 22px; font-weight: 800; }
+.lang .name { font-size: 20px; font-weight: 800; }
 .lang small { color: var(--muted); font-size: 12px; }
 .lang ion-icon { position: absolute; top: 8px; inset-inline-end: 8px; color: var(--brand); font-size: 22px; }
 .lang.on { border-color: var(--brand); background: var(--brand-soft); }

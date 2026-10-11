@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { SharedModule } from '../shared/shared.module';
 import { SettingsService } from './settings.service';
-import { TranslateService } from '../i18n/translate.service';
+import { Lang, TranslateService } from '../i18n/translate.service';
 import { QrService } from './qr.service';
 
 describe('Circle shape', () => {
@@ -38,6 +38,19 @@ describe('TranslateService', () => {
     i18n.setLang('en');
     expect(i18n.t('Scan')).toBe('Scan');
     expect(document.documentElement.dir).toBe('ltr');
+  });
+});
+
+describe('More languages', () => {
+  it('translates and sets direction for each added language', () => {
+    const i18n = TestBed.inject(TranslateService);
+    const expected: Record<string, string> = { es: 'Escanear', fr: 'Scanner', hi: 'स्कैन', ur: 'اسکین', id: 'Pindai' };
+    for (const [lang, text] of Object.entries(expected)) {
+      i18n.setLang(lang as Lang);
+      expect(i18n.t('Scan')).toBe(text);
+      expect(document.documentElement.dir).toBe(lang === 'ur' ? 'rtl' : 'ltr');
+    }
+    i18n.setLang('en');
   });
 });
 

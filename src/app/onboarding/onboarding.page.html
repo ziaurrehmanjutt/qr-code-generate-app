@@ -2,11 +2,11 @@
   <main class="intro">
     <button type="button" class="skip" (click)="finish()" *ngIf="index > 0 && !last">{{ 'Skip' | t }}</button>
 
-    <!-- Step 0: language. Shown in both languages, because the user has not chosen one yet. -->
+    <!-- Step 0: language. Shown in several languages, because the user has not chosen one yet. -->
     <section class="slide" *ngIf="index === 0">
       <img class="logo" src="assets/icon/logo.svg" alt="DiyaQR">
       <h1>DiyaQR</h1>
-      <p class="choose">Choose your language · اختر لغتك</p>
+      <p class="choose">Choose your language · اختر لغتك · Elige tu idioma</p>
       <!-- dir="ltr": the two options must not swap places when the app flips to RTL. -->
       <div class="languages" dir="ltr" role="radiogroup">
         <button type="button" class="lang" *ngFor="let l of languages" role="radio" [attr.aria-checked]="language === l.code"
