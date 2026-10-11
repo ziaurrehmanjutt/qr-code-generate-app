@@ -44,11 +44,11 @@ describe('TranslateService', () => {
 describe('More languages', () => {
   it('translates and sets direction for each added language', () => {
     const i18n = TestBed.inject(TranslateService);
-    const expected: Record<string, string> = { es: 'Escanear', fr: 'Scanner', hi: 'स्कैन', ur: 'اسکین', id: 'Pindai' };
+    const expected: Record<string, string> = { es: 'Escanear', fr: 'Scanner', hi: 'स्कैन', ur: 'اسکین', id: 'Pindai', pt: 'Escanear', tr: 'Tara', bn: 'স্ক্যান', fil: 'I-scan', fa: 'اسکن' };
     for (const [lang, text] of Object.entries(expected)) {
       i18n.setLang(lang as Lang);
       expect(i18n.t('Scan')).toBe(text);
-      expect(document.documentElement.dir).toBe(lang === 'ur' ? 'rtl' : 'ltr');
+      expect(document.documentElement.dir).toBe(['ur', 'fa'].includes(lang) ? 'rtl' : 'ltr');
     }
     i18n.setLang('en');
   });

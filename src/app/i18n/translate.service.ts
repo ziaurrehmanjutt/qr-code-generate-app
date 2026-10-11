@@ -4,9 +4,14 @@ import { ES } from './es';
 import { FR } from './fr';
 import { HI } from './hi';
 import { UR } from './ur';
-import { ID } from './id'; 
+import { ID } from './id';
+import { PT } from './pt';
+import { TR } from './tr';
+import { BN } from './bn';
+import { FIL } from './fil';
+import { FA } from './fa';
 
-export type Lang = 'en' | 'ar' | 'es' | 'fr' | 'hi' | 'ur' | 'id';
+export type Lang = 'en' | 'ar' | 'es' | 'fr' | 'hi' | 'ur' | 'id' | 'pt' | 'tr' | 'bn' | 'fil' | 'fa';
 
 /** Every language the app offers. `name` is written in that language itself. */
 export const LANGUAGES: { code: Lang; name: string; hint: string }[] = [
@@ -17,10 +22,15 @@ export const LANGUAGES: { code: Lang; name: string; hint: string }[] = [
   { code: 'hi', name: 'हिन्दी', hint: 'हिन्दी में जारी रखें' },
   { code: 'ur', name: 'اردو', hint: 'اردو میں جاری رکھیں' },
   { code: 'id', name: 'Indonesia', hint: 'Lanjutkan dalam Bahasa Indonesia' },
+  { code: 'pt', name: 'Português', hint: 'Continuar em português' },
+  { code: 'tr', name: 'Türkçe', hint: 'Türkçe devam et' },
+  { code: 'bn', name: 'বাংলা', hint: 'বাংলায় চালিয়ে যান' },
+  { code: 'fil', name: 'Filipino', hint: 'Magpatuloy sa Filipino' },
+  { code: 'fa', name: 'فارسی', hint: 'ادامه به فارسی' },
 ];
 
-const DICTIONARIES: Partial<Record<Lang, Record<string, string>>> = { ar: AR, es: ES, fr: FR, hi: HI, ur: UR, id: ID };
-const RTL: Lang[] = ['ar', 'ur'];
+const DICTIONARIES: Partial<Record<Lang, Record<string, string>>> = { ar: AR, es: ES, fr: FR, hi: HI, ur: UR, id: ID, pt: PT, tr: TR, bn: BN, fil: FIL, fa: FA };
+const RTL: Lang[] = ['ar', 'ur', 'fa'];
 
 /**
  * Minimal translation service. The English text is the key, so templates stay readable
@@ -35,8 +45,9 @@ export class TranslateService {
   /** Device language on first run: the phone's language when the app has it, English otherwise. */
   static detect(): Lang {
     const code = (navigator.language || 'en').toLowerCase().split('-')[0];
-    // Android may still report the old code "in" for Indonesian.
-    const normalized = code === 'in' ? 'id' : code;
+    // Android may report old codes: "in" for Indonesian, "tl" for Tagalog (Filipino).
+    const aliases: Record<string, string> = { in: 'id', tl: 'fil' };
+    const normalized = aliases[code] || code;
     return LANGUAGES.some(l => l.code === normalized) ? (normalized as Lang) : 'en';
   }
 
